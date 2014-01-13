@@ -1,6 +1,8 @@
 This is a poorly written and incomplete styleguide.  Feel free to change
 this with your preferred style.  After project 0, this should not change.
 
+This should serve to keep a consistent style between authors.
+
 WHITESPACE:
   - no tabs, use spaces
   - tabstops at 2, eg
