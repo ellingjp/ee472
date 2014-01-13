@@ -1,0 +1,39 @@
+This is a poorly written and incomplete styleguide.  Feel free to change
+this with your preferred style.  After project 0, this should not change.
+
+WHITESPACE:
+  - no tabs, use spaces
+  - tabstops at 2, eg
+
+    int main() {
+      if (x)
+        do something;
+    }
+
+VARIABLE NAMES:
+  - camel case, eg 'varName'
+
+BLOCKS:
+  - open curly braces on same line, eg
+
+      int function() {
+        // some function
+      }
+
+COMMENTS:
+    - Multiline comments for functions, single line comments elsewhere
+
+      /*
+       * This function has some functionality
+       */
+      int function() {
+        if (x)  // do something if x
+          do something;
+      }
+
+      /* this function is private to this file */
+      static int function() {
+        int val = something;
+        return val;   // return val
+      }
+
