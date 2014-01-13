@@ -7,35 +7,41 @@ WHITESPACE:
   - no tabs, use spaces
   - tabstops at 2, eg
 
-    int main() {
-      if (x)
-        do something;
-    }
+      int main() {
+        if (x)
+          do something;
+      }
 
 VARIABLE NAMES:
   - camel case, eg 'varName'
+  - when declaring pointers, asterisk should be next to variable name, ex:
+      int *myPtr;
+
+    This is particularly nice when declaring several pointers:
+
+      int *myPtr, *anotherPtr; as opposed to
+      int* myPtr, * anotherPtr;
 
 BLOCKS:
   - open curly braces on same line, eg
 
-      int function() {
-        // some function
-      }
+        int function() {
+          // some function
+        }
 
 COMMENTS:
     - Multiline comments for functions, single line comments elsewhere
 
-      /*
-       * This function has some functionality
-       */
-      int function() {
-        if (x)  // do something if x
-          do something;
-      }
+        /*
+        * This function has some functionality
+        */
+        int function() {
+          if (x)  // do something if x
+            do something;
+        }
 
-      /* this function is private to this file */
-      static int function() {
-        int val = something;
-        return val;   // return val
-      }
-
+        /* this function is private to this file */
+        static int function() {
+          int val = something;
+          return val;   // return val
+        }
