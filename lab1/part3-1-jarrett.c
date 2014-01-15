@@ -56,7 +56,7 @@ int
 main(void)
 {
   
-    unsigned long flash_delay = 5000;   // Delay between flashes
+    unsigned long flashDelay = 5000;   // Delay between flashes
     char *characters = "A B C D";       // Characters to flash
     
     // Set the clocking to run directly from the crystal.
@@ -70,9 +70,9 @@ main(void)
     while(TRUE)
     {
       RIT128x96x4StringDraw(characters, 0, 44, 15);
-      delay(flash_delay);
+      delay(flashDelay);
       RIT128x96x4Clear();
-      delay(flash_delay);
+      delay(flashDelay);
     }
 
 }
