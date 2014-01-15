@@ -56,8 +56,8 @@ int
 main(void)
 {
   
-    unsigned long flashDelay = 5000;   // Delay between flashes
-    char *characters = "A B C D";       // Characters to flash
+    unsigned long flashDelay = 8000;   // Delay between flashes
+    char *characters = "ABCD";         // Characters to flash
     
     // Set the clocking to run directly from the crystal.
     SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
@@ -66,10 +66,12 @@ main(void)
     // Initialize display
     RIT128x96x4Init(OLED_CLK);
     
-    // Flash the letters A B C D
+    // Flash the letters ABCD
+    unsigned int xVal = 15;
+    unsigned int yVal = 15;
     while(TRUE)
     {
-      RIT128x96x4StringDraw(characters, 0, 44, 15);
+      RIT128x96x4StringDraw(characters, xVal, yVal, 15);
       delay(flashDelay);
       RIT128x96x4Clear();
       delay(flashDelay);
