@@ -22,7 +22,7 @@
 //
 //*****************************************************************************
 
-
+#include "inc/hw_types.h"
 #include "driverlib/debug.h"
 #include "driverlib/sysctl.h"
 #include "drivers/rit128x96x4.h"
@@ -43,91 +43,43 @@ __error__(char *pcFilename, unsigned long ulLine)
 
 #define TRUE 1
 #define FALSE 0
+#define OLED_CLK 1000000
 
-
-void delay(int aValue);
-
+void delay(unsigned long aValue);
 
 //*****************************************************************************
 //
-// Print A, B, C, and D to the OLED board then flash it in 1 second intervals.
+// Flash "A B C D" to the board.
 //
 //*****************************************************************************
 int
 main(void)
 {
-//
+  
+    unsigned long flash_delay = 5000;   // Delay between flashes
+    char *characters = "A B C D";       // Characters to flash
+    
     // Set the clocking to run directly from the crystal.
-    //
     SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
                    SYSCTL_XTAL_8MHZ);
 
-    //
-    // Initialize the OLED display.
-    //
-    RIT128x96x4Init(1000000);
-
-	int delayVal = 1000;
-	char A[1];
-	A[0] = 'A';
-	A[1] = '/0';
-	char B[1];
-	B[0] = 'B';
-	B[1] = '/0';      
-	char C[1];
-	C[0] = 'C';
-	C[1] = '/0';      
-	char D[1];
-	D[0] = 'D';
-	D[1] = '/0';
-	char space[1];
-	space[0] = ' ';
-	space[1] = '/0';
+    // Initialize display
+    RIT128x96x4Init(OLED_CLK);
     
-    
-    //
-    //  print A, B, C, and D at the same time
+    // Flash the letters A B C D
     while(TRUE)
     {
-
-
-	 
-	  RIT128x96x4StringDraw(A, 10, 24, 15);
-	  RIT128x96x4StringDraw(B, 20, 24, 15);
-	  RIT128x96x4StringDraw(C, 30, 24, 15);
-	  RIT128x96x4StringDraw(D, 40, 24, 15);
-	  delay(delayVal);
-	  RIT128x96x4StringDraw(space, 10, 24, 15);
-	  RIT128x96x4StringDraw(space, 20, 24, 15);
-	  RIT128x96x4StringDraw(space, 30, 24, 15);
-	  RIT128x96x4StringDraw(space, 40, 24, 15);
-	  delay(delayVal);
-	}
-	  
-	  
-	  
-	  
-      
-
-
-
+      RIT128x96x4StringDraw(characters, 0, 44, 15);
+      delay(flash_delay);
+      RIT128x96x4Clear();
+      delay(flash_delay);
+    }
 
 }
 
-
-
-
-//  software delay
-void delay(int aValue)
+// Software delay
+void delay(unsigned long aValue)
 {
-    volatile int i = 0;
-
-    volatile unsigned int j = 0;
-    
-    for (i = aValue; i > 0; i--)
-    {
-        for (j = 0; j < 100; j++);
-    }
-
-    return;
+    for (volatile unsigned int i = 0; i < aValue; i++)
+      for (volatile unsigned int j = 0; j < 100; j++);
 }
