@@ -95,7 +95,7 @@ void getData(int* valuePtr)
     char myData[2];
 
     //  let valuePtr point to it
-    //valuePtr = &tempValue;    // error is here. Do not reassign reference pointer.
+ //   valuePtr = &tempValue;          //  This is the error. Do not reassign pointer
  
     //  get the data
     *valuePtr = i;

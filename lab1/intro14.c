@@ -26,7 +26,7 @@
 #include "driverlib/debug.h"
 #include "driverlib/sysctl.h"
 #include "drivers/rit128x96x4.h"
-#include "externalFunction.c"
+
 
 
 
@@ -44,21 +44,20 @@ __error__(char *pcFilename, unsigned long ulLine)
 
 #define TRUE 1
 #define FALSE 0
-#define DELAY_AMOUNT 1000
+unsigned long DELAY_AMOUNT = 1000;
 
 void delay(unsigned long aValue); 
 
 
 // declare a function that does the funciton of f1, f2 (not here), with any char
-void twoForOne(unsigned long *delay3, char myFavoriteChar); 
+extern void printAndWait(unsigned long *delay3, char myFavoriteChar); 
 
 //*****************************************************************************
 //
 // Print "0123456789" to the OLED on the Stellaris evaluation board.
 //
 //*****************************************************************************
-int
-main(void)
+int main(void)
 {
     //
     // Set the clocking to run directly from the crystal.
@@ -85,7 +84,20 @@ main(void)
     //  print the digits 0 1 2 3 4 5 6 7 8 9
     while(TRUE)
     {
-      twoForOne(amountPtr, '!');
+      for(i = 0; i < 10; i++) {
+        printAndWait(amountPtr, i + '0');
+        k = k + 10;
+      }
+      
+      k = 15;
+      
+      for(i = 0; i < 10; i++) {
+        printAndWait(amountPtr, ' ');
+        k = k + 10;
+      }
+      
+      k = 15;
+
     }
 
 }
@@ -104,41 +116,3 @@ void delay(unsigned long aValue)
     return;
 }
 
-
-//// prints out a line of the given character then erases the line
-//void twoForOne (unsigned long * delay3, char myFavoriteChar) {
-////define some local vars
-//  int i = 0;
-//  int k = 15; // beginning position (magicks)
-//  char myData[3] = {myFavoriteChar, '\0'};
-//  
-//  for (i = 0; i < 10; i++)
-//      {
-//  //      myData[0] = i + '0';        //  convert the int i to ascii
-//   //     myData[1] = '\0';           //  terminate the string
-//        
-//        k = k + 10;                //  start at oled position 15
-//                                   //  move 10 units to right for next
-//                                   //  character
-//           
-//        RIT128x96x4StringDraw(myData, k, 44, 15);
-//        
-//        delay(*delay3);                //  delay so we can read the display
-//      }
-//    
-//    k = 15;     // set k to start at beginning of line
-//    i = 0;
-//    myData[0] = ' ';  // print a space
-//    myData[1] = '\0';
-//     
-//    //  clear the line
-//    
-//    for (i = 0; i < 10; i++)
-//    {    
-//      k = k + 10;
-//         
-//      RIT128x96x4StringDraw(myData, k, 44, 15); // prints out ' ' 10 times
-//      
-//      delay(*delay3);
-//    }
-//}

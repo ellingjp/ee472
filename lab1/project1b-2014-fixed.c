@@ -68,7 +68,7 @@ main(void)
     //  define some local variables
     int i = 0;
     
-    char myData[5];		//  declare a character array
+    char myData[6];		//  declare a character array
     
     //
     // myData is:

@@ -43,7 +43,7 @@ __error__(char *pcFilename, unsigned long ulLine)
 
 #define TRUE 1
 #define FALSE 0
-#define DELAY_AMOUNT 1000
+unsigned long DELAY_AMOUNT = 1000;
 
 int k;
 
