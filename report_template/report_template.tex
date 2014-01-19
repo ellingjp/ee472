@@ -5,22 +5,19 @@
 % See "book", "report", "letter" for other types of document.
 
 \documentclass[12pt]{article} % use larger type; default would be 10pt
-
-\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
-
-%%% Examples of Article customizations
-% These packages are optional, depending whether you want the features they provide.
-% See the LaTeX Companion or other references for full information.
+\usepackage[utf8]{inputenc}   % set input encoding (not needed with XeLaTeX)
 
 %%% PAGE DIMENSIONS
 \usepackage{geometry}
 \geometry{a4paper}
-\geometry{margin=1in}
+\geometry{margin=1in} % 1in page margin
 
+%%% COLOR AND GRAPHICS
 \usepackage{color}
 \usepackage{graphicx} % support the \includegraphics command and options
-\usepackage{listings}
-\usepackage{listings}
+
+\usepackage{pslatex}
+\usepackage{listings} % For displaying source code
 \lstset{ %
   language=C,                    % choose the language of the code
   basicstyle=\footnotesize,      % the size of the fonts that are used for the code
@@ -50,14 +47,12 @@
 \usepackage{subfig}   % make it possible to include more than one captioned figure/table in a single float
 
 %%% HEADERS & FOOTERS
-\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
-\pagestyle{fancy} % options: empty , plain , fancy
-\renewcommand{\headrulewidth}{0pt} % customise the layout...
-\lhead{}\chead{}\rhead{}
-\lfoot{}\cfoot{\thepage}\rfoot{}
+%\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+%\pagestyle{fancy} % options: empty , plain , fancy
+%\renewcommand{\headrulewidth}{0pt} % customise the layout...
+%\lhead{}\chead{}\rhead{}
+%\lfoot{}\cfoot{\thepage}\rfoot{}
 
-%% FONT
-\usepackage{pslatex}
 
 %%% SECTION TITLE APPEARANCE
 \usepackage{sectsty}
@@ -71,38 +66,73 @@
 \renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
 \renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
 
+%%% Title setup
+\newcommand{\TitleFont}{\fontsize{16}{20}\selectfont\bfseries}
+\newcommand{\AuthorFont}{\fontsize{14}{17}\selectfont}
+
 %%% END Article customizations
 
 %%% The "real" document content comes below...
 
-\title{\fontsize{16}{20} \selectfont Our Awesome EE 472 Lab}
-\author{\fontsize{14}{17} \selectfont Jonathan Ellington, Patrick Ma, Jarrett Gaddy}
+\title{\TitleFont EE 472 Lab 1 \\ Introducing the Lab Environment \vfill }
+\author{\AuthorFont Jonathan Ellington \\ Patrick Ma \\ Jarrett Gaddy}
 \date{}
 
 \begin{document}
 
-%% Make title and start page numbering after title page
+%% Make title and ToC, start page numbering AFTER ToC
 \maketitle
 \thispagestyle{empty}
 \pagebreak
 \tableofcontents
+\listoftables
+\listoffigures
 \thispagestyle{empty}
 \pagebreak
 \setcounter{page}{1}
 
-\section{First section}
+\section{Introduction}
 
-Your text goes here.
+The introductory lab contains 3 parts to introduce the students to different parts of working with the Stellaris embedded system. Part 1 of the lab gives the students a piece of sample code that will print a few numbers on an OLED screen on the Stellaris board. The lab asks the students to modify the code in a number of ways to implement the same code in a slightly different way. Examples of what the lab asks for are modifying the program to use function calls. Part 2 of the lab introduces the students to debugging their code that is currently running on the Stellaris board using the IAR program’s debugging capabilities. 2 programs with minor issues are provided to be run on the board while the debugger is being used to find and fix the problems. Finally for part 3 of the lab the students must use what they have learned from part 1 and 2 to create their own applications that will display messages on the OLED display on the Stellaris board. The 3 applications each involve blinking the characters A, B, C, and D in different patterns.
+
+The introductory lab contains 3 parts to introduce the students to different parts of working with the Stellaris embedded system. Part 1 of the lab gives the students a piece of sample code that will print a few numbers on an OLED screen on the Stellaris board. The lab asks the students to modify the code in a number of ways to implement the same code in a slightly different way. Examples of what the lab asks for are modifying the program to use function calls. Part 2 of the lab introduces the students to debugging their code that is currently running on the Stellaris board using the IAR program’s debugging capabilities. 2 programs with minor issues are provided to be run on the board while the debugger is being used to find and fix the problems. Finally for part 3 of the lab the students must use what they have learned from part 1 and 2 to create their own applications that will display messages on the OLED display on the Stellaris board. The 3 applications each involve blinking the characters A, B, C, and D in different patterns.
 
 \subsection{A subsection}
 
-More text.
+Some more text and a table. \\
+
 
 \subsubsection{A subsubsection}
 
 Even more text.
 
+\begin{figure}[h]
+    \centering
+    \label{figure:chick}
+    \includegraphics{figure1.png}
+    \caption{A chick}
+\end{figure}
+
 \section{Yet another section}
+
+\centering
+\begin{table}[h]
+    \centering
+    \label{table:ex}
+    \begin{tabular}{llr}
+        \toprule
+        Animal    & Description & Price (\$) \\
+        \midrule
+        Gnat      & per gram    & 13.65      \\
+                  & each        & 0.01       \\
+        Gnu       & stuffed     & 92.50      \\
+        Emu       & stuffed     & 33.33      \\
+        Armadillo & frozen      & 8.99       \\
+        \bottomrule
+    \end{tabular}
+    \caption{Example table.}
+\end{table}
+
 
 \pagebreak
 \appendix
@@ -114,7 +144,4 @@ Even more text.
 \subsection{The second part}
 \lstinputlisting{source.c}
 
-\section{Figures}
-\subsection{The first part}
-\includegraphics{figure1.png}
 \end{document}
