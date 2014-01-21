@@ -1,0 +1,53 @@
+USE CASE: Select sensors
+
+    user: 
+        - selects which sensors to measure
+
+    System: 
+        Normal operation:
+        - Indicates selected /deselected sensors
+        - for each sensor
+            - if active/selected
+                - turn on sensor flag
+            - else
+                - turn off sensor flag 
+
+        Exceptional operation
+        - user selects unconnected sensor
+            - do as usual, dealt with  during measurement
+
+USE CASE: Measure Sensors
+
+    user: 
+        turns on device
+
+    system: 
+        normal operation:
+            - for each sensor
+                - if sensor active flag true
+                    - records value from sensor
+                    - converts to human readable units
+                    - displays measured value
+                - else
+                    -indicate inactive sensor 
+
+        exception operation:
+            - if value outside 5% of sensor specified range
+                _ flash warnings
+            - if value outside 10% of sensor specified range
+                _ sound alarm
+
+USE CASE: Acknowledge Alarms
+
+    user: 
+        - acknowledges alarm
+
+    System:
+        Normal operation:
+        - sounds alarm and flashes, until user acknowledgement
+        - if ack'd
+            -turn off audible alarm (continue visual)
+            - if time passes and still out of range
+                    - recommence audible alarm
+
+
