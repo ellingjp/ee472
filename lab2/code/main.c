@@ -53,7 +53,6 @@ int main(void) {
     scheduleTasks();
     while (1) {
        dispatchTask(getNextTask());
-       delay();
     }
 }
 
@@ -67,6 +66,7 @@ void dispatchTask(TCB *task) {
 }
 
 TCB *getNextTask() {
+  delay();
   return &taskQueue[0];
 }
 

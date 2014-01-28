@@ -12,6 +12,6 @@ void initializeMeasureData(MeasureData *data) {
 void measureTask(void *dataptr) {
     MeasureData *data = (MeasureData *) dataptr;
     data->pulseRateRaw++;
-        
+    
     RIT128x96x4StringDraw("Test", 0, 0, 15);
 }
