@@ -45,3 +45,18 @@ COMMENTS:
           int val = something;
           return val;   // return val
         }
+
+MULTIPLE FILE PROGRAMS:
+    - Public data should be DECLARED in header files (.h), for example
+        "GlobalData" struct and "extern GlobalData globalDataMem"
+
+    - Private data should be declared in c files, for example
+        MeasureData (exclusively used by measure.c) should be declared 
+        in measure.c, not measure.h
+
+    - DEFINITIONS go into c files (.c), for example 
+        "GlobalData globalDataMem = { ... }" 
+
+
+    Note that globalDataMem is defined in globals.c, but is declared in
+    globals.h as "extern ..." so the variable has external linkage 
