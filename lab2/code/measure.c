@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define MEASURE_DEBUG 0
+
 // Internal data structure
 typedef struct measureData {
   int *temperatureRaw;
@@ -26,7 +28,10 @@ MeasureData data;                   // internal data
 void *measureData = (void *)&data;  // external pointer to internal data
 
 void initializeMeasureData(void *data) {
+#if MEASURE_DEBUG
   RIT128x96x4Init(1000000);
+#endif
+  
   MeasureData *mdata = (MeasureData *)data;
   mdata->temperatureRaw = &(globalDataMem.temperatureRaw);
   mdata->systolicPressRaw = &(globalDataMem.systolicPressRaw);
@@ -63,16 +68,11 @@ void setSysPress(int *syspress) {
    
     static unsigned int i = 0;
 
-    // Store the initial systolic pressure value
-    static int initial_value;
-    if (i == 0)
-      initial_value = *syspress;
-
     Bool complete = false;    
     
     if (*syspress > 100) {
       complete = true;
-      *syspress = initial_value;
+      *syspress = SYS_RAW_INIT;
     }
 
     if (i%2==0) *syspress+=3;
@@ -84,15 +84,10 @@ void setSysPress(int *syspress) {
 void setDiaPress(int *diapress) {
     static unsigned int i = 0;
 
-    // Store the initial diastolic pressure value
-    static int initial_value;
-    if (i == 0)
-      initial_value = *diapress;
-
     Bool complete = false;
     if (*diapress < 40) {
       complete = true;
-      *diapress = initial_value;
+      *diapress = DIA_RAW_INIT;
     }
     
     if (i%2==0) *diapress -=2;
@@ -123,7 +118,7 @@ void setPulse(int *pulse) {
 
 void measureTask(void *dataptr) {
   // only run on major cycle
-  if (minor_cycle_ctr == 0) {   // on major cycle
+  if (IS_MAJOR_CYCLE) {   // on major cycle
     MeasureData *data = (MeasureData *) dataptr;
 
     setTemp(data->temperatureRaw);
@@ -131,8 +126,19 @@ void measureTask(void *dataptr) {
     setDiaPress(data->diastolicPressRaw);
     setPulse(data->pulseRateRaw);
     
+#if MEASURE_DEBUG
     char num[30];
     sprintf(num, "Raw temp: %d", *(data->temperatureRaw));
     RIT128x96x4StringDraw(num, 0, 0, 15);
+    
+    sprintf(num, "Raw Syst: %d", *(data->systolicPressRaw));
+    RIT128x96x4StringDraw(num, 0, 10, 15);
+    
+    sprintf(num, "Raw Dia: %d", *(data->diastolicPressRaw));
+    RIT128x96x4StringDraw(num, 0, 20, 15);
+    
+    sprintf(num, "Raw Pulse: %d", *(data->pulseRateRaw));
+    RIT128x96x4StringDraw(num, 0, 30, 15);
+#endif
   }
 }
