@@ -5,10 +5,11 @@
  *
  * Defines global data for tasks to access
  */
+#include "globals.h"
 
 GlobalData globalDataMem;
 
-void initializeGlobals() {
+void initializeGlobalData() {
   globalDataMem.temperatureRaw = 75;
   globalDataMem.systolicPressRaw = 80;
   globalDataMem.diastolicPressRaw = 80;

@@ -3,7 +3,6 @@
 #include "inc/hw_types.h"
 #include "driverlib/debug.h"
 #include "driverlib/sysctl.h"
-#include "drivers/rit128x96x4.h"
 
 #define NUM_TASKS 5
 
@@ -22,6 +21,6 @@ int main(void) {
   initialize();  // from schedule.h
 
   while (1) {
-    dispatchNextTask();  // from schedule.h
+    runTasks();  // from schedule.h
   }
 }
