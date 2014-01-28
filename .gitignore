@@ -7,6 +7,10 @@
 *.~*
 *.*~
 
+# C files #
+###########
+*.o
+*.out
 
 # These are LaTeX files#
 ########################
@@ -14,5 +18,13 @@
 *.log
 *.lof
 *.lot
-*.synctex.gz
+*.gz
 *.toc
+
+# Assorted files #
+##################
+# git recommends adding straight source code
+# as there are built in compressions
+*.gz
+*.tar
+*.zip
