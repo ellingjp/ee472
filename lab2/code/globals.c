@@ -1,19 +1,10 @@
-// This file contains basic definitions for the Dr.at your fingers program
-
-// Patrick Ma, Jonathan Ellington
-// January 25, 2014
-
-typedef struct correctedData {
-  int temperatureRaw;
-  int systolicPressRaw;
-  int diastolicPressRaw;
-  int pulseRateRaw;
-  int temperatureCorrected;
-  int systolicPressCorrected;
-  int diastolicPressCorrected;
-  int pulseRateCorrected;
-  int batteryState;
-} GlobalData;
+/* 
+ * globals.c
+ * Author(s): Jonathan Ellington, Patrick Ma
+ * 1/28/2014
+ *
+ * Defines global data for tasks to access
+ */
 
 GlobalData globalDataMem;
 

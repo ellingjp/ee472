@@ -1,11 +1,17 @@
-typedef struct measureData {
-    int *temperatureRaw;
-    int *systolicPressRaw;
-    int *diastolicPressRaw;
-    int *pulseRateRaw;
-} MeasureData;
+/* 
+ * measure.h
+ * Author(s): Jonathan Ellington
+ * 1/28/2014
+ *
+ * Defines the interface for the measureTask.  
+ * initializeMeasureData() should be called before running measureTask()
+ */
 
-extern MeasureData measureData;
+/* Points to the data used by measure */
+extern void *measureData;
 
+/* Initialize MeasureData, must be done before running measureTask() */
 void initializeMeasureData(MeasureData *data);
+
+/* Perform the measure task */
 void measureTask(void *dataptr);

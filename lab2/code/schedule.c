@@ -1,3 +1,11 @@
+/* 
+ * schedule.c
+ * Author(s): Jonathan Ellington
+ * 1/28/2014
+ *
+ * Implements schedule.h
+ */
+
 #include "schedule.h"
 #include "globals.h"
 
@@ -53,12 +61,12 @@ TCB *getNextTask() {
 // Initialize the taskQueue with each task
 void initializeQueue() {
   // Measure Task
-  taskQueue[0].runTaskFunction = &measureTask; // from measure.h
-  taskQueue[0].taskDataPtr = &measureData;     // from measure.h
+  taskQueue[0].runTaskFunction = measureTask; // from measure.h
+  taskQueue[0].taskDataPtr = measureData;     // from measure.h
 
   // Compute Task (not yet implemented)
-  // taskQueue[1].runTaskFunction = &computeTask; // from compute.h
-  // taskQueue[1].taskDataPtr = &computeData;     // from compute.h
+  // taskQueue[1].runTaskFunction = computeTask; // from compute.h
+  // taskQueue[1].taskDataPtr = computeData;     // from compute.h
 }
 
 // Software delay
