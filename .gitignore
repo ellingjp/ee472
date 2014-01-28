@@ -1,2 +1,18 @@
+# See github.com/gitignore for more files 
+
+# Temporary files#
+##################
+
 *.swp
 *.~*
+*.*~
+
+
+# These are LaTeX files#
+########################
+*.aux
+*.log
+*.lof
+*.lot
+*.synctex.gz
+*.toc
