@@ -21,4 +21,4 @@ typedef struct correctedData {
 
 extern GlobalData globalDataMem;
 
-void initializeGlobals();
+void initializeGlobalData();

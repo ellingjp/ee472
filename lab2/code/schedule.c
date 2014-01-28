@@ -7,6 +7,7 @@
  */
 
 #include "schedule.h"
+#include "timebase.h"
 #include "globals.h"
 
 // Each task include
@@ -16,7 +17,7 @@
 //#include "warning.h"
 //#include "status.h"
 
-#define NUM_TASKS 5
+#define NUM_TASKS 1
 
 // TCB
 typedef struct tcb_struct {
@@ -24,38 +25,34 @@ typedef struct tcb_struct {
   void *taskDataPtr;
 } TCB;
 
-// The taskQueue holding TCB for each task
-static TCB taskQueue[NUM_TASKS];
+static TCB taskQueue[NUM_TASKS];    // The taskQueue holding TCB for each task
+unsigned int minor_cycle_ctr = 0;   // minor cycle counter
+
+// Private functions
+TCB *getNextTask();
+void initializeQueue();
+void delay_in_ms(int ms);
+
+// Must initialize before running this function!
+void runTasks() {
+  for (int i = 0; i < NUM_TASKS; i++) {
+    TCB *task = &taskQueue[i];
+    task->runTaskFunction(task->taskDataPtr);
+  }
+  delay_in_ms(MINOR_CYCLE);
+  minor_cycle_ctr = (minor_cycle_ctr+1) % MAJOR_CYCLE;
+}
 
 // Initialize datastructures
 void initialize() {
   initializeGlobalData();   // from globals.h
 
   // Initialize each task data
-  initializeMeasureData(&measureData);  // from measure.h
+  initializeMeasureData(measureData);  // from measure.h
   //initializeComputeData()  // not implemented yet
 
   // schedule each task
   initializeQueue();
-}
-
-// Dispatch the next task, as defined
-// by getNextTask()
-// SHOULD INCLUDE A DELAY!
-void dispatchNextTask() {
-  TCB *task = getNextTask;
-  task->runTaskFunction(task->taskDataPtr);
-}
-
-// Get the next task in the queue.
-// Implemented as a circular queue
-TCB *getNextTask() {
-  delay();
-
-  static unsigned int i = 0;   // static to keep track across calls
-
-  // take modulo, then increment i
-  return &taskQueue[i++ % NUM_TASKS];
 }
 
 // Initialize the taskQueue with each task
@@ -70,7 +67,7 @@ void initializeQueue() {
 }
 
 // Software delay
-void delay() {
-  for (int i = 0; i < 100; i++)
-    for (int j = 0; j < 1000; j++);
+void delay_in_ms(int ms) {
+  for (int i = 0; i < ms; i++)
+    for (int j = 0; j < 800; j++);
 }

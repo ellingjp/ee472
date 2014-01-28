@@ -7,8 +7,12 @@
  */
 
 #include "globals.h"
+#include "timebase.h"
 #include "measure.h"
+#include "bool.h"
 #include "drivers/rit128x96x4.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 // Internal data structure
 typedef struct measureData {
@@ -21,16 +25,114 @@ typedef struct measureData {
 MeasureData data;                   // internal data
 void *measureData = (void *)&data;  // external pointer to internal data
 
-void initializeMeasureData() {
-  measureData->temperatureRaw = &(globalDataMem.temperatureRaw);
-  measureData->systolicPressRaw = &(globalDataMem.systolicPressRaw);
-  measureData->diastolicPressRaw = &(globalDataMem.diastolicPressRaw);
-  measureData->pulseRateRaw = &(globalDataMem.pulseRateRaw);
+void initializeMeasureData(void *data) {
+  RIT128x96x4Init(1000000);
+  MeasureData *mdata = (MeasureData *)data;
+  mdata->temperatureRaw = &(globalDataMem.temperatureRaw);
+  mdata->systolicPressRaw = &(globalDataMem.systolicPressRaw);
+  mdata->diastolicPressRaw = &(globalDataMem.diastolicPressRaw);
+  mdata->pulseRateRaw = &(globalDataMem.pulseRateRaw);
+}
+
+void setTemp(int *temp) {
+    static unsigned int i = 0;
+    static Bool goingUp = true;
+
+    if (*temp > 50)
+      goingUp = false;
+    else if (*temp < 15)
+      goingUp = true;
+
+    if (goingUp == true) {
+        if (i%2==0) *temp+=2;
+        else *temp--;
+    }
+    else {
+        if (i%2==0) *temp-=2;
+        else *temp++;
+    }
+    
+    i++;
+}
+
+void setSysPress(int *syspress) {
+    // This is written to lab spec, with a flag to indicate "complete".
+    // Right now, it does nothing, but I imagine it should probably be a global
+    // variable to indicate to the compute task that the pressure measurement 
+    // is ready, since this measurement takes a nontrivial amount of time
+   
+    static unsigned int i = 0;
+
+    // Store the initial systolic pressure value
+    static int initial_value;
+    if (i == 0)
+      initial_value = *syspress;
+
+    Bool complete = false;    
+    
+    if (*syspress > 100) {
+      complete = true;
+      *syspress = initial_value;
+    }
+
+    if (i%2==0) *syspress+=3;
+    else *syspress--;
+    
+    i++;
+}
+
+void setDiaPress(int *diapress) {
+    static unsigned int i = 0;
+
+    // Store the initial diastolic pressure value
+    static int initial_value;
+    if (i == 0)
+      initial_value = *diapress;
+
+    Bool complete = false;
+    if (*diapress < 40) {
+      complete = true;
+      *diapress = initial_value;
+    }
+    
+    if (i%2==0) *diapress -=2;
+    else *diapress++;
+}
+
+void setPulse(int *pulse) {
+    static unsigned int i = 0;
+
+    static Bool goingUp = true;
+
+    if (*pulse < 15)
+      goingUp = true;
+    else if (*pulse > 40)
+      goingUp = false;
+
+    if (goingUp == true) {
+      if (i%2 == 0) *pulse--;
+      else *pulse+=3;
+    }
+    else {
+      if (i%2 == 0) *pulse++;
+      else *pulse-=3;
+    }
+    
+    i++;
 }
 
 void measureTask(void *dataptr) {
-  MeasureData *data = (MeasureData *) dataptr;
-  data->pulseRateRaw++;
+  // only run on major cycle
+  if (minor_cycle_ctr == 0) {   // on major cycle
+    MeasureData *data = (MeasureData *) dataptr;
 
-  RIT128x96x4StringDraw("Test", 0, 0, 15);
+    setTemp(data->temperatureRaw);
+    setSysPress(data->systolicPressRaw);
+    setDiaPress(data->diastolicPressRaw);
+    setPulse(data->pulseRateRaw);
+    
+    char num[30];
+    sprintf(num, "Raw temp: %d", *(data->temperatureRaw));
+    RIT128x96x4StringDraw(num, 0, 0, 15);
+  }
 }
