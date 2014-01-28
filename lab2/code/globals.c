@@ -10,15 +10,15 @@
 GlobalData globalDataMem;
 
 void initializeGlobalData() {
-  globalDataMem.temperatureRaw = 75;
-  globalDataMem.systolicPressRaw = 80;
-  globalDataMem.diastolicPressRaw = 80;
-  globalDataMem.pulseRateRaw = 50;
+  globalDataMem.temperatureRaw = TEMP_RAW_INIT;
+  globalDataMem.systolicPressRaw = SYS_RAW_INIT;
+  globalDataMem.diastolicPressRaw = DIA_RAW_INIT;
+  globalDataMem.pulseRateRaw = PULSE_RAW_INIT;
 
-  globalDataMem.temperatureCorrected = 0;
-  globalDataMem.systolicPressCorrected = 0;
-  globalDataMem.diastolicPressCorrected = 0;
-  globalDataMem.pulseRateCorrected = 0;
+  globalDataMem.temperatureCorrected = TEMP_CORR_INIT;
+  globalDataMem.systolicPressCorrected = SYS_CORR_INIT;
+  globalDataMem.diastolicPressCorrected = DIA_CORR_INIT;
+  globalDataMem.pulseRateCorrected = PULSE_RAW_INIT;
 
-  globalDataMem.batteryState = 200;
+  globalDataMem.batteryState = BATT_INIT;
 }
