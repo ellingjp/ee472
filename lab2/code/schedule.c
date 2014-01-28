@@ -68,6 +68,6 @@ void initializeQueue() {
 
 // Software delay
 void delay_in_ms(int ms) {
-  for (int i = 0; i < ms; i++)
-    for (int j = 0; j < 800; j++);
+  for (volatile int i = 0; i < ms; i++)
+    for (volatile int j = 0; j < 800; j++);
 }
