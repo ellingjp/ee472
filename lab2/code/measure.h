@@ -5,5 +5,7 @@ typedef struct measureData {
     int *pulseRateRaw;
 } MeasureData;
 
+extern MeasureData measureData;
+
 void initializeMeasureData(MeasureData *data);
 void measureTask(void *dataptr);

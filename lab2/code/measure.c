@@ -2,16 +2,18 @@
 #include "measure.h"
 #include "drivers/rit128x96x4.h"
 
-void initializeMeasureData(MeasureData *data) {
-  data->temperatureRaw = &(globalDataMem.temperatureRaw);
-  data->systolicPressRaw = &(globalDataMem.systolicPressRaw);
-  data->diastolicPressRaw = &(globalDataMem.diastolicPressRaw);
-  data->pulseRateRaw = &(globalDataMem.pulseRateRaw);
+MeasureData measureData;
+
+void initializeMeasureData() {
+  measureData->temperatureRaw = &(globalDataMem.temperatureRaw);
+  measureData->systolicPressRaw = &(globalDataMem.systolicPressRaw);
+  measureData->diastolicPressRaw = &(globalDataMem.diastolicPressRaw);
+  measureData->pulseRateRaw = &(globalDataMem.pulseRateRaw);
 }
 
-void measureTask(void *dataptr) {
-    MeasureData *data = (MeasureData *) dataptr;
-    data->pulseRateRaw++;
-    
-    RIT128x96x4StringDraw("Test", 0, 0, 15);
+void measureTask(MeasureData *dataptr) {
+  MeasureData *data = (MeasureData *) dataptr;
+  data->pulseRateRaw++;
+
+  RIT128x96x4StringDraw("Test", 0, 0, 15);
 }
