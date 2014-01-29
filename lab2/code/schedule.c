@@ -12,12 +12,12 @@
 
 // Each task include
 #include "measure.h"
-//#include "compute.h"
-//#include "display.h"
+#include "compute.h"
+#include "oleddisplay.h"
 //#include "warning.h"
 //#include "status.h"
 
-#define NUM_TASKS 1
+#define NUM_TASKS 3
 
 // TCB
 typedef struct tcb_struct {
@@ -48,9 +48,9 @@ void initialize() {
   initializeGlobalData();   // from globals.h
 
   // Initialize each task data
-  initializeMeasureData(measureData);  // from measure.h
-  //initializeComputeData()  // not implemented yet
-
+  initializeMeasureTask(measureData);  // from measure.h
+  initializeComputeTask(computeData);  // from compute.h
+  initializeDisplayTask(oledDisplayData);   // from oleddisplay.h
   // schedule each task
   initializeQueue();
 }
@@ -62,8 +62,12 @@ void initializeQueue() {
   taskQueue[0].taskDataPtr = measureData;     // from measure.h
 
   // Compute Task (not yet implemented)
-  // taskQueue[1].runTaskFunction = computeTask; // from compute.h
-  // taskQueue[1].taskDataPtr = computeData;     // from compute.h
+  taskQueue[1].runTaskFunction = computeTask; // from compute.h
+  taskQueue[1].taskDataPtr = computeData;     // from compute.h
+  
+   // Compute Task (not yet implemented)
+  taskQueue[2].runTaskFunction = oledDisplayTask; // from compute.h
+  taskQueue[2].taskDataPtr = oledDisplayData;     // from compute.h
 }
 
 // Software delay

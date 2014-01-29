@@ -11,7 +11,7 @@
 extern void *measureData;
 
 /* Initialize MeasureData, must be done before running measureTask() */
-void initializeMeasureData(void *measureData);
+void initializeMeasureTask(void *measureData);
 
 /* Perform the measure task */
 void measureTask(void *dataptr);

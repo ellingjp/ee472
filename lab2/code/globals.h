@@ -6,6 +6,9 @@
  * Defines global data for tasks to access
  * MUST be initialized before using
  */
+
+#define DEBUG 0
+
 #define TEMP_RAW_INIT 75
 #define SYS_RAW_INIT 80
 #define DIA_RAW_INIT 80

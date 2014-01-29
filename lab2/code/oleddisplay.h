@@ -8,10 +8,10 @@
  */
 
 /* Points to the data used by oledDisplay */
-extern void *displayData;
+extern void *oledDisplayData;
 
 /* Initialize displayData, must be done before running oledDisplayTask() */
-void initializeDisplayData(void *displayData);
+void initializeDisplayTask(void *displayData);
 
 /* Perform the oledDisplay task */
 void oledDisplayTask(void *dataptr);

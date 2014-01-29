@@ -14,17 +14,17 @@ typedef struct {
 	int *batteryState;
 } StatusData;
 
-StatusData sData;			// the internal data
-void *statusData = (void *) &sData;	// sets the external ptr to the data;
+static StatusData data;			// the internal data
+void *statusData = (void *) &data;	// sets the external ptr to the data;
 
 /* Initialize the StatusData task values */
 void initializeStatusData (void *data) {
-	StatusData *data = (StatusData *) data;
-	data->batteryState = &(globalDataMem.batteryState)
+	StatusData *sdata = (StatusData *) data;
+	sdata->batteryState = &(globalDataMem.batteryState);
 }
 
 /* Perform status tasks */
 void statusTask(void *data){
 	StatusData *sData = (StatusData *) data;
-	*(sData->batteryStatus) = *(sData->batteryStatus) - 1;
+	*(sData->batteryState) = *(sData->batteryState) - 1;
 }

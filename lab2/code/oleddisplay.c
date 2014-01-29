@@ -17,25 +17,24 @@
 
 // Internal data structure
 typedef struct oledDisplayData {
-  int *temperatureCorrected;
-  int *systolicPressCorrected;
-  int *diastolicPressCorrected;
-  int *pulseRateCorrected;
+  float *temperatureCorrected;
+  float *systolicPressCorrected;
+  float *diastolicPressCorrected;
+  float *pulseRateCorrected;
   int *batteryState;
-} oledDisplayData;
+} OLEDDisplayData ;
 
-oledDisplayData data;                   // internal data
+static OLEDDisplayData data;                   // internal data
 void *oledDisplayData = (void *)&data;  // external pointer to internal data
 
-void initializeoledDisplayData(void *data) {
+void initializeDisplayTask(void *data) {
   RIT128x96x4Init(1000000);
-
   
-  oledDisplayData *mdata = (oledDisplayData *)data;
-  mdata->temperatureCorrected = &(globalDataMem.temperatureRaw);
-  mdata->systolicPressCorrected = &(globalDataMem.systolicPressRaw);
-  mdata->diastolicPressCorrected = &(globalDataMem.diastolicPressRaw);
-  mdata->pulseRateCorrected = &(globalDataMem.pulseRateRaw);
+  OLEDDisplayData *mdata = (OLEDDisplayData *)data;
+  mdata->temperatureCorrected = &(globalDataMem.temperatureCorrected);
+  mdata->systolicPressCorrected = &(globalDataMem.systolicPressCorrected);
+  mdata->diastolicPressCorrected = &(globalDataMem.diastolicPressCorrected);
+  mdata->pulseRateCorrected = &(globalDataMem.pulseRateCorrected);
   mdata->batteryState = &(globalDataMem.batteryState);
 }
 
@@ -43,25 +42,22 @@ void initializeoledDisplayData(void *data) {
 void oledDisplayTask(void *dataptr) {
   // only run on major cycle
   if (IS_MAJOR_CYCLE) {   // on major cycle
-    oledDisplayData *data = (oledDisplayData *) dataptr;
-
+    OLEDDisplayData *data = (OLEDDisplayData *) dataptr;
 
     char num[30];
-    sprintf(num, "Temperature: %.2f C", *(data->temperatureRaw));
+    sprintf(num, "Temperature: %.2f C", *(data->temperatureCorrected));
     RIT128x96x4StringDraw(num, 0, 0, 15);
     
-    sprintf(num, "Systolic Pressure: %i mm Hg", *(data->systolicPressRaw));
+    sprintf(num, "Systolic Pressure: %.0f mm Hg", *(data->systolicPressCorrected));
     RIT128x96x4StringDraw(num, 0, 10, 15);
     
-    sprintf(num, "Diastolic Pressure: %i mm Hg", *(data->diastolicPressRaw));
+    sprintf(num, "Diastolic Pressure: %.0f mm Hg", *(data->diastolicPressCorrected));
     RIT128x96x4StringDraw(num, 0, 20, 15);
     
-    sprintf(num, "Pulse rate: %d BPM", *(data->pulseRateRaw));
+    sprintf(num, "Pulse rate: %d BPM", (int) *(data->pulseRateCorrected));
     RIT128x96x4StringDraw(num, 0, 30, 15);
 	
-	sprintf(num, "Battery: %d until death", *(data->batteryState));
-	RIT28x96x24StringDraw(num,0,40,15);
-	
-	
+    sprintf(num, "Battery: %d until death", *(data->batteryState));
+    RIT128x96x4StringDraw(num,0,40,15);
   }
 }

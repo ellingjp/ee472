@@ -11,10 +11,12 @@
 #include "measure.h"
 #include "bool.h"
 #include "drivers/rit128x96x4.h"
+// Used for debug display
+#if DEBUG
+#include "drivers/rit128x96x4.h"
 #include <stdlib.h>
 #include <stdio.h>
-
-#define MEASURE_DEBUG 0
+#endif 
 
 // Internal data structure
 typedef struct measureData {
@@ -24,14 +26,13 @@ typedef struct measureData {
   int *pulseRateRaw;
 } MeasureData;
 
-MeasureData data;                   // internal data
+static MeasureData data;             // internal data
 void *measureData = (void *)&data;  // external pointer to internal data
 
-void initializeMeasureData(void *data) {
-#if MEASURE_DEBUG
+void initializeMeasureTask(void *data) {
+#if DEBUG
   RIT128x96x4Init(1000000);
 #endif
-  
   MeasureData *mdata = (MeasureData *)data;
   mdata->temperatureRaw = &(globalDataMem.temperatureRaw);
   mdata->systolicPressRaw = &(globalDataMem.systolicPressRaw);
@@ -126,7 +127,7 @@ void measureTask(void *dataptr) {
     setDiaPress(data->diastolicPressRaw);
     setPulse(data->pulseRateRaw);
     
-#if MEASURE_DEBUG
+#if DEBUG
     char num[30];
     sprintf(num, "Raw temp: %d", *(data->temperatureRaw));
     RIT128x96x4StringDraw(num, 0, 0, 15);
