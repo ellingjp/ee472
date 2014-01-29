@@ -44,6 +44,7 @@ void initializeWarningTask(void *data) {
 
 void warningTask(void *dataptr) {
   // only run on major cycle
+  
 static Bool tempWarn = false;
 static Bool tempAlarm = false;
 static Bool sysWarn = false;
@@ -53,6 +54,10 @@ static Bool diaAlarm = false;
 static Bool pulseWarn = false;
 static Bool pulseAlarm = false;
 static Bool batteryWarn = false;
+static Bool ledGreen = false;
+static Bool ledYellow = false;
+static Bool ledRed = false;
+
   
   if (IS_MAJOR_CYCLE) {   // on major cycle
     WarningData *data = (WarningData *) dataptr;
@@ -101,44 +106,69 @@ static Bool batteryWarn = false;
 	
 	
   }
+	Bool normal = true;
+	Bool sound = false
 	if( true == pulseWarn)
 	{
 		//led on 1 sec off 1 sec
+		normal = false;
 	}
 	if( true == pulseAlarm)
 	{
 		//sound
+		sound = true;
+		normal = false;
 	}
 	if( true == tempWarn)
 	{
 		//led on .5 sec off .5 sec
+		normal = false;
 	}
 	if( true == tempAlarm)
 	{
 		//sound
+		sound = true;
+		normal = false;
 	}
 	if( true == sysWarn)
 	{
 		//led on .25 sec off .25 sec
+		normal = false;
 	}
 	if( true == sysAlarm)
 	{
 		//sound
+		sound = true;
+		normal = false;
 	}
 	if( true == diaWarn)
 	{
 		//led on .25 sec off .25 sec
+		normal = false;
 	}
 	if( true == diaAlarm)
 	{
 		//sound
+		sound = true;
+		normal = false;
 	}
 	if(true == batteryWarn)
 	{
 		//flash battery Warn LED
 	}
-
-	  
+	if(normal == true)
+	{
+		if(false == batteryWarn)
+			//green led on solid
+		//yellow led off
+		//red led off
+	}
+	else
+	{
+		//green led off
+	}
+	//playSound()
+		
 	  
   
 }

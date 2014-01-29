@@ -48,16 +48,22 @@ void oledDisplayTask(void *dataptr) {
     sprintf(num, "Temperature: %.2f C", *(data->temperatureCorrected));
     RIT128x96x4StringDraw(num, 0, 0, 15);
     
-    sprintf(num, "Systolic Pressure: %.0f mm Hg", *(data->systolicPressCorrected));
+    sprintf(num, "Systolic Pressure:", *(data->systolicPressCorrected));
     RIT128x96x4StringDraw(num, 0, 10, 15);
-    
-    sprintf(num, "Diastolic Pressure: %.0f mm Hg", *(data->diastolicPressCorrected));
+	
+	sprintf(num, "%.0f mm Hg", *(data->systolicPressCorrected));
     RIT128x96x4StringDraw(num, 0, 20, 15);
     
-    sprintf(num, "Pulse rate: %d BPM", (int) *(data->pulseRateCorrected));
+    sprintf(num, "Diastolic Pressure:", *(data->diastolicPressCorrected));
     RIT128x96x4StringDraw(num, 0, 30, 15);
 	
-    sprintf(num, "Battery: %d until death", *(data->batteryState));
-    RIT128x96x4StringDraw(num,0,40,15);
+	sprintf(num, "%.0f mm Hg", *(data->diastolicPressCorrected));
+    RIT128x96x4StringDraw(num, 0, 40, 15);
+    
+    sprintf(num, "Pulse rate: %d BPM", (int) *(data->pulseRateCorrected));
+    RIT128x96x4StringDraw(num, 0, 50, 15);
+	
+    sprintf(num, "Battery: %d \%", *(data->batteryState)/200);
+    RIT128x96x4StringDraw(num,0,60,15);
   }
 }
