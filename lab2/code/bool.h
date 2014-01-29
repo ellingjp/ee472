@@ -6,4 +6,4 @@
  * For the boolean type
  */
 
-typedef enum { true, false } Bool;
+typedef enum { false, true } Bool;

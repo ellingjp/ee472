@@ -11,6 +11,7 @@
 #include "measure.h"
 #include "bool.h"
 #include "drivers/rit128x96x4.h"
+
 // Used for debug display
 #if DEBUG
 #include "drivers/rit128x96x4.h"
@@ -49,7 +50,7 @@ void setTemp(int *temp) {
     else if (*temp < 15)
       goingUp = true;
 
-    if (goingUp == true) {
+    if (goingUp) {
         if (i%2==0) *temp+=2;
         else *temp--;
     }
@@ -105,7 +106,7 @@ void setPulse(int *pulse) {
     else if (*pulse > 40)
       goingUp = false;
 
-    if (goingUp == true) {
+    if (goingUp) {
       if (i%2 == 0) *pulse--;
       else *pulse+=3;
     }

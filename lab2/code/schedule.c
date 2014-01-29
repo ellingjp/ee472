@@ -14,10 +14,10 @@
 #include "measure.h"
 #include "compute.h"
 #include "oleddisplay.h"
-//#include "warning.h"
-//#include "status.h"
+#include "warning.h"
+#include "status.h"
 
-#define NUM_TASKS 3
+#define NUM_TASKS 5
 
 // TCB
 typedef struct tcb_struct {
@@ -51,6 +51,9 @@ void initialize() {
   initializeMeasureTask(measureData);  // from measure.h
   initializeComputeTask(computeData);  // from compute.h
   initializeDisplayTask(oledDisplayData);   // from oleddisplay.h
+  initializeWarningTask(warningData);   // from oleddisplay.h
+  initializeStatusTask(statusData);   // from oleddisplay.h
+  
   // schedule each task
   initializeQueue();
 }
@@ -68,6 +71,14 @@ void initializeQueue() {
    // Compute Task (not yet implemented)
   taskQueue[2].runTaskFunction = oledDisplayTask; // from compute.h
   taskQueue[2].taskDataPtr = oledDisplayData;     // from compute.h
+  
+  // Compute Task (not yet implemented)
+  taskQueue[3].runTaskFunction = warningTask; // from compute.h
+  taskQueue[3].taskDataPtr = warningData;     // from compute.h
+  
+     // Compute Task (not yet implemented)
+  taskQueue[4].runTaskFunction = statusTask; // from compute.h
+  taskQueue[4].taskDataPtr = statusData;     // from compute.h
 }
 
 // Software delay

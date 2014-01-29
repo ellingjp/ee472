@@ -13,7 +13,7 @@
 extern void *statusData;
 
 /* Initialize StatusData, must be done before running functions */
-void initializeStatusData (void *statusData);
+void initializeStatusTask (void *statusData);
 
 /* Perform the status tasks */
 void statusTask(void *dataPtr);

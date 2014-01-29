@@ -28,12 +28,12 @@ static WarningData data;                   // internal data
 
 
 
-void *WarningData = (void *)&data;  // external pointer to internal data
+void *warningData = (void *)&data;  // external pointer to internal data
 
-void initializeWarningData(void *data) {
+void initializeWarningTask(void *data) {
 
   
-  warningData *mdata = (warningData *)data;
+  WarningData *mdata = (WarningData *)data;
   mdata->temperatureCorrected = &(globalDataMem.temperatureCorrected);
   mdata->systolicPressCorrected = &(globalDataMem.systolicPressCorrected);
   mdata->diastolicPressCorrected = &(globalDataMem.diastolicPressCorrected);
@@ -57,11 +57,11 @@ static Bool batteryWarn = false;
   if (IS_MAJOR_CYCLE) {   // on major cycle
     WarningData *data = (WarningData *) dataptr;
 
-	temp = *(data->temperatureCorrected);
-	sysPress = *(data->systolicPressCorrected);
-	diaPress = *(data->diastolicPressCorrected);
-	pulse = *(data->pulseRateCorrected);
-	battery = *(data->batteryState);
+	float temp = *(data->temperatureCorrected);
+	float sysPress = *(data->systolicPressCorrected);
+	float diaPress = *(data->diastolicPressCorrected);
+	float pulse = *(data->pulseRateCorrected);
+	int battery = *(data->batteryState);
 	
 	if(temp < (TEMP_MIN*WARN_LOW) || (TEMP_MAX*WARN_HIGH))
 		tempWarn = true;
@@ -125,11 +125,11 @@ static Bool batteryWarn = false;
 	{
 		//sound
 	}
-	if( true == disWarn)
+	if( true == diaWarn)
 	{
 		//led on .25 sec off .25 sec
 	}
-	if( true == disAlarm)
+	if( true == diaAlarm)
 	{
 		//sound
 	}

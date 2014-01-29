@@ -22,9 +22,9 @@ typedef struct oledDisplayData {
   float *diastolicPressCorrected;
   float *pulseRateCorrected;
   int *batteryState;
-} OLEDDisplayData ;
+} OLEDDisplayData;
 
-static OLEDDisplayData data;                   // internal data
+static OLEDDisplayData data;            // internal data
 void *oledDisplayData = (void *)&data;  // external pointer to internal data
 
 void initializeDisplayTask(void *data) {

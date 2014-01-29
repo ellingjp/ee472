@@ -8,6 +8,7 @@
 
 #include "status.h"
 #include "globals.h"
+#include "timebase.h"
 
 // StatusData structure internal to compute task
 typedef struct {
@@ -18,13 +19,15 @@ static StatusData data;			// the internal data
 void *statusData = (void *) &data;	// sets the external ptr to the data;
 
 /* Initialize the StatusData task values */
-void initializeStatusData (void *data) {
+void initializeStatusTask (void *data) {
 	StatusData *sdata = (StatusData *) data;
 	sdata->batteryState = &(globalDataMem.batteryState);
 }
 
 /* Perform status tasks */
 void statusTask(void *data){
+  if (IS_MAJOR_CYCLE) {
 	StatusData *sData = (StatusData *) data;
 	*(sData->batteryState) = *(sData->batteryState) - 1;
+  }
 }

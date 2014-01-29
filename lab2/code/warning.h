@@ -17,7 +17,7 @@
 #define TEMP_MAX 37.8
 #define SYS_MAX 120
 #define DIA_MAX 80
-#define PULES_MIN 60
+#define PULSE_MIN 60
 #define PULSE_MAX 100
 #define BATTERY_MIN 40
 
