@@ -1,5 +1,5 @@
 /* 
- * measure.h
+ * oledDisplay.h
  * Author(s): Jarrett Gaddy
  * 1/28/2014
  *
