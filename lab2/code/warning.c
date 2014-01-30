@@ -71,7 +71,7 @@ void initializeWarningTask(void *data) {
   GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT);
 
   // configure the pin E0 for input
-  GPIOPadConfigSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
+  GPIOPadConfigSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
   GPIODirModeSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_DIR_MODE_IN);
 
 
@@ -276,7 +276,7 @@ void warningTask(void *dataptr) {
    * If the button is pushed, the value returned is 0
    * If the button is NOT pushed, the value is non-zero
    */
-  if( 1 == GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_0))
+  if( 0 == GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_0))
   {
     GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0XFF);
   }
