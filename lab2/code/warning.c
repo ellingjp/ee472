@@ -45,10 +45,10 @@ static unsigned long ulPeriod;
 void *warningData = (void *)&data;  // external pointer to internal data
 
 void initializeWarningTask(void *data) {
-
+	GPIOPadConfigSet(GPIO_PORTF_BASE,GPIO_PIN_0, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD)
 	GPIODirModeSet(GPIO_PORTF_BASE, GPIO_PIN_0, GPIO_DIR_MODE_OUT);
-	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
-	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT);
+	//GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
+	//GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT);
 
     //
     // Set the clocking to run directly from the crystal.
