@@ -7,7 +7,7 @@
  */
 
 #define MINOR_CYCLE 100     // minor cycle, in milliseconds
-#define MAJOR_CYCLE 50      // major cycle, in number of minor cycles
+#define MAJOR_CYCLE 10      // major cycle, in number of minor cycles
 
 #define IS_MAJOR_CYCLE (minor_cycle_ctr == 0)
 

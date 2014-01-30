@@ -45,10 +45,23 @@ static unsigned long ulPeriod;
 void *warningData = (void *)&data;  // external pointer to internal data
 
 void initializeWarningTask(void *data) {
-	GPIOPadConfigSet(GPIO_PORTF_BASE,GPIO_PIN_0, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
-	GPIODirModeSet(GPIO_PORTF_BASE, GPIO_PIN_0, GPIO_DIR_MODE_OUT);
-	//GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
-	//GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT);
+  
+        SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
+        
+	GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_5, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
+        GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_6, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
+        GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_7, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
+        
+	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_DIR_MODE_OUT);
+    
+    /*  This function call does the same result of the above set of calls,
+     *  but still requires that the bank of peripheral pins
+     */
+    
+//      GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_5);
+        
+	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
+	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT);
 
     //
     // Set the clocking to run directly from the crystal.
@@ -92,7 +105,7 @@ void initializeWarningTask(void *data) {
     //
     // Enable the PWM0 and PWM1 output signals.
     //
-    PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_1_BIT, true);
+//    PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_1_BIT, true);
 
 
 
@@ -187,7 +200,9 @@ static Bool ledRed = false;
 	{
 		//led on .5 sec off .5 sec
 		normal = false;
-		GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_0, 0XFF);
+		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0XFF);
+                GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0XFF);
+                GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0XFF);
 	}
 	if( true == tempAlarm)
 	{
