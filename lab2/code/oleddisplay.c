@@ -41,30 +41,29 @@ void initializeDisplayTask(void *data) {
 
 void oledDisplayTask(void *dataptr) {
   // only run on major cycle
-  if (IS_MAJOR_CYCLE) {   // on major cycle
+//  if (IS_MAJOR_CYCLE) {   // on major cycle
     OLEDDisplayData *data = (OLEDDisplayData *) dataptr;
 
     char num[30];
-    sprintf(num, "Temperature: %.2f C", *(data->temperatureCorrected));
+    sprintf(num, "Temperature: %.2f C ", *(data->temperatureCorrected));
     RIT128x96x4StringDraw(num, 0, 0, 15);
     
     sprintf(num, "Systolic Pressure:");
     RIT128x96x4StringDraw(num, 0, 10, 15);
 	
-	sprintf(num, "%.0f mm Hg", *(data->systolicPressCorrected));
+	sprintf(num, "%.0f mm Hg ", *(data->systolicPressCorrected));
     RIT128x96x4StringDraw(num, 0, 20, 15);
     
     sprintf(num, "Diastolic Pressure:");
     RIT128x96x4StringDraw(num, 0, 30, 15);
 	
-	sprintf(num, "%.0f mm Hg", *(data->diastolicPressCorrected));
+	sprintf(num, "%.0f mm Hg ", *(data->diastolicPressCorrected));
     RIT128x96x4StringDraw(num, 0, 40, 15);
     
-    sprintf(num, "Pulse rate: %d BPM", (int) *(data->pulseRateCorrected));
+    sprintf(num, "Pulse rate: %d BPM ", (int) *(data->pulseRateCorrected));
     RIT128x96x4StringDraw(num, 0, 50, 15);
 
-    RIT128x96x4StringDraw("                      ",0,60,15); 
-    sprintf(num, "Battery: %d %", *(data->batteryState)/2);
+    sprintf(num, "Battery: %d %% ", *(data->batteryState)/2);
     RIT128x96x4StringDraw(num,0,60,15);
-  }
+//  }
 }

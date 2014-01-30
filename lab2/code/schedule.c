@@ -40,7 +40,7 @@ void runTasks() {
     task->runTaskFunction(task->taskDataPtr);
   }
   delay_in_ms(MINOR_CYCLE);
-  minor_cycle_ctr = (minor_cycle_ctr+1) % MAJOR_CYCLE;
+  minor_cycle_ctr = minor_cycle_ctr+1;
 }
 
 // Initialize datastructures

@@ -94,6 +94,8 @@ void setDiaPress(int *diapress) {
     
     if (i%2==0) *diapress -=2;
     else *diapress++;
+    
+    i++;
 }
 
 void setPulse(int *pulse) {

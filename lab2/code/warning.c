@@ -24,6 +24,9 @@
 #include "drivers/rit128x96x4.h"
 
 
+#define ALARM_SLEEP_PERIOD 100   // duration to sleep in terms of mnor cycles
+
+
 //pin E0 for input on switch 3
 //pin C5 C6 and C7 for led out
 
@@ -70,8 +73,9 @@ void initializeWarningTask(void *data) {
   GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_7, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
   GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT);
 
-  // configure the pin E0 for input
-  GPIOPadConfigSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
+  // configure the pin E0 for input (sw3). NB: requires pull-up to operate
+  GPIOPadConfigSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_STRENGTH_2MA,
+                   GPIO_PIN_TYPE_STD_WPU);
   GPIODirModeSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_DIR_MODE_IN);
 
 
@@ -148,6 +152,9 @@ void warningTask(void *dataptr) {
   static tBoolean ledGreen = false;
   static tBoolean ledYellow = false;
   static tBoolean ledRed = false;
+  
+  static tBoolean sleepAlarm = false;
+  static int wakeUpAlarmAt = 0;
 
   // only run on major cycle
   if (IS_MAJOR_CYCLE) {   // on major cycle
@@ -261,7 +268,7 @@ void warningTask(void *dataptr) {
   {
     //green led off
   }
-  if(true == sound)
+  if(true == sound && (!sleepAlarm))
   {
     PWMGenEnable(PWM0_BASE, PWM_GEN_0);
 
@@ -273,17 +280,25 @@ void warningTask(void *dataptr) {
   //playSound()
 
   /* This is the alarm override
+   * Upon override, the alarm is silenced for some time.
+   * silence length is defined by ALARM_SLEEP_PERIOD
+   * 
    * If the button is pushed, the value returned is 0
    * If the button is NOT pushed, the value is non-zero
    */
-  if( 0 == GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_0))
+  if( 0 == GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_0) && (sysAlarm || diaAlarm ||
+        tempAlarm || pulseAlarm))
   {
-    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0XFF);
-  }
-  else
-  {
-    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0X00);
+    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0XFF);  // for debug, lights led
+    sleepAlarm = true;
+    wakeUpAlarmAt = minor_cycle_ctr + ALARM_SLEEP_PERIOD;
   }
 
+  // Check whether to resound alarm
+  if( minor_cycle_ctr == wakeUpAlarmAt) {
+    sleepAlarm = false;
+    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0X00);  // for debug, kills led
+
+  }
 
 }
