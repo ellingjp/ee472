@@ -115,12 +115,12 @@ Brief introduction and overview of the purpose of the lab and of the methods and
 
 This section should include the following:
 
-\subsection{Design Specification}
+\subsection{Design Specification  Patrick}
 
 In this subsection you will textually describe your client's requirements.  What does he or she need in the project you are developing.  If you are incorporating extra features or capabilities, please describe them clearly in this section.
 
 \begin{itemize}[$$]
-  \item Overall summary description of the module - 2-3 paragraphs maximum
+  \item Overall summary description of the module - 2-3 paragraphs maximum (explanation of use cases goes here)
 
     \begin{itemize}[$$]
       \item Specification of the public interface to the module
@@ -154,34 +154,40 @@ In this subsection you will textually describe your client's requirements.  What
     \caption{Example table.}
 \end{table}
 
-\subsection{Software Implementation}
+\subsection{Software Implementation  Jon}
 
 What is your design????
 
 Present your design starting from a top level functional view and potentially block diagram or high level architecture.  Refine that view to present and explain each of the modules that comprise the major functional blocks.  Discuss the flow of control through the design.  Identify and discuss the specific processes/tasks you have implemented in your design. Explain your design choices.    
 
-\begin{figure}[h]
-    \centering
-    \label{figure:chick}
-    \includegraphics{figure1.png}
-    \caption{A chick}
-\end{figure}
+\subsubsection{Top level design Jon}
+
+Put stuff here about the functional decomposition, system architecture, interaction of parts.
+
+\subsubsection{low level design  Jarret}
+
+task level implementation details here. Control diagram goes here, etc.
 
 \section{Presentation, Discussion, and Analysis of the Results}
 
 Based upon the execution of your design, present your results. Explain them and what was expected, and draw any conclusions (for example, did this prove your design worked).
 
 In addition to a detailed discussion and analysis of your project and your results, you must include all the answers to all questions raised in the lab.
+\subsection{results  patrick}
 
-\subsection{Analysis of any Errors}
+\subsection{discussion of results  Jon}
+
+\subsection{Analysis of any Errors  Patric}
 
 This one is obvious. Do this section as appropriate.  If it improves the flow, it does not need to be a separate section and may be included in the presentation, discussion, and analysis of the results.  However, it will still be graded separately and must be present.
 
-\subsection{Analysis of why the project may not have worked and what efforts were made to identify the root cause of any problems}
+\subsection{Analysis of problems and issues encountered and what efforts were made to identify the root cause of any problems  Jarrett}
 
-State any problems you encountered while working on the project. If your project did not work or worked only partially, provide an analysis of why and what efforts were made to identify the root cause of any problems.
+State any problems you encountered while working on the project. If your project did not work or worked only partially, provide an analysis of why and what efforts were made to identify the root cause of any problems. \\
 
-\section{Test Plan}
+Some points to bring up: did not enable the GPIO bank (caused OLED display to not work), could not get switch to work (solved by understanding that switch required pull up). P or J can talk about design solutions that did not work. On the whole, we had problems with going too deep, too quickly.
+
+\section{Test Plan Patrick}
 
 Overall summary of what needs to be tested to ensure that your design meets the original requirements, 2-3 paragraphs maximum unless specified otherwise
 
@@ -191,7 +197,7 @@ Annotated description of what is to be tested and the test limits.  This specifi
 
 Note, this does not specify test implementation...this is what to do, not how to do it.
 
-\subsection{Test Cases}
+\subsection{Test Cases  Jarrett}
 
 Annotated description of how your system is to be tested against the test limits
 Note, this does specify test implementation...this is not what to do, this is how to do it based upon the test specification.
@@ -200,14 +206,23 @@ Note, this does specify test implementation...this is not what to do, this is ho
 
 You should know these sections very well, no need to explain.  Note, however, that they are two different sections.  The summary is just that, a summary of your project.  It should loosely mirror the abstract with a bit more detail.  The conclusion concludes the report, potentially adds information that is often outside the main thrust of the report, and may offer suggestions or recommendations about the project.
 
+\subsection{Final Summary}
+
+
+\subsection{Project Conclusions}
+
+
 \pagebreak
 \appendix
 
 \section{Source Code}
+
+Source code for this project is provided below.
+
 \subsection{The first part}
-\lstinputlisting{source.c}
+% \lstinputlisting{source.c}
 
 \subsection{The second part}
-\lstinputlisting{source.c}
+% \lstinputlisting{source.c}
 
 \end{document}
