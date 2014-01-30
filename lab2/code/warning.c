@@ -14,6 +14,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "inc/hw_memmap.h"
+#include "inc/hw_types.h"
+#include "driverlib/debug.h"
+#include "driverlib/gpio.h"
+#include "driverlib/pwm.h"
+#include "driverlib/sysctl.h"
+#include "drivers/rit128x96x4.h"
+
+
+//pin E0 for input on switch 3
+//pin C5 C6 and C7 for led out
+
+
 
 // Internal data structure
 typedef struct WarningData {
@@ -25,12 +38,71 @@ typedef struct WarningData {
 } WarningData;
 
 static WarningData data;                   // internal data
-
+static unsigned long ulPeriod;
 
 
 void *warningData = (void *)&data;  // external pointer to internal data
 
 void initializeWarningTask(void *data) {
+
+
+
+    //
+    // Set the clocking to run directly from the crystal.
+    //
+    SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
+                   SYSCTL_XTAL_8MHZ);
+    SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
+
+    //
+    // Initialize the OLED display.
+    //
+    RIT128x96x4Init(1000000);
+
+    //
+    // Clear the screen and tell the user what is happening.
+    //
+    RIT128x96x4StringDraw("Generating PWM", 18, 24, 15);
+    RIT128x96x4StringDraw("on PF0 and PG1", 18, 32, 15);
+
+    //
+    // Enable the peripherals used by this example.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);
+
+    //
+    // Set GPIO F0 and G1 as PWM pins.  They are used to output the PWM0 and
+    // PWM1 signals.
+    //
+    GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_0);
+    GPIOPinTypePWM(GPIO_PORTG_BASE, GPIO_PIN_1);
+
+    //
+    // Compute the PWM period based on the system clock.
+    //
+    ulPeriod = SysCtlClockGet() / 440;
+
+    //
+    // Set the PWM period to 440 (A) Hz.
+    //
+    PWMGenConfigure(PWM0_BASE, PWM_GEN_0,
+                    PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
+    PWMGenPeriodSet(PWM0_BASE, PWM_GEN_0, ulPeriod);
+
+    //
+    // Set PWM0 to a duty cycle of 25% and PWM1 to a duty cycle of 75%.
+    //
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_0, ulPeriod / 4);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_1, ulPeriod * 3 / 4);
+
+    //
+    // Enable the PWM0 and PWM1 output signals.
+    //
+    PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_1_BIT, true);
+
+
 
   
   WarningData *mdata = (WarningData *)data;
@@ -166,6 +238,15 @@ static Bool ledRed = false;
 	else
 	{
 		//green led off
+	}
+	if(true == sound)
+	{
+		PWMGenEnable(PWM0_BASE, PWM_GEN_0);
+	
+	}
+	else
+	{
+		PWMGenDisable(PWM0_BASE, PWM_GEN_0);
 	}
 	//playSound()
 		
