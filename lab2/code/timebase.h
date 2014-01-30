@@ -6,8 +6,8 @@
  * Defines the major and minor cycles the system runs on
  */
 
-#define MINOR_CYCLE 100     // minor cycle, in milliseconds
-#define MAJOR_CYCLE 10      // major cycle, in number of minor cycles
+#define MINOR_CYCLE 50     // minor cycle, in milliseconds
+#define MAJOR_CYCLE 100      // major cycle, in number of minor cycles
 
 #define IS_MAJOR_CYCLE (minor_cycle_ctr % MAJOR_CYCLE == 0)
 
