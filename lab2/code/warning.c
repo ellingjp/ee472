@@ -16,6 +16,7 @@
 
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
+#include "driverlib/gpio.h"
 #include "driverlib/debug.h"
 #include "driverlib/gpio.h"
 #include "driverlib/pwm.h"
@@ -45,7 +46,9 @@ void *warningData = (void *)&data;  // external pointer to internal data
 
 void initializeWarningTask(void *data) {
 
-
+	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_DIR_MODE_OUT);
+	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
+	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT);
 
     //
     // Set the clocking to run directly from the crystal.
@@ -72,7 +75,7 @@ void initializeWarningTask(void *data) {
     //
     // Compute the PWM period based on the system clock.
     //
-    ulPeriod = SysCtlClockGet() / 440;
+    ulPeriod = SysCtlClockGet() / 65.4064;
 
     //
     // Set the PWM period to 440 (A) Hz.
@@ -185,6 +188,7 @@ static Bool ledRed = false;
 	{
 		//led on .5 sec off .5 sec
 		normal = false;
+		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0XFF)
 	}
 	if( true == tempAlarm)
 	{
@@ -220,7 +224,7 @@ static Bool ledRed = false;
 	}
 	if(normal == true)
 	{
-		if(false == batteryWarn)
+		//if(false == batteryWarn)
 			//green led on solid
 		//yellow led off
 		//red led off
