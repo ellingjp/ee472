@@ -126,9 +126,9 @@ void measureTask(void *dataptr) {
     MeasureData *data = (MeasureData *) dataptr;
 
     setTemp(data->temperatureRaw);
-    //setSysPress(data->systolicPressRaw);
-    //setDiaPress(data->diastolicPressRaw);
-    //setPulse(data->pulseRateRaw);
+    setSysPress(data->systolicPressRaw);
+    setDiaPress(data->diastolicPressRaw);
+    setPulse(data->pulseRateRaw);
     
 #if DEBUG
     char num[30];
