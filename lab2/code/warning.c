@@ -46,15 +46,14 @@ void *warningData = (void *)&data;  // external pointer to internal data
 
 void initializeWarningTask(void *data) {
 
-	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_DIR_MODE_OUT); //green
-	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT); //red
-	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT); //yellow
+	//GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_DIR_MODE_OUT); //green
+	//GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT); //red
+	//GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT); //yellow
 
     //
     // Set the clocking to run directly from the crystal.
     //
-    SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
-                   SYSCTL_XTAL_8MHZ);
+    //SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | SYSCTL_XTAL_8MHZ);
     SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
 
 
@@ -133,11 +132,11 @@ static Bool ledRed = false;
 	float pulse = *(data->pulseRateCorrected);
 	int battery = *(data->batteryState);
 	
-	if(temp < (TEMP_MIN*WARN_LOW) || (TEMP_MAX*WARN_HIGH))
+	if(temp < (TEMP_MIN*WARN_LOW) || temp >(TEMP_MAX*WARN_HIGH))
 		tempWarn = true;
 	else tempWarn = false;
 	
-	if(temp < (TEMP_MIN*ALARM_LOW) || (TEMP_MAX*ALARM_HIGH))
+	if(temp < (TEMP_MIN*ALARM_LOW) || temp >(TEMP_MAX*ALARM_HIGH))
 		tempAlarm = true;
 	else tempAlarm = false;	
 
@@ -157,11 +156,11 @@ static Bool ledRed = false;
 		diaAlarm = true;
 	else diaAlarm = false;	
 
-	if(pulse < (PULSE_MIN*WARN_LOW) || (PULSE_MAX*WARN_HIGH))
+	if(pulse < (PULSE_MIN*WARN_LOW) || pulse >(PULSE_MAX*WARN_HIGH))
 		pulseWarn = true;
 	else pulseWarn = false;
 	
-	if(pulse < (PULSE_MIN*ALARM_LOW) || (PULSE_MAX*ALARM_HIGH))
+	if(pulse < (PULSE_MIN*ALARM_LOW) || pulse >(PULSE_MAX*ALARM_HIGH))
 		pulseAlarm = true;
 	else pulseAlarm = false;	
 
@@ -177,7 +176,7 @@ static Bool ledRed = false;
 	{
 		//led on 1 sec off 1 sec
 		normal = false;
-		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0XFF)
+		//GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0XFF)
 	}
 	if( true == pulseAlarm)
 	{
@@ -189,7 +188,7 @@ static Bool ledRed = false;
 	{
 		//led on .5 sec off .5 sec
 		normal = false;
-		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0XFF)
+		//GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0XFF)
 	}
 	if( true == tempAlarm)
 	{
@@ -201,7 +200,7 @@ static Bool ledRed = false;
 	{
 		//led on .25 sec off .25 sec
 		normal = false;
-		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0XFF)
+		//GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0XFF)
 	}
 	if( true == sysAlarm)
 	{
@@ -213,7 +212,7 @@ static Bool ledRed = false;
 	{
 		//led on .25 sec off .25 sec
 		normal = false;
-		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0XFF)
+		//GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0XFF)
 	}
 	if( true == diaAlarm)
 	{
@@ -223,19 +222,19 @@ static Bool ledRed = false;
 	}
 	if(true == batteryWarn)
 	{
-		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0XFF)
+		//GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0XFF)
 		
 	}
 	if(normal == true)
 	{
-		if(false == batteryWarn)
+		/*if(false == batteryWarn)
 			GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0XFF)//green led on solid
 		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0X00)//yellow led off
-		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0X00)//red led off
+		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0X00)//red led off*/
 	}
 	else
 	{
-		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0X00)//green led off
+		//GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0X00)//green led off
 	}
 	if(true == sound)
 	{
