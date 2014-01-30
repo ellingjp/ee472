@@ -24,13 +24,22 @@
 #include "drivers/rit128x96x4.h"
 
 
-#define ALARM_SLEEP_PERIOD 100   // duration to sleep in terms of mnor cycles
+#define ALARM_SLEEP_PERIOD 50   // duration to sleep in terms of minor cycles
 
+#define WARN_RATE_PULSE    20   // flash rate in terms of minor cycles
+#define WARN_RATE_TEMP     10
+#define WARN_RATE_PRESS    5
+
+#define LED_GREEN GPIO_PIN_6
+#define LED_RED   GPIO_PIN_5
+#define LED_YELLOW GPIO_PIN_7
+
+typedef enum {OFF, ON, ASLEEP} alarmState;
+typedef enum {NONE, WARN_PRESS, WARN_TEMP, WARN_PULSE} warningState;
+typedef enum {NORMAL, LOW} batteryState;
 
 //pin E0 for input on switch 3
 //pin C5 C6 and C7 for led out
-
-
 
 // Internal data structure
 typedef struct WarningData {
@@ -62,20 +71,20 @@ void initializeWarningTask(void *data) {
 
 
   // configure the pin C5 for 4mA output
-  GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_5, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
-  GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_DIR_MODE_OUT);    
+  GPIOPadConfigSet(GPIO_PORTC_BASE,LED_RED, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
+  GPIODirModeSet(GPIO_PORTC_BASE, LED_RED, GPIO_DIR_MODE_OUT);    
 
   // configure the pin C6 for 4mA output
-  GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_6, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
-  GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
+  GPIOPadConfigSet(GPIO_PORTC_BASE,LED_GREEN, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
+  GPIODirModeSet(GPIO_PORTC_BASE, LED_GREEN, GPIO_DIR_MODE_OUT);
 
   // configure the pin C7 for 4mA output
-  GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_7, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
-  GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT);
+  GPIOPadConfigSet(GPIO_PORTC_BASE,LED_YELLOW, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
+  GPIODirModeSet(GPIO_PORTC_BASE, LED_YELLOW, GPIO_DIR_MODE_OUT);
 
   // configure the pin E0 for input (sw3). NB: requires pull-up to operate
   GPIOPadConfigSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_STRENGTH_2MA,
-                   GPIO_PIN_TYPE_STD_WPU);
+      GPIO_PIN_TYPE_STD_WPU);
   GPIODirModeSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_DIR_MODE_IN);
 
 
@@ -83,7 +92,7 @@ void initializeWarningTask(void *data) {
    *  but still requires that the bank of peripheral pins is enabled via
    *  SysCtrlPeripheralEnable()
    */
-  //  GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_5);
+  //  GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, LED_RED);
 
   ///////////////////////////////////////////
   //  This section defines the PWM speaker characteristics
@@ -140,144 +149,125 @@ void initializeWarningTask(void *data) {
  */
 void warningTask(void *dataptr) {
 
-  static tBoolean tempWarn = false;
-  static tBoolean tempAlarm = false;
-  static tBoolean sysWarn = false;
-  static tBoolean sysAlarm = false;
-  static tBoolean diaWarn = false;
-  static tBoolean diaAlarm = false;
-  static tBoolean pulseWarn = false;
-  static tBoolean pulseAlarm = false;
-  static tBoolean batteryWarn = false;
-  static tBoolean ledGreen = false;
-  static tBoolean ledYellow = false;
-  static tBoolean ledRed = false;
+  static alarmState aState = OFF;
+  static warningState wState = NONE;
+  static batteryState bState = NORMAL;
   
-  static tBoolean sleepAlarm = false;
+  static warningState prevState;
+  prevState = wState;
+  
   static int wakeUpAlarmAt = 0;
 
-  // only run on major cycle
-  if (IS_MAJOR_CYCLE) {   // on major cycle
-    WarningData *data = (WarningData *) dataptr;
+  // Get measurement data
+  WarningData *data = (WarningData *) dataptr;
+  float temp = *(data->temperatureCorrected);
+  float sysPress = *(data->systolicPressCorrected);
+  float diaPress = *(data->diastolicPressCorrected);
+  float pulse = *(data->pulseRateCorrected);
+  int battery = *(data->batteryState);
 
-    float temp = *(data->temperatureCorrected);
-    float sysPress = *(data->systolicPressCorrected);
-    float diaPress = *(data->diastolicPressCorrected);
-    float pulse = *(data->pulseRateCorrected);
-    int battery = *(data->batteryState);
+  // Alarm condition
+  if ( (temp < TEMP_MIN*ALARM_LOW || temp > (TEMP_MAX*ALARM_HIGH)) ||
+      (sysPress < SYS_MAX*ALARM_HIGH) ||
+      (diaPress < DIA_MAX*ALARM_HIGH) ||
+      (pulse < PULSE_MIN*ALARM_LOW || pulse > PULSE_MAX*ALARM_HIGH) ) {
 
-    if(temp < (TEMP_MIN*WARN_LOW) || temp > (TEMP_MAX*WARN_HIGH))
-      tempWarn = true;
-    else tempWarn = false;
-
-    if(temp < (TEMP_MIN*ALARM_LOW) || temp > (TEMP_MAX*ALARM_HIGH))
-      tempAlarm = true;
-    else tempAlarm = false; 
-
-    if(sysPress < (SYS_MAX*WARN_HIGH))
-      sysWarn = true;
-    else sysWarn = false;
-
-    if(sysPress < (SYS_MAX*ALARM_HIGH))
-      sysAlarm = true;
-    else sysAlarm = false;  
-
-    if(diaPress < (DIA_MAX*WARN_HIGH))
-      diaWarn = true;
-    else diaWarn = false;
-
-    if(diaPress < (DIA_MAX*ALARM_HIGH))
-      diaAlarm = true;
-    else diaAlarm = false;  
-
-    if(pulse < (PULSE_MIN*WARN_LOW) || pulse > (PULSE_MAX*WARN_HIGH))
-      pulseWarn = true;
-    else pulseWarn = false;
-
-    if(pulse < (PULSE_MIN*ALARM_LOW) || pulse > (PULSE_MAX*ALARM_HIGH))
-      pulseAlarm = true;
-    else pulseAlarm = false;  
-
-    if(battery < (BATTERY_MIN))
-      batteryWarn = true;
-    else batteryWarn = false;
-
-
-  }
-  tBoolean normal = true;
-  tBoolean sound = false;
-  if( true == pulseWarn)
-  {
-    //led on 1 sec off 1 sec
-    normal = false;
-  }
-  if( true == pulseAlarm)
-  {
-    //sound
-    sound = true;
-    normal = false;
-  }
-  if( true == tempWarn)
-  {
-    //led on .5 sec off .5 sec
-    normal = false;
-    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0XFF);
-    //GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0XFF);
-    //GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0XFF);
-  }
-  if( true == tempAlarm)
-  {
-    //sound
-    sound = true;
-    normal = false;
-  }
-  if( true == sysWarn)
-  {
-    //led on .25 sec off .25 sec
-    normal = false;
-  }
-  if( true == sysAlarm)
-  {
-    //sound
-    sound = true;
-    normal = false;
-  }
-  if( true == diaWarn)
-  {
-    //led on .25 sec off .25 sec
-    normal = false;
-  }
-  if( true == diaAlarm)
-  {
-    //sound
-    sound = true;
-    normal = false;
-  }
-  if(true == batteryWarn)
-  {
-    //flash battery Warn LED
-  }
-  if(normal == true)
-  {
-    //if(false == batteryWarn)
-    //green led on solid
-    //yellow led off
-    //red led off
+    // Should only turn alarm ON if it was previously OFF.  If it is
+    // ASLEEP, shouldn't do anything.
+    if (aState == OFF) aState = ON;
   }
   else
-  {
-    //green led off
-  }
-  if(true == sound && (!sleepAlarm))
-  {
-    PWMGenEnable(PWM0_BASE, PWM_GEN_0);
+    aState = OFF;
 
-  }
+  // Warning Condition
+  if ( sysPress < SYS_MAX*ALARM_HIGH || diaPress < DIA_MAX*ALARM_HIGH )
+    wState = WARN_PRESS;
+  else if ( temp < TEMP_MIN*WARN_LOW || temp > TEMP_MAX*WARN_HIGH )
+    wState = WARN_TEMP;
+  else if ( pulse < PULSE_MIN*WARN_LOW || pulse > PULSE_MAX*WARN_HIGH )
+    wState = WARN_PULSE;
   else
-  {
-    PWMGenDisable(PWM0_BASE, PWM_GEN_0);
+    wState = NONE; 
+
+  // Battery Condition
+  if (battery < BATTERY_MIN)
+    bState = LOW;
+
+  // Handle speaker, based on alarm state
+  switch (aState) {
+    case ON:
+      PWMGenEnable(PWM0_BASE, PWM_GEN_0);
+      break;
+    case ASLEEP:
+      PWMGenDisable(PWM0_BASE, PWM_GEN_0);
+      break;
+    default:  // OFF
+      PWMGenDisable(PWM0_BASE, PWM_GEN_0);
+      break;
   }
-  //playSound()
+
+  // Handle warning cases
+  static int toggletime;
+  switch (wState) {
+    case WARN_PRESS:
+      GPIOPinWrite(GPIO_PORTC_BASE, LED_GREEN, 0X00);
+      
+      if (wState != prevState) {
+        GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
+        toggletime = minor_cycle_ctr + WARN_RATE_PRESS;
+      }
+      else if (minor_cycle_ctr == toggletime) {
+        if (GPIOPinRead(GPIO_PORTC_BASE, LED_RED) == 0)
+          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
+        else
+          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0X00); // need to flash
+        
+        toggletime+=WARN_RATE_PRESS;
+      }
+      
+      break;
+    case WARN_TEMP:
+      GPIOPinWrite(GPIO_PORTC_BASE, LED_GREEN, 0X00);
+      
+      if (wState != prevState) {
+        GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
+        toggletime = minor_cycle_ctr + WARN_RATE_TEMP;
+      }
+      else if (minor_cycle_ctr == toggletime) {
+        if (GPIOPinRead(GPIO_PORTC_BASE, LED_RED) == 0)
+          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
+        else
+          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0X00); // need to flash
+        
+        toggletime+=WARN_RATE_TEMP;
+      }
+      break;
+    case WARN_PULSE:
+      GPIOPinWrite(GPIO_PORTC_BASE, LED_GREEN, 0X00);
+      
+      if (wState != prevState) {
+        GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
+        toggletime = minor_cycle_ctr + WARN_RATE_PULSE;
+      }
+      else if (minor_cycle_ctr == toggletime) {
+        if (GPIOPinRead(GPIO_PORTC_BASE, LED_RED) == 0)
+          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
+        else
+          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0X00); // need to flash
+        
+        toggletime+=WARN_RATE_PULSE;
+      }
+      break;
+    default:  // NORMAL
+      GPIOPinWrite(GPIO_PORTC_BASE, LED_GREEN, 0xFF);
+      GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0x00);
+      break;
+  }
+
+  if (bState == LOW)
+    GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0xFF);
+  else
+    GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0x00);
 
   /* This is the alarm override
    * Upon override, the alarm is silenced for some time.
@@ -286,19 +276,16 @@ void warningTask(void *dataptr) {
    * If the button is pushed, the value returned is 0
    * If the button is NOT pushed, the value is non-zero
    */
-  if( 0 == GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_0) && (sysAlarm || diaAlarm ||
-        tempAlarm || pulseAlarm))
+  if (0 == GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_0) && (aState == ON) )
   {
-    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0XFF);  // for debug, lights led
-    sleepAlarm = true;
+    GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0XFF);  // for debug, lights led
+    aState = ASLEEP;
     wakeUpAlarmAt = minor_cycle_ctr + ALARM_SLEEP_PERIOD;
   }
 
   // Check whether to resound alarm
-  if( minor_cycle_ctr == wakeUpAlarmAt) {
-    sleepAlarm = false;
-    GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0X00);  // for debug, kills led
-
+  if (minor_cycle_ctr == wakeUpAlarmAt && aState == ASLEEP) {
+    aState = ON;
+    GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0X00);  // for debug, kills led
   }
-
 }
