@@ -53,8 +53,7 @@ void initializeWarningTask(void *data) {
     //
     // Set the clocking to run directly from the crystal.
     //
-    //SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
-                   SYSCTL_XTAL_8MHZ);
+    //SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | SYSCTL_XTAL_8MHZ);
     SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
 
 
@@ -188,7 +187,7 @@ static Bool ledRed = false;
 	{
 		//led on .5 sec off .5 sec
 		normal = false;
-		GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_0, 0XFF)
+		GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_0, 0XFF);
 	}
 	if( true == tempAlarm)
 	{
