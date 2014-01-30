@@ -62,8 +62,9 @@ void oledDisplayTask(void *dataptr) {
     
     sprintf(num, "Pulse rate: %d BPM", (int) *(data->pulseRateCorrected));
     RIT128x96x4StringDraw(num, 0, 50, 15);
-	
-    sprintf(num, "Battery: %d \%", *(data->batteryState)/200);
+
+    RIT128x96x4StringDraw("                      ",0,60,15); 
+    sprintf(num, "Battery: %d %", *(data->batteryState)/2);
     RIT128x96x4StringDraw(num,0,60,15);
   }
 }
