@@ -46,9 +46,9 @@ void *warningData = (void *)&data;  // external pointer to internal data
 
 void initializeWarningTask(void *data) {
 
-	GPIODirModeSet(GPIO_PORTF_BASE, GPIO_PIN_0, GPIO_DIR_MODE_OUT);
-	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
-	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT);
+	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_DIR_MODE_OUT); //green
+	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT); //red
+	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT); //yellow
 
     //
     // Set the clocking to run directly from the crystal.
@@ -177,6 +177,7 @@ static Bool ledRed = false;
 	{
 		//led on 1 sec off 1 sec
 		normal = false;
+		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0XFF)
 	}
 	if( true == pulseAlarm)
 	{
@@ -188,7 +189,7 @@ static Bool ledRed = false;
 	{
 		//led on .5 sec off .5 sec
 		normal = false;
-		GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_0, 0XFF)
+		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0XFF)
 	}
 	if( true == tempAlarm)
 	{
@@ -200,6 +201,7 @@ static Bool ledRed = false;
 	{
 		//led on .25 sec off .25 sec
 		normal = false;
+		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0XFF)
 	}
 	if( true == sysAlarm)
 	{
@@ -211,6 +213,7 @@ static Bool ledRed = false;
 	{
 		//led on .25 sec off .25 sec
 		normal = false;
+		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0XFF)
 	}
 	if( true == diaAlarm)
 	{
@@ -220,18 +223,19 @@ static Bool ledRed = false;
 	}
 	if(true == batteryWarn)
 	{
-		//flash battery Warn LED
+		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0XFF)
+		
 	}
 	if(normal == true)
 	{
-		//if(false == batteryWarn)
-			//green led on solid
-		//yellow led off
-		//red led off
+		if(false == batteryWarn)
+			GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0XFF)//green led on solid
+		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0X00)//yellow led off
+		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0X00)//red led off
 	}
 	else
 	{
-		//green led off
+		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0X00)//green led off
 	}
 	if(true == sound)
 	{
