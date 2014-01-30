@@ -53,7 +53,7 @@ void initializeWarningTask(void *data) {
     //
     // Set the clocking to run directly from the crystal.
     //
-    SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
+    //SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
                    SYSCTL_XTAL_8MHZ);
     SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
 
