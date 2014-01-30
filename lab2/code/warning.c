@@ -214,15 +214,15 @@ void warningTask(void *dataptr) {
       
       if (wState != prevState) {
         GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
-        toggletime = minor_cycle_ctr + WARN_RATE_PRESS;
+        toggletime = WARN_RATE_PRESS;
       }
-      else if (minor_cycle_ctr == toggletime) {
+      else if (0 == minor_cycle_ctr%toggletime) {
         if (GPIOPinRead(GPIO_PORTC_BASE, LED_RED) == 0)
           GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
         else
           GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0X00); // need to flash
         
-        toggletime+=WARN_RATE_PRESS;
+        //toggletime+=WARN_RATE_PRESS;
       }
       
       break;
@@ -231,15 +231,15 @@ void warningTask(void *dataptr) {
       
       if (wState != prevState) {
         GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
-        toggletime = minor_cycle_ctr + WARN_RATE_TEMP;
+        toggletime = WARN_RATE_TEMP;
       }
-      else if (minor_cycle_ctr == toggletime) {
+      else if (0 == minor_cycle_ctr%toggletime) {
         if (GPIOPinRead(GPIO_PORTC_BASE, LED_RED) == 0)
           GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
         else
           GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0X00); // need to flash
         
-        toggletime+=WARN_RATE_TEMP;
+        //toggletime+=WARN_RATE_TEMP;
       }
       break;
     case WARN_PULSE:
@@ -247,15 +247,15 @@ void warningTask(void *dataptr) {
       
       if (wState != prevState) {
         GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
-        toggletime = minor_cycle_ctr + WARN_RATE_PULSE;
+        toggletime = WARN_RATE_PULSE;
       }
-      else if (minor_cycle_ctr == toggletime) {
+      else if (0==minor_cycle_ctr%toggletime) {
         if (GPIOPinRead(GPIO_PORTC_BASE, LED_RED) == 0)
           GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
         else
           GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0X00); // need to flash
         
-        toggletime+=WARN_RATE_PULSE;
+        //toggletime+=WARN_RATE_PULSE;
       }
       break;
     default:  // NORMAL
