@@ -9,7 +9,7 @@
 #include "globals.h"
 #include "timebase.h"
 #include "warning.h"
-#include "bool.h"
+#include "inc/hw_types.h"
 #include "drivers/rit128x96x4.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -45,27 +45,36 @@ static unsigned long ulPeriod;
 void *warningData = (void *)&data;  // external pointer to internal data
 
 void initializeWarningTask(void *data) {
-  
-        SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
-		SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
-        
-	GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_5, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
-    GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_6, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
-    GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_7, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
-    GPIOPadConfigSet(GPIO_PORTE_BASE,GPIO_PIN_0, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD); 
-	
-	
-    
+    //
+    // Enable the peripherals used by this code. I.e enable the use of pin banks, etc.
+    //
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);        // bank C
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);        // bank E
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);        // bank F
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);        // bank G
 		
     /*  This function call does the same result of the above set of calls,
      *  but still requires that the bank of peripheral pins
      */
     
-//      GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_5);
-	GPIODirModeSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_DIR_MODE_IN);
+    //GPIOPinTypeGPIOOutput(GPIO_PORTC_BASE, GPIO_PIN_5);
+
+    GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_5, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
     GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_DIR_MODE_OUT);    
-	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
-	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT);
+    
+    GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_6, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
+    GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
+
+    GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_7, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
+    GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT);
+
+    GPIOPadConfigSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
+    GPIODirModeSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_DIR_MODE_IN);
+	
+
+	
+	
 
     //
     // Set the clocking to run directly from the crystal.
@@ -74,12 +83,6 @@ void initializeWarningTask(void *data) {
     SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
 
 
-    //
-    // Enable the peripherals used by this code.
-    //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);
 
     //
     // Set GPIO F0 and G1 as PWM pins.  They are used to output the PWM0 and
@@ -126,18 +129,18 @@ void initializeWarningTask(void *data) {
 void warningTask(void *dataptr) {
   // only run on major cycle
   
-static Bool tempWarn = false;
-static Bool tempAlarm = false;
-static Bool sysWarn = false;
-static Bool sysAlarm = false;
-static Bool diaWarn = false;
-static Bool diaAlarm = false;
-static Bool pulseWarn = false;
-static Bool pulseAlarm = false;
-static Bool batteryWarn = false;
-static Bool ledGreen = false;
-static Bool ledYellow = false;
-static Bool ledRed = false;
+static tBoolean tempWarn = false;
+static tBoolean tempAlarm = false;
+static tBoolean sysWarn = false;
+static tBoolean sysAlarm = false;
+static tBoolean diaWarn = false;
+static tBoolean diaAlarm = false;
+static tBoolean pulseWarn = false;
+static tBoolean pulseAlarm = false;
+static tBoolean batteryWarn = false;
+static tBoolean ledGreen = false;
+static tBoolean ledYellow = false;
+static tBoolean ledRed = false;
 
   
   if (IS_MAJOR_CYCLE) {   // on major cycle
@@ -149,11 +152,11 @@ static Bool ledRed = false;
 	float pulse = *(data->pulseRateCorrected);
 	int battery = *(data->batteryState);
 	
-	if(temp < (TEMP_MIN*WARN_LOW) || (TEMP_MAX*WARN_HIGH))
+	if(temp < (TEMP_MIN*WARN_LOW) || temp > (TEMP_MAX*WARN_HIGH))
 		tempWarn = true;
 	else tempWarn = false;
 	
-	if(temp < (TEMP_MIN*ALARM_LOW) || (TEMP_MAX*ALARM_HIGH))
+	if(temp < (TEMP_MIN*ALARM_LOW) || temp > (TEMP_MAX*ALARM_HIGH))
 		tempAlarm = true;
 	else tempAlarm = false;	
 
@@ -173,11 +176,11 @@ static Bool ledRed = false;
 		diaAlarm = true;
 	else diaAlarm = false;	
 
-	if(pulse < (PULSE_MIN*WARN_LOW) || (PULSE_MAX*WARN_HIGH))
+	if(pulse < (PULSE_MIN*WARN_LOW) || pulse > (PULSE_MAX*WARN_HIGH))
 		pulseWarn = true;
 	else pulseWarn = false;
 	
-	if(pulse < (PULSE_MIN*ALARM_LOW) || (PULSE_MAX*ALARM_HIGH))
+	if(pulse < (PULSE_MIN*ALARM_LOW) || pulse > (PULSE_MAX*ALARM_HIGH))
 		pulseAlarm = true;
 	else pulseAlarm = false;	
 
@@ -187,8 +190,8 @@ static Bool ledRed = false;
 	
 	
   }
-	Bool normal = true;
-	Bool sound = false;
+	tBoolean normal = true;
+	tBoolean sound = false;
 	if( true == pulseWarn)
 	{
 		//led on 1 sec off 1 sec
@@ -262,7 +265,11 @@ static Bool ledRed = false;
 	}
 	//playSound()
 		
-	if( 0 == GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_0)
+    /* This is the alarm override
+     * If the button is pushed, the value returned is 0
+     * If the button is NOT pushed, the value is non-zero
+     */
+	if( 1 == GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_0))
 	{
 		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 0XFF);
 	}

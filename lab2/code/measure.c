@@ -9,7 +9,7 @@
 #include "globals.h"
 #include "timebase.h"
 #include "measure.h"
-#include "bool.h"
+#include "inc/hw_types.h"
 #include "drivers/rit128x96x4.h"
 
 // Used for debug display
@@ -43,7 +43,7 @@ void initializeMeasureTask(void *data) {
 
 void setTemp(int *temp) {
     static unsigned int i = 0;
-    static Bool goingUp = true;
+    static tBoolean goingUp = true;
 
     if (*temp > 50)
       goingUp = false;
@@ -70,7 +70,7 @@ void setSysPress(int *syspress) {
    
     static unsigned int i = 0;
 
-    Bool complete = false;    
+    tBoolean complete = false;    
     
     if (*syspress > 100) {
       complete = true;
@@ -86,7 +86,7 @@ void setSysPress(int *syspress) {
 void setDiaPress(int *diapress) {
     static unsigned int i = 0;
 
-    Bool complete = false;
+    tBoolean complete = false;
     if (*diapress < 40) {
       complete = true;
       *diapress = DIA_RAW_INIT;
@@ -99,7 +99,7 @@ void setDiaPress(int *diapress) {
 void setPulse(int *pulse) {
     static unsigned int i = 0;
 
-    static Bool goingUp = true;
+    static tBoolean goingUp = true;
 
     if (*pulse < 15)
       goingUp = true;

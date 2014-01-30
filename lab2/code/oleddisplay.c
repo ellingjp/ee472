@@ -9,7 +9,7 @@
 #include "globals.h"
 #include "timebase.h"
 #include "oledDisplay.h"
-#include "bool.h"
+#include "inc/hw_types.h"
 #include "drivers/rit128x96x4.h"
 #include <stdlib.h>
 #include <stdio.h>
