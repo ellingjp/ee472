@@ -13,6 +13,12 @@
 #define ALARM_LOW 0.90 //alarm at 10% below min range value
 #define ALARM_HIGH 1.10 //alarm at 10% above max range value
 
+#define ALARM_SLEEP_PERIOD 50   // duration to sleep in terms of minor cycles
+
+#define WARN_RATE_PULSE    4    // flash rate in terms of minor cycles
+#define WARN_RATE_TEMP     2
+#define WARN_RATE_PRESS    1
+
 #define TEMP_MIN 36.1
 #define TEMP_MAX 37.8
 #define SYS_MAX 120

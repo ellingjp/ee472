@@ -51,12 +51,12 @@ void setTemp(int *temp) {
       goingUp = true;
 
     if (goingUp) {
-        if (i%2==0) *temp+=2;
-        else *temp--;
+        if (i%2==0) (*temp)+=2;
+        else (*temp)--;
     }
     else {
-        if (i%2==0) *temp-=2;
-        else *temp++;
+        if (i%2==0) (*temp)-=2;
+        else (*temp)++;
     }
     
     i++;
@@ -77,8 +77,8 @@ void setSysPress(int *syspress) {
       *syspress = SYS_RAW_INIT;
     }
 
-    if (i%2==0) *syspress+=3;
-    else *syspress--;
+    if (i%2==0) (*syspress)+=3;
+    else (*syspress)--;
     
     i++;
 }
@@ -92,8 +92,8 @@ void setDiaPress(int *diapress) {
       *diapress = DIA_RAW_INIT;
     }
     
-    if (i%2==0) *diapress -=2;
-    else *diapress++;
+    if (i%2==0) (*diapress)-=2;
+    else (*diapress)++;
     
     i++;
 }
@@ -109,12 +109,12 @@ void setPulse(int *pulse) {
       goingUp = false;
 
     if (goingUp) {
-      if (i%2 == 0) *pulse--;
-      else *pulse+=3;
+      if (i%2 == 0) (*pulse)--;
+      else (*pulse)+=3;
     }
     else {
-      if (i%2 == 0) *pulse++;
-      else *pulse-=3;
+      if (i%2 == 0) (*pulse)++;
+      else (*pulse)-=3;
     }
     
     i++;
@@ -126,9 +126,9 @@ void measureTask(void *dataptr) {
     MeasureData *data = (MeasureData *) dataptr;
 
     setTemp(data->temperatureRaw);
-    setSysPress(data->systolicPressRaw);
-    setDiaPress(data->diastolicPressRaw);
-    setPulse(data->pulseRateRaw);
+    //setSysPress(data->systolicPressRaw);
+    //setDiaPress(data->diastolicPressRaw);
+    //setPulse(data->pulseRateRaw);
     
 #if DEBUG
     char num[30];

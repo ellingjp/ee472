@@ -28,7 +28,7 @@ void initializeStatusTask (void *data) {
 void statusTask(void *data){
   if (IS_MAJOR_CYCLE) {
 	StatusData *sData = (StatusData *) data;
-	if (sData->batteryState > 0)
+	if (*(sData->batteryState) > 0)
           *(sData->batteryState) = *(sData->batteryState) - 1;
   }
 }

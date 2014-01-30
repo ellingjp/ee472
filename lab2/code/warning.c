@@ -26,9 +26,9 @@
 
 #define ALARM_SLEEP_PERIOD 50   // duration to sleep in terms of minor cycles
 
-#define WARN_RATE_PULSE    20   // flash rate in terms of minor cycles
-#define WARN_RATE_TEMP     10
-#define WARN_RATE_PRESS    5
+#define WARN_RATE_PULSE    4    // flash rate in terms of minor cycles
+#define WARN_RATE_TEMP     2
+#define WARN_RATE_PRESS    1
 
 #define LED_GREEN GPIO_PIN_6
 #define LED_RED   GPIO_PIN_5
@@ -168,8 +168,8 @@ void warningTask(void *dataptr) {
 
   // Alarm condition
   if ( (temp < TEMP_MIN*ALARM_LOW || temp > (TEMP_MAX*ALARM_HIGH)) ||
-      (sysPress < SYS_MAX*ALARM_HIGH) ||
-      (diaPress < DIA_MAX*ALARM_HIGH) ||
+      (sysPress > SYS_MAX*ALARM_HIGH) ||
+      (diaPress > DIA_MAX*ALARM_HIGH) ||
       (pulse < PULSE_MIN*ALARM_LOW || pulse > PULSE_MAX*ALARM_HIGH) ) {
 
     // Should only turn alarm ON if it was previously OFF.  If it is
@@ -180,7 +180,7 @@ void warningTask(void *dataptr) {
     aState = OFF;
 
   // Warning Condition
-  if ( sysPress < SYS_MAX*ALARM_HIGH || diaPress < DIA_MAX*ALARM_HIGH )
+  if ( sysPress > SYS_MAX*ALARM_HIGH || diaPress > DIA_MAX*ALARM_HIGH )
     wState = WARN_PRESS;
   else if ( temp < TEMP_MIN*WARN_LOW || temp > TEMP_MAX*WARN_HIGH )
     wState = WARN_TEMP;
@@ -264,8 +264,10 @@ void warningTask(void *dataptr) {
       break;
   }
 
-  if (bState == LOW)
+  if (bState == LOW) {
     GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0xFF);
+    GPIOPinWrite(GPIO_PORTC_BASE, LED_GREEN, 0x00);
+  }
   else
     GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0x00);
 
@@ -278,7 +280,7 @@ void warningTask(void *dataptr) {
    */
   if (0 == GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_0) && (aState == ON) )
   {
-    GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0XFF);  // for debug, lights led
+    //GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0XFF);  // for debug, lights led
     aState = ASLEEP;
     wakeUpAlarmAt = minor_cycle_ctr + ALARM_SLEEP_PERIOD;
   }

@@ -9,10 +9,10 @@
 
 #define DEBUG 0
 
-#define TEMP_RAW_INIT 75
-#define SYS_RAW_INIT 80
-#define DIA_RAW_INIT 80
-#define PULSE_RAW_INIT 50
+#define TEMP_RAW_INIT 50
+#define SYS_RAW_INIT 0
+#define DIA_RAW_INIT 0
+#define PULSE_RAW_INIT 30
 
 #define TEMP_CORR_INIT 0.0
 #define SYS_CORR_INIT 0.0
