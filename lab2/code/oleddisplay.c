@@ -48,13 +48,13 @@ void oledDisplayTask(void *dataptr) {
     sprintf(num, "Temperature: %.2f C", *(data->temperatureCorrected));
     RIT128x96x4StringDraw(num, 0, 0, 15);
     
-    sprintf(num, "Systolic Pressure:", *(data->systolicPressCorrected));
+    sprintf(num, "Systolic Pressure:");
     RIT128x96x4StringDraw(num, 0, 10, 15);
 	
 	sprintf(num, "%.0f mm Hg", *(data->systolicPressCorrected));
     RIT128x96x4StringDraw(num, 0, 20, 15);
     
-    sprintf(num, "Diastolic Pressure:", *(data->diastolicPressCorrected));
+    sprintf(num, "Diastolic Pressure:");
     RIT128x96x4StringDraw(num, 0, 30, 15);
 	
 	sprintf(num, "%.0f mm Hg", *(data->diastolicPressCorrected));

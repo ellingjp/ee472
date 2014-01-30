@@ -54,19 +54,9 @@ void initializeWarningTask(void *data) {
                    SYSCTL_XTAL_8MHZ);
     SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
 
-    //
-    // Initialize the OLED display.
-    //
-    RIT128x96x4Init(1000000);
 
     //
-    // Clear the screen and tell the user what is happening.
-    //
-    RIT128x96x4StringDraw("Generating PWM", 18, 24, 15);
-    RIT128x96x4StringDraw("on PF0 and PG1", 18, 32, 15);
-
-    //
-    // Enable the peripherals used by this example.
+    // Enable the peripherals used by this code.
     //
     SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
@@ -179,7 +169,7 @@ static Bool ledRed = false;
 	
   }
 	Bool normal = true;
-	Bool sound = false
+	Bool sound = false;
 	if( true == pulseWarn)
 	{
 		//led on 1 sec off 1 sec
