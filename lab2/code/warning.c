@@ -46,7 +46,7 @@ void *warningData = (void *)&data;  // external pointer to internal data
 
 void initializeWarningTask(void *data) {
 
-	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_DIR_MODE_OUT);
+	GPIODirModeSet(GPIO_PORTF_BASE, GPIO_PIN_0, GPIO_DIR_MODE_OUT);
 	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
 	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_7, GPIO_DIR_MODE_OUT);
 
@@ -188,7 +188,7 @@ static Bool ledRed = false;
 	{
 		//led on .5 sec off .5 sec
 		normal = false;
-		GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 0XFF)
+		GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_0, 0XFF)
 	}
 	if( true == tempAlarm)
 	{
