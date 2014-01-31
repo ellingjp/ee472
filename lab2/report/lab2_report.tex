@@ -88,7 +88,7 @@
 
 %%% The "real" document content comes below...
 
-\title{\TitleFont EE 472 Lab 1 \\ Introducing the Lab Environment \vfill }
+\title{\TitleFont EE 472 Lab 2 \\ Learning the Development Environment \vfill }
 \author{\AuthorFont Jonathan Ellington \\ Patrick Ma \\ Jarrett Gaddy}
 \date{}
 
@@ -115,8 +115,6 @@ software. Finally the students must test their system to make sure that it is
 ready to start saving lives.	
 
 \section{Introduction}
-\textbf{Brief introduction and overview of the purpose of the lab and of the methods and tools used.}
-
 The students are to design an embedded system on the Texas Instruments
 Stellaris EKI-LM3S8962 and EE 472 embedded design testboard. The design must
 implement a medical monitoring device. This device must monitor a patient's
@@ -127,14 +125,14 @@ the valid range an alarm will sound. This alarm will sound until the values
 return to the valid range or the user acknowledges the alarm with a button. The
 values of each measurement will also be printed to the oled screen.
 
-The design will be tested to verify proper behavior on alarm and warning notifications. In addition the implementation will be tested by measuring the amount of time that each of the 5 program tasks running the instrument take to execute. These tasks are mini prograams that each handle a part of the instruments purpose.
+The design will be tested to verify proper behavior on alarm and warning notifications. In addition the implementation will be tested by measuring the amount of time that each of the 5 program tasks running the instrument take to execute. These tasks are mini programs that each handle a part of the instruments purpose.
  
 \section{Discussion of the Lab}
 
 \subsection{Design Specification\label{sec:designSpec}}
 
 \subsubsection{Specification Overview}
-The entire system must satisfy several lofty objectives. The final product must be portable, lightweight, and internet enabled. The system must also make measurements of vital bodily functions, perform simple computations, provide datalogging functionality, and indicate when measured vitals exceed given ranges, or the user fails to comply with a prescribed logging regimen. \\
+The entire system must satisfy several lofty objectives. The final product must be portable, lightweight, and Internet enabled. The system must also make measurements of vital bodily functions, perform simple computations, provide data logging functionality, and indicate when measured vitals exceed given ranges, or the user fails to comply with a prescribed logging regimen. \\
 At the present time, only two subsystems must be produced: the display and alarm portions. Additionally, the system must demonstrate the ability to store basic measurements. \\
 
 \begin{itemize}[$$]
@@ -183,7 +181,7 @@ For this project, these requirements have been further specified as follows:
     \end{itemize}
 \end{itemize}
 
-The initization values, normal measurement ranges, displayed units, and 
+The initialization values, normal measurement ranges, displayed units, and 
 warning and alarm behaviors for each vital measurement are given in 
 Table~\ref{tab:sensorDefs}. The sensors must be sampled every five seconds.
 
@@ -210,8 +208,6 @@ Additionally, the system must be implemented using the Stellaris
 EKI-LM3S8962 ARM Cortex-M3 microcomputer board, The software for the system 
 must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
-
-
 \subsubsection{Identified Use Cases}
 Taking the functional requirements listed above, several use cases were
  developed. A Use case diagram of these scenarios is given in Figure~\ref{fig:useCases}. Each use case is expanded and explained below.
@@ -229,7 +225,7 @@ In the first use case, the user views the basic measurements picked up by the
 sensors connected to the device. \\
 During normal operation, once the device is turned on by the user, the system
 records the value output by each sensor. This raw value is linearized and 
-converted into a human-readable form. Finally, this value is displayed onscreen.
+converted into a human-readable form. Finally, this value is displayed on-screen.
 
 Three exceptional conditions were identified for this use case: 
 \begin{itemize}
@@ -292,7 +288,7 @@ controls three LEDs colored green, yellow, and red.  These LEDs are used to
 inform the user on the current state of their vitals as well as the state of
 the device.  Under normal circumstances, the green LED will be lit.  If the
 users' vitals fall outside of a specified range, the red LED will flash at a
-specified rate, dependant on which vital is out of range.  If the battery is
+specified rate, depending on which vital is out of range.  If the battery is
 low, the yellow LED will be illuminated.
 
 \begin{figure}[h]
@@ -332,7 +328,7 @@ Each of these tasks interact using the shared data shown in Figure~\ref{fig:arch
 \end{figure}
 
 \subsubsection{High-level Implementation in C}
-After developing the system architecture, the design needed to be translated into the C programming language.  The design manifested in a multifile program consisting of the following source files:
+After developing the system architecture, the design needed to be translated into the C programming language.  The design manifested in a multi-file program consisting of the following source files:
 \begin{itemize}
   \item \textbf{globals.c/globals.h} - Used to define the Shared Data used among the tasks
   \item \textbf{schedule.c/schedule.h} - Defines the scheduler interface and it's implementation, as well as the TCB structure
@@ -369,7 +365,7 @@ task then runs into an infinite while loop. Inside the while loop a run method
 is called. The run method is part of the scheduler. This method keeps track of
 whether the device is on a minor cycle or a major cycle and runs the preform
 task method of each task. The tasks included in this project are Compute,
-Measure, Warning, oleddisplay, and status. Each task has a public interface of
+Measure, Warning, oledDisplay, and status. Each task has a public interface of
 2 void pointers. One that when initialized by the main method will point to the
 preform task function, and another that, when initialized, points to a struct
 containing pointers to the data required by that task. Each task has a task
@@ -382,9 +378,9 @@ through the array of TCB and runs the function pointed to by the TCB with the
 argument of the data pointer stored in the TCB. After running all 5 tasks the
 TCB has a software defined wait of 250 milliseconds to implement the minor
 cycle delay. The software defined wait is simply a for loop that uses addition
-as a time consumption tool. it is known that system clock is 8 Mhz so having a
+as a time consumption tool. It is known that system clock is 8 MHz so having a
 for loop go from 0 to 2 million would take about a quarter of a second. The
-control flow is shown in the figure below in figure 5. 
+control flow is shown in Figure~\ref{fig:Control}. 
 
 \begin{figure}[h]
     \centering
@@ -394,74 +390,76 @@ control flow is shown in the figure below in figure 5.
 \end{figure}
 
 Each task has its own unique purpose in the system, and each uses a different
-part of the global data. The Measure task, with an activity diagram shown in
-Figure 6, deals only with the raw data from the instruments. This task is meant
-to act in place of the instruments that are unavailable. The task only runs if
-the scheduler has set the global value is Major Cycle to 1. On a major cycle
-the measure function either increments the data of each measurement by 1 or 2
-or decrements the data by 1 or 2.
+part of the global data. The Measure task (Figure~\ref{fig:measureActivity} in the
+appendix), deals only with the raw data from the instruments. This task is
+meant to act in place of the instruments that are unavailable. The task only
+runs if the scheduler has set the global value is Major Cycle to 1. On a major
+cycle the measure function either increments the data of each measurement by 1
+or 2 or decrements the data by 1 or 2.
 
 The compute task is very simple. Like the measure task it only runs on a minor
 cycle. It takes the raw data that has been set by the measure task, multiplies
-by a constand and adds a constant to each piece of raw data to get the
+by a constant and adds a constant to each piece of raw data to get the
 corrected data. The compute task then puts the values for the corrected data in
 memory at the location of the global data pointer. Compute uses every data
 value except the battery.
 
-Afer compute, the warning task begins checking for warning or alarm states. The
+After compute, the warning task begins checking for warning or alarm states. The
 warning task only deals with the corrected data from compute and the battery
 state. This task also must deal with the input and output signals used to
 display warning and sound an alarm. Unlike the other tasks, this task has more
 to its initialization than just initializing the data. In addition to setting
 up the pointers to the global data, during initialization, the task also
 enables peripheral banks C, E, F, and G. These are enabled using the
-SysCtlPeripheralEnable library call. Additionaly the task set up pins C 5, 6,
+SysCtlPeripheralEnable library call. Additionally the task set up pins C 5, 6,
 and 7 as outputs, pins F 0 and G 1 as PWM outputs, and pin E 0 as a pull up
-resistor input. Additionaly the pwm outputsare set to use a 65 hz clock to play
+resistor input. Additionally the PWM outputs are set to use a 65 Hz clock to play
 a sound at this frequency whenever enabled. The activity diagram is shown in
-Figure 8. There are 3 subsystems in the warning task. These subsystems each
-handle a different part of user notification. The first subsystem deals with
-the alarm. The subsystem checks to see if any of the given corrected data is
-outside of the range given to us as acceptable by more than 10\%. If any value
-is then the PWM output is enabled using PWMGenEnable. If the values fall back
-within the acceptable range, or the user hits the acknowledge button, then the
-pwm is disabled with PWMGenDisable and the sound stops. The next subsystem
-checks the corrected data for being 5\% out of range of the accepted values. If
-any value is more than 5\% out of its range then a warning will be displayed on
-the red led connected to pin C 5 using the GPIOPinWrite function. Depending on
-the value that is out of range the period the led flashes at will vary. The
-final subsystem is the battery check. This system checks if there is more than
-30\% of battery left on the device. This is taken from the battery state data
-field. If there is less than 20\% battery left then a yellow led connedted to
-pin C7 is illuminated, if there is more then 20\% battery, and the device is
-not in a warning or alarm state then the green led on pin C 6 is illuminated. 
+Figure~\ref{fig:warningActivity} in the appendix. There are 3 subsystems in the
+warning task. These subsystems each handle a different part of user
+notification. The first subsystem deals with the alarm. The subsystem checks to
+see if any of the given corrected data is outside of the range given to us as
+acceptable by more than 10\%. If any value is then the PWM output is enabled
+using PWMGenEnable. If the values fall back within the acceptable range, or the
+user hits the acknowledge button, then the PWM is disabled with PWMGenDisable
+and the sound stops. The next subsystem checks the corrected data for being 5\%
+out of range of the accepted values. If any value is more than 5\% out of its
+range then a warning will be displayed on the red led connected to pin C 5
+using the GPIOPinWrite function. Depending on the value that is out of range
+the period the led flashes at will vary. The final subsystem is the battery
+check. This system checks if there is more than 30\% of battery left on the
+device. This is taken from the battery state data field. If there is less than
+20\% battery left then a yellow led connected to pin C7 is illuminated, if
+there is more then 20\% battery, and the device is not in a warning or alarm
+state then the green led on pin C 6 is illuminated. 
 
 To show a user their current medical measurements, the system also has an
-oleddisplay task. This task uses the corrected data from measurements, and the
-battery state. The display task has an activity diagram shown in Figure 9. This
-task uses the sprintf function in C to convert the data types that the
-corrected data is stored in, and properly format these data values into a
-string which is stored in a buffer. The string contained in the buffer is then
-printed to the oled screen using the driver library rit128x96x4 functions.
+oledDisplay task. This task uses the corrected data from measurements, and the
+battery state. The display task has an activity diagram shown in
+Figure~\ref{fig:displayActivity} in the appendix. This task uses the sprintf()
+function in C to convert the data types that the corrected data is stored in,
+and properly format these data values into a string which is stored in a
+buffer. The string contained in the buffer is then printed to the OLED screen
+using the driver library rit128x96x4 functions.
 
 The last task is the status task. This task only deals with one piece of data
 which is the battery state data. The only thing the status task does is that on
 a major cycle, it decrements the battery state by 1. This is shown in the
-activity diagram in Figure 10
+activity diagram in Figure~\ref{fig:statusActivity} in the appendix.
 
 \section{Presentation, Discussion, and Analysis of the Results}
 
 \subsection{Results}
 The project was completed and demonstrated on January 29, 2014.
 
-Demonstration of the system to the interested parties showed that the system met the requrements initially presented at the onset of the lab project.
+Demonstration of the system to the interested parties showed that the system met the requirements initially presented at the onset of the lab project.
 Testing of the system prior to demonstration also verified that the system met the specifications listed in Section~\ref{sec:designSpec}.
 
-Additionally, during the demonstration, to show that several warning features worked as expected, source code was temporarily modified to speed up the progression of the system through various warning states. These changes were simple to execute and caused the desired effect on the system without causing unwanted abberrant behavior. Reverting the source code was similarly intuitive.
+Additionally, during the demonstration, to show that several warning features worked as expected, source code was temporarily modified to speed up the progression of the system through various warning states. These changes were simple to execute and caused the desired effect on the system without causing unwanted aberrant behavior. Reverting the source code was similarly intuitive.
 
 During the actual coding and implementation of the design, remarks were made several times about the ease of execution during that phase of the project. After the initial high level Design phase, very few changes were made, or required, to the functional design or system architecture.
 
-Using an oscilloscope, the runtimes of each task were empirically determined. The results are given in Table~\ref{tab:taskRuntimes}.
+Using an oscilloscope, the run times of each task were empirically determined. The results are given in Table~\ref{tab:taskRuntimes}.
 
 \begin{table}[h]
 	\centering
@@ -526,9 +524,9 @@ The project was completed without any residual errors or unsolved problems. See 
 
 %Some points to bring up: did not enable the GPIO bank (caused OLED display to not work), could not get switch to work (solved by understanding that switch required pull up). P or J can talk about design solutions that did not work. On the whole,  had problems with going too deep, too quickly.
 
-The medical instrument design in this project was completed and tested succesfuly to meet all the requirements, the designers did face a number of errors and difficulties in the process. Most of the challanges faced in this design were in implementing the inputs and outputs from the ARM micro processor. In this implementation, the students orginally had consulted the driver library documentation and found how to enable a general purpose input output (GPIO) pand, GPIO pin, and how to read from a GPIO pin. However, when the code to enable a GPIO pin was executed, the execution of tasks within the scheduler froze completely until a reset. This problem was caused by the students failure to enable the peripheral bank that the GPIO pins existed on. After learning how to do this, code was added to enable the peripheral and the task execution no longer froze on enabling a pin.
+The medical instrument design in this project was completed and tested successfully to meet all the requirements, the designers did face a number of errors and difficulties in the process. Most of the challenges faced in this design were in implementing the inputs and outputs from the ARM micro processor. In this implementation, the students originally consulted the driver library documentation and found how to enable a general purpose input output (GPIO) pin, and how to read from a GPIO pin. However, when the code to enable a GPIO pin was executed, the execution of tasks within the scheduler froze completely until a reset. This problem was caused by the students failure to enable the peripheral bank that the GPIO pins existed on. After learning how to do this, code was added to enable the peripheral and the task execution no longer froze on enabling a pin.
 
-Another problem encountered by the design team was that initially after setting up a GPIO pin as an input to take a button press from the Stellaris test board, pressing the button did not have the intended effect. The push button did not change the state of the input. The students were originally perplexed and tried a number of solutions to this problem. Testing indicated that the code for the GPIO input was correct as a 3.3 V signal directly to the pin could trigger the intended event on the input. Eventualy it was found that to use the push button switch the GPIO pin's pad must be configured to accept a pull up resistor type of input.
+Another problem encountered by the design team was that initially after setting up a GPIO pin as an input to take a button press from the Stellaris test board, pressing the button did not have the intended effect. The push button did not change the state of the input. The students were originally perplexed and tried a number of solutions to this problem. Testing indicated that the code for the GPIO input was correct as a 3.3 V signal directly to the pin could trigger the intended event on the input. Eventually it was found that to use the push button switch the GPIO pin's pad must be configured to accept a pull up resistor type of input.
 
 All problems were solved before demonstrating the product to the interested parties. As such, the final design did not have any errors.
 
@@ -544,12 +542,12 @@ tested:
 	\item System enters, indicates, and exits the proper warning state for blood pressure, temperature, pulse, and battery
 	\item System enters and exits the alarm state correctly
 	\item Alarm is silenced upon button push
-	\item Alarm recommences sound after silencing if system remains in alarm state longer than slilence period
+	\item Alarm recommences sound after silencing if system remains in alarm state longer than silence period
 \end{itemize}
 
 Additional tests to determine the runtime of each specific task are also required.
 
-\subsection{Test Specification Jon}
+\subsection{Test Specification}
 
 Annotated description of what is to be tested and the test limits.  This specification quantifies inputs, outputs, and constraints on the system.  That is, it provides specific values for each. 
 
@@ -608,13 +606,13 @@ battery state using the CPU.  For now, it simply decrements the state of the
 battery.  The test should show that the battery state is decremented by one
 every major cycle.
 
-\subsection{Test Cases  Jarrett}
+\subsection{Test Cases}
 
 The students begin testing by examining if the alarm sounds at the proper time.
-This is initialy tested by disabling the functions that simulate measurements
+This is initially tested by disabling the functions that simulate measurements
 being made on each of the data measurements, and setting their initial values
 to be either within the alarm range or outside of the alarm range. The warning
-states were also initialy tested this way. The initial values for raw data
+states were also initially tested this way. The initial values for raw data
 given in Table~\ref{tab:sensorDefs} on page \pageref{tab:sensorDefs} were used
 to test the normal state of the machine because each falls within the
 acceptable range of measurements for corrected data (also given in
@@ -623,7 +621,7 @@ Table~\ref{tab:sensorDefs}) that does not require a warning.
 Using these initial values, the code was programmed onto the Stellaris board.
 Correct operation was verified by the alarm not sounding, and the red led being
 off, indicating that no warning state was in effect. In addition the green led
-was on indicating a normal state. Next the students varried one parameter at a
+was on indicating a normal state. Next the students varied one parameter at a
 time to be outside of the acceptable range by more than 10\%. Starting with the
 temperature being set to an initial raw value of 50, the alarm was verified by
 hearing the aural annunciation coming from the system. In addition, the
@@ -638,9 +636,9 @@ same methods were used to verify that the alarm and warning states for pulse
 rate were working correctly, but this time the warning led turned on 3 times in
 6 seconds indicating a 2 second period which is the intended period of
 flashing. The pulse rate was then returned to 25 and each pressure reading was
-checked for correct operation individualy by being set to an initial raw value
+checked for correct operation individually by being set to an initial raw value
 of 100. Once again, the green led started off because the system was not in a
-nirmal state. The alarm was sounding due to the extremely high blood pressure
+normal state. The alarm was sounding due to the extremely high blood pressure
 measurements, and the red warning led flashed 12 times in 6 seconds indicating
 the correct period of .5 seconds for a blood pressure warning. In addition to
 testing the validity of each warning state and alarm state, the acknowledgement
@@ -649,37 +647,37 @@ hitting the acknowledge button once during each measurements test. During each
 test, hitting the acknowledge button turned the alarm sound off for a short
 time, as intended. 
 
-Next the measuremet simulation functions were tested. This was done by
-re-enabing each one that had been disabled from the previous test one at a
+Next the measurement simulation functions were tested. This was done by
+re-enabling each one that had been disabled from the previous test one at a
 time. The initial raw values were again set to the values in Figure 5. When
-each measurement was reenabled, the students could watch the temperature change
-at each major cycle using the oled display. Since the oled display indicated
+each measurement was re-enabled, the students could watch the temperature change
+at each major cycle using the OLED display. Since the OLED display indicated
 that the corrected temperature went up .75 degrees on a major cycle then down
-1.5 degrees on the next, the temperature measurement was working as intedned.
-This situation also gave the students an opprotunity to verify that the warning
+1.5 degrees on the next, the temperature measurement was working as intended.
+This situation also gave the students an opportunity to verify that the warning
 and alarm states initiated as the temperature fell out of the acceptable range.
 The Led began flashing with a 1 second period after a few major cycles, then
 the alarm began sounding, indicating correct operation. Since temperature was
-working correctly, the temperature measurment function was once again disabled
-and the pulse rate measurement function was re-enabled. The oled display
+working correctly, the temperature measurement function was once again disabled
+and the pulse rate measurement function was re-enabled. The OLED display
 indicated that the pulse rate was increasing by 3 on a major cycle then falling
 by 6 on the following major cycle. This was consistent with the intended
 design. The alarm and warning being initiated as the pulse rate fell. The pulse
 rate measurement was then disabled and each blood pressure measurement was
-re-enabled individualy for testing. The Systolic pressure began by rising 4 mm
+re-enabled individually for testing. The Systolic pressure began by rising 4 mm
 Hg on a major cycle then falling 2 mm Hg on the next, and the Diastolic
 pressure by rising 3 on a Major cycle and falling 1.5 on the next, this was
 consistent with our design. The warning and alarm states were activated as each
 passed its threshold and the red led was blinking with a period of .5 seconds.
 The warning led was also tested in the case that all warning states were
 active. To do this all initial values were set to 100. In this case, as
-designed by the students, the red warning led indicated the fastsest blinking
+designed by the students, the red warning led indicated the fastest blinking
 warning with a .5 second period. 
 
 The final bit of testing preformed on the system was timing each task within
 the system. This was done by adding a general purpose output pin in our
 scheduler code. This output was set high right before the execution of a task,
-and set low immediately after the execution of the task. An oscciloscope was
+and set low immediately after the execution of the task. An oscilloscope was
 then attached to this output pin and set to trigger on a positive edge. The
 cursors were then used to measure the amount of time the signal was high in
 each cycle.
@@ -687,7 +685,7 @@ each cycle.
 Using these initial values, the code was programmed onto the Stellaris board.
 Correct operation was verified by the alarm not sounding, and the red led being
 off, indicating that no warning state was in effect. In addition the green led
-was on indicating a normal state. Next the students varried one parameter at a
+was on indicating a normal state. Next the students varied one parameter at a
 time to be outside of the acceptable range by more than 10\%. Starting with the
 temperature being set to an initial raw value of 50, the alarm was verified by
 hearing the aural annunciation coming from the system. In addition, the
@@ -702,9 +700,9 @@ The same methods were used to verify that the alarm and warning states for
 pulse rate were working correctly, but this time the warning led turned on 3
 times in 6 seconds indicating a 2 second period which is the intended period of
 flashing. The pulse rate was then returned to 25 and each pressure reading was
-checked for correct operation individualy by being set to an initial raw value
+checked for correct operation individually by being set to an initial raw value
 of 100. Once again, the green led started off because the system was not in a
-nirmal state. The alarm was sounding due to the extremely high blood pressure
+normal state. The alarm was sounding due to the extremely high blood pressure
 measurements, and the red warning led flashed 12 times in 6 seconds indicating
 the correct period of .5 seconds for a blood pressure warning. In addition to
 testing the validity of each warning state and alarm state, the acknowledgement
@@ -713,37 +711,37 @@ hitting the acknowledge button once during each measurements test. During each
 test, hitting the acknowledge button turned the alarm sound off for a short
 time, as intended. 
 
-Next the measuremet simulation functions were tested. This was done by
-re-enabing each one that had been disabled from the previous test one at a
+Next the measurement simulation functions were tested. This was done by
+re-enabling each one that had been disabled from the previous test one at a
 time. The initial raw values were again set to the values in Figure 5. When
-each measurement was reenabled, the students could watch the temperature change
-at each major cycle using the oled display. Since the oled display indicated
+each measurement was re-enabled, the students could watch the temperature change
+at each major cycle using the OLED display. Since the OLED display indicated
 that the corrected temperature went up .75 degrees on a major cycle then down
-1.5 degrees on the next, the temperature measurement was working as intedned.
-This situation also gave the students an opprotunity to verify that the warning
+1.5 degrees on the next, the temperature measurement was working as intended.
+This situation also gave the students an opportunity to verify that the warning
 and alarm states initiated as the temperature fell out of the acceptable range.
 The Led began flashing with a 1 second period after a few major cycles, then
 the alarm began sounding, indicating correct operation. Since temperature was
-working correctly, the temperature measurment function was once again disabled
-and the pulse rate measurement function was re-enabled. The oled display
+working correctly, the temperature measurement function was once again disabled
+and the pulse rate measurement function was re-enabled. The OLED display
 indicated that the pulse rate was increasing by 3 on a major cycle then falling
 by 6 on the following major cycle. This was consistent with the intended
 design. The alarm and warning being initiated as the pulse rate fell. The pulse
 rate measurement was then disabled and each blood pressure measurement was
-re-enabled individualy for testing. The Systolic pressure began by rising 4 mm
+re-enabled individually for testing. The Systolic pressure began by rising 4 mm
 Hg on a major cycle then falling 2 mm Hg on the next, and the Diastolic
 pressure by rising 3 on a Major cycle and falling 1.5 on the next, this was
 consistent with the design. The warning and alarm states were activated as each
 passed its threshold and the red led was blinking with a period of .5 seconds.
 The warning led was also tested in the case that all warning states were
 active. To do this all initial values were set to 100. In this case, as
-designed by the students, the red warning led indicated the fastsest blinking
+designed by the students, the red warning led indicated the fastest blinking
 warning with a .5 second period. 
 
 The final bit of testing preformed on the system was timing each task within
 the system. This was done by adding a general purpose output pin in the
 scheduler code. This output was set high right before the execution of a task,
-and set low immediately after the execution of the task. An oscciloscope was
+and set low immediately after the execution of the task. An oscilloscope was
 then attached to this output pin and set to trigger on a positive edge. The
 cursors were then used to measure the amount of time the signal was high in
 each cycle.
@@ -768,7 +766,7 @@ system in code for the Texas Instruments Stellaris EKI-LM3S8962 much more
 quickly and with far fewer errors than if they had spent less time in the
 design phase of this project. 
 
-Effective design tools allowed the students to quickly implement their embedded system in C code for an ARM Cortex A3 processor, and move onto the testing phase of the project quickly. Unfortunately, while testing the students encountered a number of problems in using the pwm and general purpose input and output signals. After consulting the documentation for the Stellaris kit and solving their input/output problems, they began testing thri design using visual and audio queues, the IAR embedded workbench debugger, and a few specifically programmed debug features. After the results of the testing verefied the design to be working correctly, the students proceeded to present their medical instrument to their instructor.
+Effective design tools allowed the students to quickly implement their embedded system in C code for an ARM Cortex A3 processor, and move onto the testing phase of the project quickly. Unfortunately, while testing the students encountered a number of problems in using the PWM and general purpose input and output signals. After consulting the documentation for the Stellaris kit and solving their input/output problems, they began testing their design using visual and audio queues, the IAR embedded workbench debugger, and a few specifically programmed debug features. After the results of the testing verified the design to be working correctly, the students proceeded to present their medical instrument to their instructor.
 
 \pagebreak
 \appendix
@@ -779,13 +777,15 @@ Effective design tools allowed the students to quickly implement their embedded 
 	\hline
 	Person & Design Hrs & Code Hrs & Test/Debug Hrs & Documentation Hrs \\ \hline
 	Patrick & 15 & 7 & 2 & 9  \\ \hline
-	Jarret & x & x & x & x  \\ \hline
-	Jonathan & x & x & x & x  \\ \hline
+	Jarret & 3 & 6 & 6 & 7  \\ \hline
+	Jonathan & 15 & 5 & 4 & 8  \\ \hline
 \end{tabular}
 
 ~\\
 
 By initializing/signing above, I attest that I did in fact work the estimated number of hours stated. I also attest, under penalty of shame, that the work produced during the lab and contained herein is actually my own (as far as I know to be true). If special considerations or dispensations are due others or myself, I have indicated them below.
+
+\pagebreak
 
 \section{Activity Diagrams}
 
@@ -793,45 +793,76 @@ By initializing/signing above, I attest that I did in fact work the estimated nu
   \centering
   \includegraphics[width=\textwidth]{../design/measure_activity.png}
   \caption{Measure Activity Diagram}
-  \label{fig:measure}
+  \label{fig:measureActivity}
 \end{figure}
 
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{../design/compute_activity.png}
   \caption{Compute Activity Diagram}
-  \label{fig:compute}
+  \label{fig:computeActivity}
 \end{figure}
 
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{../design/warning_activity.png}
   \caption{Warning Activity Diagram}
-  \label{fig:Warning}
+  \label{fig:warningActivity}
 \end{figure}
 
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{../design/display_activity.png}
   \caption{Display Activity Diagram}
-  \label{fig:Display}
+  \label{fig:displayActivity}
 \end{figure}
 
 \begin{figure}
   \centering
   \includegraphics[width=0.2\textwidth]{../design/Status_activity.png}
   \caption{Status Activity Diagram}
-  \label{fig:status}
+  \label{fig:statusActivity}
 \end{figure}
+
+\pagebreak
 
 \section{Source Code}
 
 Source code for this project is provided below.
 
-\subsection{The first part}
-% \lstinputlisting{source.c}
+\subsection{Main Function}
+\lstinputlisting{../code/main.c}
 
-\subsection{The second part}
-% \lstinputlisting{source.c}
+\subsection{Global Data}
+\lstinputlisting{../code/globals.h}
+\lstinputlisting{../code/globals.c}
+
+\subsection{Timebase}
+\lstinputlisting{../code/timebase.h}
+
+\subsection{Scheduler}
+\lstinputlisting{../code/schedule.h}
+\lstinputlisting{../code/schedule.c}
+
+\subsection{Tasks}
+\subsubsection{Measure Task}
+\lstinputlisting{../code/measure.h}
+\lstinputlisting{../code/measure.c}
+
+\subsubsection{Compute Task}
+\lstinputlisting{../code/compute.h}
+\lstinputlisting{../code/compute.c}
+
+\subsubsection{Display Task}
+\lstinputlisting{../code/oleddisplay.h}
+\lstinputlisting{../code/oleddisplay.c}
+
+\subsubsection{Warning/Alarm Task}
+\lstinputlisting{../code/warning.h}
+\lstinputlisting{../code/warning.c}
+
+\subsubsection{Status}
+\lstinputlisting{../code/status.h}
+\lstinputlisting{../code/status.c}
 
 \end{document}
