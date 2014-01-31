@@ -131,6 +131,7 @@ At the present time, only two subsystems must be produced: the display and alarm
       \item Accept variety of input data types
       \item Provide visual indication of warning states
       \item Provide an audible indicator of alarm states
+    \end{itemize}
 \end{itemize}
 
 \begin{itemize}[$$] 
@@ -189,13 +190,98 @@ At the present time, only two subsystems must be produced: the display and alarm
 
 \subsection{Software Implementation  Jon}
 
-What is your design????
-
-Present your design starting from a top level functional view and potentially block diagram or high level architecture.  Refine that view to present and explain each of the modules that comprise the major functional blocks.  Discuss the flow of control through the design.  Identify and discuss the specific processes/tasks you have implemented in your design. Explain your design choices.    
 
 \subsubsection{Top level design Jon}
 
-Put stuff here about the functional decomposition, system architecture, interaction of parts.
+%- User use cases  (need to fix)
+%  + Take measurements
+%  + Acknowledge alarm
+%- High level blocks
+%  + Functional decomposition
+%    o User
+%    o Stellaris board
+%    o External Sensors
+%  + System Architecture (need to flip inheritance arrows and composition arrow)
+%    o Discuss shared data
+%    o Discuss TCB->Schedular composition
+%    o Discuss TCB->task inheritance
+%    o Interaction with hardware
+%- Implementation in C
+%  + Scheduler
+%    o Has queue of TCBs
+%    o Runs each with minor cycle delay
+%      - Timebase
+%        o Specifies major/minor cycle
+%  + Tasks
+%    o Global data is declared in a header file, globals.h and shared with everyone
+%    o Get their own file and header file
+%    o Own data is hidden from rest of program, single pointer exposed
+%    o Every task gets an initialization to initialize data
+
+The design process began by identifying the use cases and actors involved with the system.  In the specified system, the user interacts with the system in one of two ways:
+\begin{enumerate}
+  \item The user can view their vitals
+  \item The user will acknowledge an alarm condition to silence the alarm
+\end{enumerate}
+In order for a user to view their vitals, the system will have to interact with some external sensors.  Specifically, the system will interact with blood pressure, temperature, and pulse rate sensors.  A graphical depiction of this is shown in Figure~\ref{fig:use}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{../design/use_cases_graphical}
+    \caption{Use-Case Diagram}
+    \label{fig:use}
+\end{figure}
+
+After understanding how the user would interact with the device, the system was
+functionally decomposed into high-level blocks as shown in
+Figure~\ref{fig:func}.  The main system control is located in the CPU, which
+controls all data flow into and out of the peripheral devices.  The OLED
+displays the user's current vitals including blood pressure (systolic and
+diastolic), temperature, and pulse rate.  In the future external sensors will
+be added, but for now the values are simulated using the CPU.  The CPU also
+controls three LEDs colored green, yellow, and red.  These LEDs are used to
+inform the user on the current state of their vitals as well as the state of
+the device.  Under normal circumstances, the green LED will be lit.  If the
+users' vitals fall outside of a specified range, the red LED will flash at a
+specified rate, dependant on which vital is out of range.  If the battery is
+low, the yellow LED will be illuminated.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{../design/Functional_decomposition}
+    \caption{Functional Decomposition}
+    \label{fig:func}
+\end{figure}
+
+Next, the system architecture was developed (Figure~\ref{fig:arch}).  At a high
+level the system works on two main concepts, the scheduler and tasks.  Tasks
+embody some sort of work being done, and the scheduler is in charge of
+determining the speed and order in which the tasks execute.  The system has
+several tasks, each with their own specific job.  For modularity reasons, each
+task should have the same public interface and the scheduler should be able to
+run each task regardless of that specific tasks job or implementation.  Thus
+the task concept is abstracted into a Task Control Block (TCB), and the
+scheduler maintains a queue of TCBs to run.  The TCB abstraction is shown in
+Figure~\ref{fig:arch} using inheritance, and the fact that the scheduler has a
+queue of TCBs is shown with composition.  The core functionality of the system
+was divided into the following five main tasks:
+\begin{itemize}
+  \item \textbf{Measure Task} - In charge of interacting with the blood pressure, temperature, and pulse sensors (simulated)
+  \item \textbf{Compute Task} - Converts sensor data into human readable format
+  \item \textbf{Display Task} - Displays the measurements on the Stellaris OLED
+  \item \textbf{Warning/Alarm Task} - Interacts with the red, yellow, and green LEDs, as well as the speaker to annunciate warning and alarm information
+  \item \textbf{Status Task} - Receives battery information from the device
+\end{itemize}
+Each of these tasks will interact using the shared data shown in Figure~\ref{fig:arch}. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{../design/System_Architecture}
+    \caption{System Architecture Diagram}
+    \label{fig:arch}
+\end{figure}
+
+To implement this in C, 
 
 \subsubsection{low level design  Jarret}
 
