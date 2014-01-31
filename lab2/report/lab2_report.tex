@@ -284,9 +284,28 @@ Each of these tasks interact using the shared data shown in Figure~\ref{fig:arch
 After developing the system architecture, the design needed to be translated into the C programming language.  The design manifested in a multifile program consisting of the following source files:
 \begin{itemize}
   \item \textbf{globals.c/globals.h} - Used to define the Shared Data used among the tasks
-  \item \textbf{schedule.c/schedule.h} - Defines the scheduler interface and it's implementation
-  \item \textbf{timebase.h}
+  \item \textbf{schedule.c/schedule.h} - Defines the scheduler interface and it's implementation, as well as the TCB structure
+  \item \textbf{timebase.h} - Defines the timebase used for the scheduler and tasks
 \end{itemize}
+Each task also has it's corresponding ``.c'' and ``.h'' file (for example, measure.c and measure.h).
+
+The TCB structure that the scheduler uses must work for all tasks, and must not
+contain any task-specific information.  Instead, the TCB consists of only a void pointer to the tasks data, and a pointer to a function that returns void and takes a void pointer, as follows:
+\begin{lstlisting}
+struct TCB {
+  void *taskDataPtr;
+  void (*taskRunFn)(void *);
+}
+\end{lstlisting}
+Leaving out the type information allows the scheduler to pass the task's data
+(*taskDataPtr) into the task's run function completely unaware of the kind of
+data the task uses or how the task works.
+
+For increased modularity, the data structure used by each task was not put in
+the task's header file.  Instead, the structure was declared within the task
+implementation file, and instantiated using a task initialization function.  In
+the header file, a void pointer pointing to the initialized structure is
+exposed with global scope, as well as the task's run and initialization functions.
 
 \subsubsection{low level design  Jarret}
 
