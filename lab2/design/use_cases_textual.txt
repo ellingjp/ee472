@@ -16,7 +16,7 @@ USE CASE: Select sensors
         - user selects unconnected sensor
             - do as usual, dealt with  during measurement
 
-USE CASE: Measure Sensors
+USE CASE: View Vitals
 
     user: 
         turns on device
