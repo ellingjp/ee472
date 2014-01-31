@@ -335,11 +335,36 @@ implementation details here. Tasks, scheduler, etc. Control diagram goes here, a
 Based upon the execution of your design, present your results. Explain them and what was expected, and draw any conclusions (for example, did this prove your design worked).
 
 In addition to a detailed discussion and analysis of your project and your results, you must include all the answers to all questions raised in the lab.
-\subsection{results  patrick}
-The project was completed and demonstrated on January 29, 2014. 
+\subsection{results}
+The project was completed and demonstrated on January 29, 2014. \\
+
+Demonstration of the system to the interested parties showed that the system met the requrements initially presented at the onset of the lab project.
+Testing of the system prior to demonstration also verified that the system met the specifications listed in Section~\ref{sec:designSpec}. \\
+Additionally, during the demonstration, to show that several warning features worked as expected, source code was temporarily modified to speed up the progression of the system through various warning states. These changes were simple to execute and caused the desired effect on the system without causing unwanted abberrant behavior. Reverting the source code was similarly intuitive.
+During the actual coding and implementation of the design, remarks were made several times about the ease of execution during that phase of the project. After the initial high level Design phase, very few changes were made, or required, to the functional design or system architecture.\\
+
+Using an oscilloscope, the runtimes of each task were empirically determined. The results are given in Table~\ref{tab:taskRuntimes}.
+
+\begin{figure}[h]
+	\centering
+	\begin{tabular}{|l|r|} 
+		\hline
+		Task & Runtime ($\mu$s) \\ \hline
+		Measure & 23.4 \\ \hline
+		Compute & 55.4 \\ \hline
+		Display & 22900.0 \\ \hline
+		Warning & 27.4	\\ \hline
+		Status & 5.6	\\ \hline
+	\end{tabular}
+	\caption{Empirically determined task runtimes\label{tab:taskRuntimes}}
+\end{figure}
 
 
-
+\textbf{Answers to the last three questions in the list of items to include in the project report:} \\
+\emph{You don't find the stealth submarine. That's why they are so expensive; at that cost, you take great pains to never lose one.\\
+A helium balloon always rises. It just rises upside-down. \\
+If you really managed to lose the stealth submersible, you first have to tell the government, which will deny it has any stealth submersibles, then you have to comb the seven seas until your comb hits the sub.}
+ 
 \subsection{discussion of results  Jon}
 
 \subsection{Analysis of any Errors}
@@ -399,7 +424,7 @@ Effective design tools allowed the students to quickly implement their embedded 
 \begin{tabular}{|l|*{4}{r|}}
 	\hline
 	Person & Design Hrs & Code Hrs & Test/Debug Hrs & Documentation Hrs \\ \hline
-	Patrick & 15 & 4 & 2 & 9  \\ \hline
+	Patrick & 15 & 7 & 2 & 9  \\ \hline
 	Jarret & x & x & x & x  \\ \hline
 	Jonathan & x & x & x & x  \\ \hline
 \end{tabular}
