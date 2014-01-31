@@ -338,8 +338,75 @@ exposed with global scope, as well as the task's run and initialization function
 
 \subsubsection{low level design  Jarret}
 
-implementation details here. Tasks, scheduler, etc. Control diagram goes here, activity diagram, etc.
 
+%implementation details here. Tasks, scheduler, etc. Control diagram goes here, activity diagram, etc.
+The primary task of this project is to implement C code for a medical device on the Stellaris EKI-LM3S8962 and its ARM Coretex A3 processor. The project was started by creating a main file that initializes the variables used in each task then runs into an infinite while loop. Inside the while loop a run method is called. The run method is part of the scheduler. This method keeps track of whether the device is on a minor cycle or a major cycle and runs the preform task method of each task. The tasks included in this project are Compute, Measure, Warning, oleddisplay, and status. Each task has a public interface of 2 void pointers. One that when initialized by the main method will point to the preform task function, and another that, when initialized, points to a struct containing pointers to the data required by that task. Each task has a task control block(TCB) in the scheduler. This TCB points contains pointers to the preform task function and the data for the task. The TCB is used by the scheduler to run the task. The scheduler contains an array of TCB, each element in the array corresponds to a new task. In this case there are 5 tasks so 5 elements in the array.The scheduler's run task contains a for loop that runs through the array of TCB and runs the function pointed to by the TCB with the argument of the data pointer stored in the TCB. After running all 5 tasks the TCB has a software defined wait of 250 milliseconds to implement the minor cycle delay. The software defined wait is simply a for loop that uses addition as a time consumption tool. it is known that system clock is 8 Mhz so having a for loop go from 0 to 2 million would take about a quarter of a second. The control flow is shown in the figure below in figure 5. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{design/Control_state_diagram.png}
+    \caption{Control Flow Diagram}
+    \label{fig:Control}
+\end{figure}
+
+Each task has its own unique purpose in the system, and each uses a different part of the global data. The Measure task, with an activity diagram shown in Figure 6, deals only with the raw data from the instruments. This task is meant to act in place of the instruments that are unavailable. The task only runs if the scheduler has set the global value is Major Cycle to 1. On a major cycle the measure function either increments the data of each measurement by 1 or 2 or decrements the data by 1 or 2.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{design/measure_activity.png}
+    \caption{Measure Activity Diagram}
+    \label{fig:measure}
+\end{figure}
+
+
+The compute task is very simple. Like the measure task it only runs on a minor cycle. It takes the raw data that has been set by the measure task, multiplies by a constand and adds a constant to each piece of raw data to get the corrected data. The compute task then puts the values for the corrected data in memory at the location of the global data pointer. Compute uses every data value except the battery.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{design/compute_activity.png}
+    \caption{Compute Activity Diagram}
+    \label{fig:compute}
+\end{figure}
+
+
+Afer compute, the warning task begins checking for warning or alarm states. The warning task only deals with the corrected data from compute and the battery state. This task also must deal with the input and output signals used to display warning and sound an alarm. Unlike the other tasks, this task has more to its initialization than just initializing the data. In addition to setting up the pointers to the global data, during initialization, the task also enables peripheral banks C, E, F, and G. These are enabled using the SysCtlPeripheralEnable library call. Additionaly the task set up pins C 5, 6, and 7 as outputs, pins F 0 and G 1 as PWM outputs, and pin E 0 as a pull up resistor input. Additionaly the pwm outputsare set to use a 65 hz clock to play a sound at this frequency whenever enabled. The activity diagram is shown in Figure 8. There are 3 subsystems in the warning task. These subsystems each handle a different part of user notification. The first subsystem deals with the alarm. The subsystem checks to see if any of the given corrected data is outside of the range given to us as acceptable by more than 10\%. If any value is then the PWM output is enabled using PWMGenEnable. If the values fall back within the acceptable range, or the user hits the acknowledge button, then the pwm is disabled with PWMGenDisable and the sound stops. The next subsystem checks the corrected data for being 5\% out of range of the accepted values. If any value is more than 5\% out of its range then a warning will be displayed on the red led connected to pin C 5 using the GPIOPinWrite function. Depending on the value that is out of range the period the led flashes at will vary. The final subsystem is the battery check. This system checks if there is more than 30\% of battery left on the device. This is taken from the battery state data field. If there is less than 20\% battery left then a yellow led connedted to pin C7 is illuminated, if there is more then 20\% battery, and the device is not in a warning or alarm state then the green led on pin C 6 is illuminated. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{design/warning_activity.png}
+    \caption{Warning Activity Diagram}
+    \label{fig:Warning}
+\end{figure}
+
+
+
+To show a user their current medical measurements, the system also has an oleddisplay task. This task uses the corrected data from measurements, and the battery state. The display task has an activity diagram shown in Figure 9. This task uses the sprintf function in C to convert the data types that the corrected data is stored in, and properly format these data values into a string which is stored in a buffer. The string contained in the buffer is then printed to the oled screen using the driver library rit128x96x4 functions.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{design/display_activity.png}
+    \caption{Display Activity Diagram}
+    \label{fig:Display}
+\end{figure}
+
+
+
+The last task is the status task. This task only deals with one piece of data which is the battery state data. The only thing the status task does is that on a major cycle, it decrements the battery state by 1. This is shown in the activity diagram in Figure 10
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{design/Status_activity.png}
+    \caption{Status Activity Diagram}
+    \label{fig:status}
+\end{figure}
+
+\section{Presentation, Discussion, and Analysis of the Results}
+
+Based upon the execution of your design, present your results. Explain them and what was expected, and draw any conclusions (for example, did this prove your design worked).
+
+In addition to a detailed discussion and analysis of your project and your results, you must include all the answers to all questions raised in the lab.
 \section{Presentation, Discussion, and Analysis of the Results}
 
 Based upon the execution of your design, present your results. Explain them and what was expected, and draw any conclusions (for example, did this prove your design worked).
@@ -416,7 +483,7 @@ The project was completed without any residual errors or unsolved problems. See 
 
 %State any problems you encountered while working on the project. If your project did not work or worked only partially, provide an analysis of why and what efforts were made to identify the root cause of any problems. \\
 
-%Some points to bring up: did not enable the GPIO bank (caused OLED display to not work), could not get switch to work (solved by understanding that switch required pull up). P or J can talk about design solutions that did not work. On the whole, we had problems with going too deep, too quickly.
+%Some points to bring up: did not enable the GPIO bank (caused OLED display to not work), could not get switch to work (solved by understanding that switch required pull up). P or J can talk about design solutions that did not work. On the whole,  had problems with going too deep, too quickly.
 
 The medical instrument design in this project was completed and tested succesfuly to meet all the requirements, the designers did face a number of errors and difficulties in the process. Most of the challanges faced in this design were in implementing the inputs and outputs from the ARM micro processor. In this implementation, the students orginally had consulted the driver library documentation and found how to enable a general purpose input output (GPIO) pand, GPIO pin, and how to read from a GPIO pin. However, when the code to enable a GPIO pin was executed, the execution of tasks within the scheduler froze completely until a reset. This problem was caused by the students failure to enable the peripheral bank that the GPIO pins existed on. After learning how to do this, code was added to enable the peripheral and the task execution no longer froze on enabling a pin.
 
@@ -491,6 +558,7 @@ the speaker alarm.  The following ranges specify the warning and alarm states.
 		Diastolic Pressure & 10 & less than 80 mg Hg & & \\
     \bottomrule
 	\end{tabular}
+<<<<<<< HEAD
 	\caption{Initial values and warning/alarm states}
   \label{tab:ranges}
 \end{table}
@@ -570,6 +638,16 @@ and set low immediately after the execution of the task. An oscciloscope was
 then attached to this output pin and set to trigger on a positive edge. The
 cursors were then used to measure the amount of time the signal was high in
 each cycle.
+=======
+	\caption{Initial values and System ok parameters\label{tab:testing initil values}}
+\end{figure}
+	
+Using these initial values, the code was programmed onto the Stellaris board. Correct operation was verified by the alarm not sounding, and the red led being off, indicating that no warning state was in effect. In addition the green led was on indicating a normal state. Next the students varried one parameter at a time to be outside of the acceptable range by more than 10\%. Starting with the temperature being set to an initial raw value of 50, the alarm was verified by hearing the aural annunciation coming from the system. In addition, the temperature warning stat was also in effect. This means that the green led was off and the red led was blinking. To verify correct operation the students needed to make sure the led was blinking with a period of 1 second. The correct flashing pattern was verified by counting the number of times the led flashed in 6 seconds. In this case, for temperature, the led flashed 6 times in 6 seconds indicating a 1 second period, and correct operation. After this test, the temperature value was returned to 42 and the Pulse was instead set to 45. The same methods were used to verify that the alarm and warning states for pulse rate were working correctly, but this time the warning led turned on 3 times in 6 seconds indicating a 2 second period which is the intended period of flashing. The pulse rate was then returned to 25 and each pressure reading was checked for correct operation individualy by being set to an initial raw value of 100. Once again, the green led started off because the system was not in a nirmal state. The alarm was sounding due to the extremely high blood pressure measurements, and the red warning led flashed 12 times in 6 seconds indicating the correct period of .5 seconds for a blood pressure warning. In addition to testing the validity of each warning state and alarm state, the acknowledgement of the alarm was also tested during each of these tests. This was tested by hitting the acknowledge button once during each measurements test. During each test, hitting the acknowledge button turned the alarm sound off for a short time, as intended. 
+
+Next the measuremet simulation functions were tested. This was done by re-enabing each one that had been disabled from the previous test one at a time. The initial raw values were again set to the values in Figure 5. When each measurement was reenabled, the students could watch the temperature change at each major cycle using the oled display. Since the oled display indicated that the corrected temperature went up .75 degrees on a major cycle then down 1.5 degrees on the next, the temperature measurement was working as intedned. This situation also gave the students an opprotunity to verify that the warning and alarm states initiated as the temperature fell out of the acceptable range. The Led began flashing with a 1 second period after a few major cycles, then the alarm began sounding, indicating correct operation. Since temperature was working correctly, the temperature measurment function was once again disabled and the pulse rate measurement function was re-enabled. The oled display indicated that the pulse rate was increasing by 3 on a major cycle then falling by 6 on the following major cycle. This was consistent with the intended design. The alarm and warning being initiated as the pulse rate fell. The pulse rate measurement was then disabled and each blood pressure measurement was re-enabled individualy for testing. The Systolic pressure began by rising 4 mm Hg on a major cycle then falling 2 mm Hg on the next, and the Diastolic pressure by rising 3 on a Major cycle and falling 1.5 on the next, this was consistent with the design. The warning and alarm states were activated as each passed its threshold and the red led was blinking with a period of .5 seconds. The warning led was also tested in the case that all warning states were active. To do this all initial values were set to 100. In this case, as designed by the students, the red warning led indicated the fastsest blinking warning with a .5 second period. 
+
+The final bit of testing preformed on the system was timing each task within the system. This was done by adding a general purpose output pin in the scheduler code. This output was set high right before the execution of a task, and set low immediately after the execution of the task. An oscciloscope was then attached to this output pin and set to trigger on a positive edge. The cursors were then used to measure the amount of time the signal was high in each cycle.
+>>>>>>> a22960857529fdf47152d9af7444c3ca051b6505
 
 \section{Summary and Conclusion}
 
