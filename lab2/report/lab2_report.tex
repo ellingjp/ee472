@@ -372,9 +372,15 @@ The project was completed without any residual errors or unsolved problems. See 
 
 \subsection{Analysis of problems and issues encountered and what efforts were made to identify the root cause of any problems  Jarrett}
 
-State any problems you encountered while working on the project. If your project did not work or worked only partially, provide an analysis of why and what efforts were made to identify the root cause of any problems. \\
+%State any problems you encountered while working on the project. If your project did not work or worked only partially, provide an analysis of why and what efforts were made to identify the root cause of any problems. \\
 
-Some points to bring up: did not enable the GPIO bank (caused OLED display to not work), could not get switch to work (solved by understanding that switch required pull up). P or J can talk about design solutions that did not work. On the whole, we had problems with going too deep, too quickly.
+%Some points to bring up: did not enable the GPIO bank (caused OLED display to not work), could not get switch to work (solved by understanding that switch required pull up). P or J can talk about design solutions that did not work. On the whole, we had problems with going too deep, too quickly.
+
+The medical instrument design in this project was completed and tested succesfuly to meet all the requirements, the designers did face a number of errors and difficulties in the process. Most of the challanges faced in this design were in implementing the inputs and outputs from the ARM micro processor. In this implementation, the students orginally had consulted the driver library documentation and found how to enable a general purpose input output (GPIO) pand, GPIO pin, and how to read from a GPIO pin. However, when the code to enable a GPIO pin was executed, the execution of tasks within the scheduler froze completely until a reset. This problem was caused by the students failure to enable the peripheral bank that the GPIO pins existed on. After learning how to do this, code was added to enable the peripheral and the task execution no longer froze on enabling a pin.
+
+Another problem encountered by the design team was that initially after setting up a GPIO pin as an input to take a button press from the Stellaris test board, pressing the button did not have the intended effect. The push button did not change the state of the input. The students were originally perplexed and tried a number of solutions to this problem. Testing indicated that the code for the GPIO input was correct as a 3.3 V signal directly to the pin could trigger the intended event on the input. Eventualy it was found that to use the push button switch the GPIO pin's pad must be configured to accept a pull up resistor type of input.
+
+All problems were solved before demonstrating the product to the interested parties. As such, the final design did not have any errors.
 
 \section{Test Plan}
 
@@ -401,8 +407,25 @@ Note, this does not specify test implementation...this is what to do, not how to
 
 \subsection{Test Cases  Jarrett}
 
-Annotated description of how your system is to be tested against the test limits
-Note, this does specify test implementation...this is not what to do, this is how to do it based upon the test specification.
+The students begin testing by examining if the alarm sounds at the proper time. This is initialy tested by disabling the functions that simulate measurements being made on each of the data measurements, and setting their initial values to be either within the alarm range or outside of the alarm range. The warning states were also initialy tested this way. The initial values for raw data below were used to test the normal state of the machine because each falls within the acceptable range of measurements for corrected data also given below that does not require a warning.
+\begin{figure}[h]
+	\centering
+	\begin{tabular}{|l|c|r|} 
+		\hline
+		Data & Initial Raw Value & Acceptable Range \\ \hline
+		Temperature & 42 & 36.1 C to 37.8 C  \\ \hline
+		Pulse & 25 & 60 to 100 beats per minute \\ \hline
+		Systolic Pressure  & 10 & less than 120 mm Hg \\ \hline
+		Diastolic Pressure & 10 & less than 80 mg Hg	\\ \hline
+	\end{tabular}
+	\caption{Initial values and System ok parameters\label{tab:testing initil values}}
+\end{figure}
+	
+Using these initial values, the code was programmed onto the Stellaris board. Correct operation was verified by the alarm not sounding, and the red led being off, indicating that no warning state was in effect. In addition the green led was on indicating a normal state. Next the students varried one parameter at a time to be outside of the acceptable range by more than 10\%. Starting with the temperature being set to an initial raw value of 50, the alarm was verified by hearing the aural annunciation coming from the system. In addition, the temperature warning stat was also in effect. This means that the green led was off and the red led was blinking. To verify correct operation we needed to make sure the led was blinking with a period of 1 second. The correct flashing pattern was verified by counting the number of times the led flashed in 6 seconds. In this case, for temperature, the led flashed 6 times in 6 seconds indicating a 1 second period, and correct operation. After this test, the temperature value was returned to 42 and the Pulse was instead set to 45. The same methods were used to verify that the alarm and warning states for pulse rate were working correctly, but this time the warning led turned on 3 times in 6 seconds indicating a 2 second period which is the intended period of flashing. The pulse rate was then returned to 25 and each pressure reading was checked for correct operation individualy by being set to an initial raw value of 100. Once again, the green led started off because the system was not in a nirmal state. The alarm was sounding due to the extremely high blood pressure measurements, and the red warning led flashed 12 times in 6 seconds indicating the correct period of .5 seconds for a blood pressure warning. In addition to testing the validity of each warning state and alarm state, the acknowledgement of the alarm was also tested during each of these tests. This was tested by hitting the acknowledge button once during each measurements test. During each test, hitting the acknowledge button turned the alarm sound off for a short time, as intended. 
+
+Next the measuremet simulation functions were tested. This was done by re-enabing each one that had been disabled from the previous test one at a time. The initial raw values were again set to the values in Figure 5. When each measurement was reenabled, the students could watch the temperature change at each major cycle using the oled display. Since the oled display indicated that the corrected temperature went up .75 degrees on a major cycle then down 1.5 degrees on the next, the temperature measurement was working as intedned. This situation also gave the students an opprotunity to verify that the warning and alarm states initiated as the temperature fell out of the acceptable range. The Led began flashing with a 1 second period after a few major cycles, then the alarm began sounding, indicating correct operation. Since temperature was working correctly, the temperature measurment function was once again disabled and the pulse rate measurement function was re-enabled. The oled display indicated that the pulse rate was increasing by 3 on a major cycle then falling by 6 on the following major cycle. This was consistent with the intended design. The alarm and warning being initiated as the pulse rate fell. The pulse rate measurement was then disabled and each blood pressure measurement was re-enabled individualy for testing. The Systolic pressure began by rising 4 mm Hg on a major cycle then falling 2 mm Hg on the next, and the Diastolic pressure by rising 3 on a Major cycle and falling 1.5 on the next, this was consistent with our design. The warning and alarm states were activated as each passed its threshold and the red led was blinking with a period of .5 seconds. The warning led was also tested in the case that all warning states were active. To do this all initial values were set to 100. In this case, as designed by the students, the red warning led indicated the fastsest blinking warning with a .5 second period. 
+
+The final bit of testing preformed on the system was timing each task within the system. This was done by adding a general purpose output pin in our scheduler code. This output was set high right before the execution of a task, and set low immediately after the execution of the task. An oscciloscope was then attached to this output pin and set to trigger on a positive edge. The cursors were then used to measure the amount of time the signal was high in each cycle.
 
 \section{Summary and Conclusion}
 
