@@ -272,7 +272,7 @@ was divided into the following five main tasks:
   \item \textbf{Warning/Alarm Task} - Interacts with the red, yellow, and green LEDs, as well as the speaker to annunciate warning and alarm information
   \item \textbf{Status Task} - Receives battery information from the device
 \end{itemize}
-Each of these tasks will interact using the shared data shown in Figure~\ref{fig:arch}. 
+Each of these tasks interact using the shared data shown in Figure~\ref{fig:arch}. 
 
 \begin{figure}
     \centering
@@ -281,11 +281,16 @@ Each of these tasks will interact using the shared data shown in Figure~\ref{fig
     \label{fig:arch}
 \end{figure}
 
-To implement this in C, 
+After developing the system architecture, the design needed to be translated into the C programming language.  The design manifested in a multifile program consisting of the following source files:
+\begin{itemize}
+  \item \textbf{globals.c/globals.h} - Used to define the Shared Data used among the tasks
+  \item \textbf{schedule.c/schedule.h} - Defines the scheduler interface and it's implementation
+  \item \textbf{timebase.h}
+\end{itemize}
 
 \subsubsection{low level design  Jarret}
 
-task level implementation details here. Control diagram goes here, etc.
+implementation details here. Tasks, scheduler, etc. Control diagram goes here, activity diagram, etc.
 
 \section{Presentation, Discussion, and Analysis of the Results}
 
