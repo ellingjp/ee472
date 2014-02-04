@@ -16,4 +16,4 @@
 void initializeComputeTask();
 
 /* Points to the TCB for compute */
-TCB computeTask;
+extern TCB computeTask;

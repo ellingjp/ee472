@@ -15,4 +15,4 @@
 void initializeStatusTask();
 
 /* The status Task */
-TCB statusTask;
+extern TCB statusTask;

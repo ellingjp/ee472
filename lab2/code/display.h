@@ -13,4 +13,4 @@
 void initializeDisplayTask();
 
 /* Points to the TCB for measure */
-TCB displayTask;
+extern TCB displayTask;

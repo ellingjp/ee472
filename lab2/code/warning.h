@@ -32,4 +32,4 @@
 void initializeWarningTask();
 
 /* The warning task */
-TCB warningTask;
+extern TCB warningTask;

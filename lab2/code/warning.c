@@ -50,10 +50,12 @@ typedef struct WarningData {
   int *batteryState;
 } WarningData;
 
-static WarningData data;                   // internal data
+static WarningData data;        // internal data
 static unsigned long ulPeriod;
 
-TCB warningTask;
+TCB warningTask;  // task interface
+
+void warningRunFunction(void *dataptr);  // prototype for compiler
 
 /* 
  * initializes task variables

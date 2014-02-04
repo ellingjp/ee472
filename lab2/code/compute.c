@@ -36,6 +36,8 @@ typedef struct computeData {
 static ComputeData data;    // the internal data
 TCB computeTask;            // task interface
 
+void computeRunFunction(void *computeData);  // prototype for compiler
+  
 /*
  * Initializes the computeData task values (pointers to variables, etc)
  */
@@ -50,7 +52,7 @@ void initializeComputeTask() {
   data.diastPressCorrected = &(globalDataMem.diastolicPressCorrected);
   data.pulseCorrected = &(globalDataMem.pulseRateCorrected);
 
-  computeTask.taskRunFunction = &computeRunFunction;
+  computeTask.runTaskFunction = &computeRunFunction;
   computeTask.taskDataPtr = &data;
 }
 

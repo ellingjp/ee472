@@ -13,4 +13,4 @@
 void initializeMeasureTask();
 
 /* Points to the TCB for measure */
-TCB measureTask;
+extern TCB measureTask;

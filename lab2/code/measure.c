@@ -31,6 +31,8 @@ typedef struct measureData {
 static MeasureData data;  // internal data
 TCB measureTask;          // task interface
 
+void measureRunFunction(void *dataptr);  // prototype for compiler
+  
 void initializeMeasureTask() {
 #if DEBUG
   RIT128x96x4Init(1000000);

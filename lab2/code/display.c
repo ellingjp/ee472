@@ -28,6 +28,8 @@ typedef struct oledDisplayData {
 static DisplayData data;  // internal data
 TCB displayTask;          // task interface
 
+void displayRunFunction(void *dataptr);  // prototype for compiler
+  
 void initializeDisplayTask() {
   RIT128x96x4Init(1000000);
 
@@ -39,7 +41,7 @@ void initializeDisplayTask() {
   data.batteryState = &(globalDataMem.batteryState);
 
   // Load TCB
-  displayTask.taskRunFunction = &displayRunFunction;
+  displayTask.runTaskFunction = &displayRunFunction;
   displayTask.taskDataPtr = &data;
 }
 
@@ -47,7 +49,7 @@ void initializeDisplayTask() {
 void displayRunFunction(void *dataptr) {
   // only run on major cycle
   //  if (IS_MAJOR_CYCLE) {   // on major cycle
-  OLEDDisplayData *data = (OLEDDisplayData *) dataptr;
+  DisplayData *data = (DisplayData *) dataptr;
 
   char num[30];
   sprintf(num, "Temperature: %.2f C ", *(data->temperatureCorrected));
