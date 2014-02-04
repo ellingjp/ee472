@@ -16,16 +16,19 @@ typedef struct {
 } StatusData;
 
 static StatusData data;			// the internal data
-void *statusData = (void *) &data;	// sets the external ptr to the data;
+TCB statusTask;
 
 /* Initialize the StatusData task values */
-void initializeStatusTask (void *data) {
-	StatusData *sdata = (StatusData *) data;
-	sdata->batteryState = &(globalDataMem.batteryState);
+void initializeStatusTask() {
+  // Load data
+	data.batteryState = &(globalDataMem.batteryState);
+
+  // Load TCB
+  statusTask.taskRunFunction = &statusRunFunction;
 }
 
 /* Perform status tasks */
-void statusTask(void *data){
+void statusRunFunction(void *data){
   if (IS_MAJOR_CYCLE) {
 	StatusData *sData = (StatusData *) data;
 	if (*(sData->batteryState) > 0)

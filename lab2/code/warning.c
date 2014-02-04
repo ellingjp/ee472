@@ -7,6 +7,7 @@
  */
 
 #include "globals.h"
+#include "task.h"
 #include "timebase.h"
 #include "warning.h"
 #include "inc/hw_types.h"
@@ -22,7 +23,6 @@
 #include "driverlib/pwm.h"
 #include "driverlib/sysctl.h"
 #include "drivers/rit128x96x4.h"
-
 
 #define ALARM_SLEEP_PERIOD 50   // duration to sleep in terms of minor cycles
 
@@ -53,13 +53,12 @@ typedef struct WarningData {
 static WarningData data;                   // internal data
 static unsigned long ulPeriod;
 
-
-void *warningData = (void *)&data;  // external pointer to internal data
+TCB warningTask;
 
 /* 
  * initializes task variables
  */
-void initializeWarningTask(void *data) {
+void initializeWarningTask() {
   //
   // Enable the peripherals used by this code. I.e enable the use of pin banks, etc.
   //
@@ -134,12 +133,15 @@ void initializeWarningTask(void *data) {
   PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_1_BIT, true);
 
   // initialize the warning data pointers
-  WarningData *mdata = (WarningData *)data;
-  mdata->temperatureCorrected = &(globalDataMem.temperatureCorrected);
-  mdata->systolicPressCorrected = &(globalDataMem.systolicPressCorrected);
-  mdata->diastolicPressCorrected = &(globalDataMem.diastolicPressCorrected);
-  mdata->pulseRateCorrected = &(globalDataMem.pulseRateCorrected);
-  mdata->batteryState = &(globalDataMem.batteryState);
+  data.temperatureCorrected = &(globalDataMem.temperatureCorrected);
+  data.systolicPressCorrected = &(globalDataMem.systolicPressCorrected);
+  data.diastolicPressCorrected = &(globalDataMem.diastolicPressCorrected);
+  data.pulseRateCorrected = &(globalDataMem.pulseRateCorrected);
+  data.batteryState = &(globalDataMem.batteryState);
+
+  // Load the TCB
+  warningTask.runTaskFunction = &warningRunFunction;
+  warningTask.taskDataPtr = &data;
 }
 
 ////////////////////////////////////////////////////////////
@@ -147,7 +149,7 @@ void initializeWarningTask(void *data) {
 /* 
  * Warning task function
  */
-void warningTask(void *dataptr) {
+void warningRunFunction(void *dataptr) {
 
   static alarmState aState = OFF;
   static warningState wState = NONE;

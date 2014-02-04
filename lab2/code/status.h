@@ -9,11 +9,10 @@
  * functions
  */
 
-/* Points to the data used by Status */
-extern void *statusData;
+#include "task.h"  // for TCBs
 
 /* Initialize StatusData, must be done before running functions */
-void initializeStatusTask (void *statusData);
+void initializeStatusTask();
 
-/* Perform the status tasks */
-void statusTask(void *dataPtr);
+/* The status Task */
+TCB statusTask;

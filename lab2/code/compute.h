@@ -7,14 +7,13 @@
  * initializeComputeData() should be called before running computeTask()
  */
 
-/* Points to data used by compute */
-extern void *computeData;
+#include "task.h"
 
 /*
  * Initializes the compute function. Should only be called once at the
  * beginning (i.e. at startup).
  */
-void initializeComputeTask(void *computeData);
+void initializeComputeTask();
 
-/* Carry out the compute task */
-void computeTask(void *computeDataPtr);
+/* Points to the TCB for compute */
+TCB computeTask;

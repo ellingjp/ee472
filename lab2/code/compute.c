@@ -6,6 +6,7 @@
  * Implements compute.c
  */
 
+#include "task.h"
 #include "compute.h"
 #include "globals.h"
 #include "timebase.h"
@@ -32,31 +33,32 @@ typedef struct computeData {
   float *pulseCorrected;
 } ComputeData;
 
-static ComputeData data;              // the internal data
-void *computeData = (void *) &data;   // set the external ptr to the data
+static ComputeData data;    // the internal data
+TCB computeTask;            // task interface
 
 /*
  * Initializes the computeData task values (pointers to variables, etc)
  */
-void initializeComputeTask(void *data) {
-  ComputeData *cData = (ComputeData *) data;
-  cData->temperatureRaw = &(globalDataMem.temperatureRaw);
-  cData->systolicPressRaw = &(globalDataMem.systolicPressRaw);
-  cData->diastolicPressRaw = &(globalDataMem.diastolicPressRaw);
-  cData->pulseRateRaw = &(globalDataMem.pulseRateRaw);
+void initializeComputeTask() {
+  data.temperatureRaw = &(globalDataMem.temperatureRaw);
+  data.systolicPressRaw = &(globalDataMem.systolicPressRaw);
+  data.diastolicPressRaw = &(globalDataMem.diastolicPressRaw);
+  data.pulseRateRaw = &(globalDataMem.pulseRateRaw);
 
-  cData->tempCorrected = &(globalDataMem.temperatureCorrected);
-  cData->systPressCorrected = &(globalDataMem.systolicPressCorrected);
-  cData->diastPressCorrected = &(globalDataMem.diastolicPressCorrected);
-  cData->pulseCorrected = &(globalDataMem.pulseRateCorrected);
+  data.tempCorrected = &(globalDataMem.temperatureCorrected);
+  data.systPressCorrected = &(globalDataMem.systolicPressCorrected);
+  data.diastPressCorrected = &(globalDataMem.diastolicPressCorrected);
+  data.pulseCorrected = &(globalDataMem.pulseRateCorrected);
+
+  computeTask.taskRunFunction = &computeRunFunction;
+  computeTask.taskDataPtr = &data;
 }
-
 
 /* 
  * Linearizes the raw data measurement and converts value into human 
  * readable format
  */
-void computeTask(void *computeData) {
+void computeRunFunction(void *computeData) {
   if (IS_MAJOR_CYCLE) {
     ComputeData *cData = (ComputeData *) computeData;
     *(cData->tempCorrected) = 5 + 0.75 * (*(cData->temperatureRaw));

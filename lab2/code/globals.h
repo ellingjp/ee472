@@ -21,7 +21,7 @@
 
 #define BATT_INIT 200
 
-typedef struct correctedData {
+typedef struct global_data {
   int temperatureRaw;
   int systolicPressRaw;
   int diastolicPressRaw;

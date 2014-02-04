@@ -6,6 +6,7 @@
  * Implements measure.c
  */
 
+#include "task.h"
 #include "globals.h"
 #include "timebase.h"
 #include "measure.h"
@@ -27,18 +28,22 @@ typedef struct measureData {
   int *pulseRateRaw;
 } MeasureData;
 
-static MeasureData data;             // internal data
-void *measureData = (void *)&data;  // external pointer to internal data
+static MeasureData data;  // internal data
+TCB measureTask;          // task interface
 
-void initializeMeasureTask(void *data) {
+void initializeMeasureTask() {
 #if DEBUG
   RIT128x96x4Init(1000000);
 #endif
-  MeasureData *mdata = (MeasureData *)data;
-  mdata->temperatureRaw = &(globalDataMem.temperatureRaw);
-  mdata->systolicPressRaw = &(globalDataMem.systolicPressRaw);
-  mdata->diastolicPressRaw = &(globalDataMem.diastolicPressRaw);
-  mdata->pulseRateRaw = &(globalDataMem.pulseRateRaw);
+  // Load data memory
+  data.temperatureRaw = &(globalDataMem.temperatureRaw);
+  data.systolicPressRaw = &(globalDataMem.systolicPressRaw);
+  data.diastolicPressRaw = &(globalDataMem.diastolicPressRaw);
+  data.pulseRateRaw = &(globalDataMem.pulseRateRaw);
+
+  // Load TCB
+  measureTask.runTaskFunction = &measureRunFunction;
+  measureTask.taskDataPtr = &data;
 }
 
 void setTemp(int *temp) {
@@ -120,7 +125,7 @@ void setPulse(int *pulse) {
     i++;
 }
 
-void measureTask(void *dataptr) {
+void measureRunFunction(void *dataptr) {
   // only run on major cycle
   if (IS_MAJOR_CYCLE) {   // on major cycle
     MeasureData *data = (MeasureData *) dataptr;
