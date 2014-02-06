@@ -6,10 +6,7 @@
  * Implements measure.c
  */
 
-<<<<<<< HEAD
 #include "task.h"
-=======
->>>>>>> a6bd9b48cfc3011aaf42afba151673c7e5cc9c86
 #include "globals.h"
 #include "timebase.h"
 #include "measure.h"
@@ -31,7 +28,6 @@ typedef struct measureData {
   int *pulseRateRaw;
 } MeasureData;
 
-<<<<<<< HEAD
 static MeasureData data;  // internal data
 TCB measureTask;          // task interface
 
@@ -50,20 +46,6 @@ void initializeMeasureTask() {
   // Load TCB
   measureTask.runTaskFunction = &measureRunFunction;
   measureTask.taskDataPtr = &data;
-=======
-static MeasureData data;             // internal data
-void *measureData = (void *)&data;  // external pointer to internal data
-
-void initializeMeasureTask(void *data) {
-#if DEBUG
-  RIT128x96x4Init(1000000);
-#endif
-  MeasureData *mdata = (MeasureData *)data;
-  mdata->temperatureRaw = &(globalDataMem.temperatureRaw);
-  mdata->systolicPressRaw = &(globalDataMem.systolicPressRaw);
-  mdata->diastolicPressRaw = &(globalDataMem.diastolicPressRaw);
-  mdata->pulseRateRaw = &(globalDataMem.pulseRateRaw);
->>>>>>> a6bd9b48cfc3011aaf42afba151673c7e5cc9c86
 }
 
 void setTemp(int *temp) {
@@ -145,11 +127,7 @@ void setPulse(int *pulse) {
     i++;
 }
 
-<<<<<<< HEAD
 void measureRunFunction(void *dataptr) {
-=======
-void measureTask(void *dataptr) {
->>>>>>> a6bd9b48cfc3011aaf42afba151673c7e5cc9c86
   // only run on major cycle
   if (IS_MAJOR_CYCLE) {   // on major cycle
     MeasureData *data = (MeasureData *) dataptr;

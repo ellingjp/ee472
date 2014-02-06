@@ -12,7 +12,6 @@
 
 // StatusData structure internal to compute task
 typedef struct {
-<<<<<<< HEAD
   int *batteryState;
 } StatusData;
 
@@ -39,25 +38,3 @@ void statusRunFunction(void *data){
         *(sData->batteryState) = *(sData->batteryState) - 1;
   }
 }
-=======
-	int *batteryState;
-} StatusData;
-
-static StatusData data;			// the internal data
-void *statusData = (void *) &data;	// sets the external ptr to the data;
-
-/* Initialize the StatusData task values */
-void initializeStatusTask (void *data) {
-	StatusData *sdata = (StatusData *) data;
-	sdata->batteryState = &(globalDataMem.batteryState);
-}
-
-/* Perform status tasks */
-void statusTask(void *data){
-  if (IS_MAJOR_CYCLE) {
-	StatusData *sData = (StatusData *) data;
-	if (*(sData->batteryState) > 0)
-          *(sData->batteryState) = *(sData->batteryState) - 1;
-  }
-}
->>>>>>> a6bd9b48cfc3011aaf42afba151673c7e5cc9c86

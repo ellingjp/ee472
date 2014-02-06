@@ -7,10 +7,7 @@
  */
 
 #include "globals.h"
-<<<<<<< HEAD
 #include "task.h"
-=======
->>>>>>> a6bd9b48cfc3011aaf42afba151673c7e5cc9c86
 #include "timebase.h"
 #include "warning.h"
 #include "inc/hw_types.h"
@@ -27,10 +24,6 @@
 #include "driverlib/sysctl.h"
 #include "drivers/rit128x96x4.h"
 
-<<<<<<< HEAD
-=======
-
->>>>>>> a6bd9b48cfc3011aaf42afba151673c7e5cc9c86
 #define ALARM_SLEEP_PERIOD 50   // duration to sleep in terms of minor cycles
 
 #define WARN_RATE_PULSE    4    // flash rate in terms of minor cycles
@@ -57,29 +50,17 @@ typedef struct WarningData {
   int *batteryState;
 } WarningData;
 
-<<<<<<< HEAD
 static WarningData data;        // internal data
 static unsigned long ulPeriod;
 
 TCB warningTask;  // task interface
 
 void warningRunFunction(void *dataptr);  // prototype for compiler
-=======
-static WarningData data;                   // internal data
-static unsigned long ulPeriod;
-
-
-void *warningData = (void *)&data;  // external pointer to internal data
->>>>>>> a6bd9b48cfc3011aaf42afba151673c7e5cc9c86
 
 /* 
  * initializes task variables
  */
-<<<<<<< HEAD
 void initializeWarningTask() {
-=======
-void initializeWarningTask(void *data) {
->>>>>>> a6bd9b48cfc3011aaf42afba151673c7e5cc9c86
   //
   // Enable the peripherals used by this code. I.e enable the use of pin banks, etc.
   //
@@ -154,7 +135,6 @@ void initializeWarningTask(void *data) {
   PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_1_BIT, true);
 
   // initialize the warning data pointers
-<<<<<<< HEAD
   data.temperatureCorrected = &(globalDataMem.temperatureCorrected);
   data.systolicPressCorrected = &(globalDataMem.systolicPressCorrected);
   data.diastolicPressCorrected = &(globalDataMem.diastolicPressCorrected);
@@ -164,14 +144,6 @@ void initializeWarningTask(void *data) {
   // Load the TCB
   warningTask.runTaskFunction = &warningRunFunction;
   warningTask.taskDataPtr = &data;
-=======
-  WarningData *mdata = (WarningData *)data;
-  mdata->temperatureCorrected = &(globalDataMem.temperatureCorrected);
-  mdata->systolicPressCorrected = &(globalDataMem.systolicPressCorrected);
-  mdata->diastolicPressCorrected = &(globalDataMem.diastolicPressCorrected);
-  mdata->pulseRateCorrected = &(globalDataMem.pulseRateCorrected);
-  mdata->batteryState = &(globalDataMem.batteryState);
->>>>>>> a6bd9b48cfc3011aaf42afba151673c7e5cc9c86
 }
 
 ////////////////////////////////////////////////////////////
@@ -179,11 +151,7 @@ void initializeWarningTask(void *data) {
 /* 
  * Warning task function
  */
-<<<<<<< HEAD
 void warningRunFunction(void *dataptr) {
-=======
-void warningTask(void *dataptr) {
->>>>>>> a6bd9b48cfc3011aaf42afba151673c7e5cc9c86
 
   static alarmState aState = OFF;
   static warningState wState = NONE;
