@@ -61,7 +61,6 @@ void initializeSerialTask() {
   // Might need UARTEnable(UART0_BASE);
 }
 
-
 void serialRunFunction(void *dataptr) {
   char buf[512];
   sprintf(buf,
@@ -76,7 +75,7 @@ void serialRunFunction(void *dataptr) {
           *(data.pulseRateCorrected),
           *(data.batteryState));
   
-  // This cast removes a warning.  It is safe as long as buf contains
+  // The cast removes a warning.  It is safe as long as buf contains
   // plain ASCII (non extended)
   UARTSend( (unsigned char *) buf, strlen(buf));
 }
