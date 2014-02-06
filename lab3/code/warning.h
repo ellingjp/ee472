@@ -7,7 +7,10 @@
  * initializeWarningData() should be called before running warningTask()
  */
  
+<<<<<<< HEAD
 #include "task.h"
+=======
+>>>>>>> a6bd9b48cfc3011aaf42afba151673c7e5cc9c86
  
 #define WARN_LOW 0.95 //warn at 5% below min range value
 #define WARN_HIGH 1.05 //warn at 5% above max range value
@@ -28,8 +31,22 @@
 #define PULSE_MAX 100
 #define BATTERY_MIN 40
 
+<<<<<<< HEAD
 /* Initialize displayData, must be done before running warningTask() */
 void initializeWarningTask();
 
 /* The warning task */
 extern TCB warningTask;
+=======
+ 
+ 
+
+/* Points to the data used by warning */
+extern void *warningData;
+
+/* Initialize displayData, must be done before running warningTask() */
+void initializeWarningTask(void *displayData);
+
+/* Perform the warning task */
+void warningTask(void *dataptr);
+>>>>>>> a6bd9b48cfc3011aaf42afba151673c7e5cc9c86
