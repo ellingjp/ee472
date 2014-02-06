@@ -7,18 +7,23 @@
  */
 #include "globals.h"
 
-GlobalData globalDataMem;
+GlobalData global;
 
 void initializeGlobalData() {
-  globalDataMem.temperatureRaw = TEMP_RAW_INIT;
-  globalDataMem.systolicPressRaw = SYS_RAW_INIT;
-  globalDataMem.diastolicPressRaw = DIA_RAW_INIT;
-  globalDataMem.pulseRateRaw = PULSE_RAW_INIT;
+  global.temperatureRaw.head = 0;
+  global.temperatureRaw.buf[global.temperatureRaw.head] = 75;
 
-  globalDataMem.temperatureCorrected = TEMP_CORR_INIT;
-  globalDataMem.systolicPressCorrected = SYS_CORR_INIT;
-  globalDataMem.diastolicPressCorrected = DIA_CORR_INIT;
-  globalDataMem.pulseRateCorrected = PULSE_RAW_INIT;
+  global.bloodPressRaw.sys_head = 0;
+  global.bloodPressRaw.dia_head = 8;
+  global.bloodPressRaw.buf[global.bloodPressRaw.sys_head] = 80; // sys
+  global.bloodPressRaw.buf[global.bloodPressRaw.dia_head] = 80; // dia
 
-  globalDataMem.batteryState = BATT_INIT;
+  global.pulseRateRaw.head = 0;
+  global.pulseRateRaw.buf[global.pulseRateRaw.head] = 50;
+
+  global.batteryState = 200;
+  global.mode = 0;
+  global.measurementSelection = 0;
+  global.alarmAcknowledge = false;
+  global.scroll = 0;
 }

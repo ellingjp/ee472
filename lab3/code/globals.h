@@ -31,7 +31,8 @@ typedef struct global_data {
 
   typedef struct {
     int buf[16];
-    int head;
+    int sys_head;
+    int dia_head;
   } bloodPressRaw;
 
   typedef struct {
@@ -54,11 +55,7 @@ typedef struct global_data {
     int   head;
   } prCorrected;
 
-  typedef struct {
-    int buf[8];
-    int head;
-  } batteryState;
-
+  unsigned short batteryState;
   unsigned short mode;
   unsigned short measurementSelection;
   tBoolean alarmAcknowledge;
