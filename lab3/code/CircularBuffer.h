@@ -15,6 +15,10 @@
  *       troublesome without dynamic memory.  Do not rely on any of these
  *       elements!
  */
+
+#ifndef _CIRCULAR_BUFFER_H
+#define _CIRCULAR_BUFFER_H
+
 typedef struct _circBuf {
   void *array;
   int sizeElm;
@@ -44,3 +48,4 @@ void *cbGetArray(CircularBuffer *cb);
 /* Adds elem to cb */
 void cbAdd(CircularBuffer *cb, void *elem);
 
+#endif // _CIRCULAR_BUFFER_H
