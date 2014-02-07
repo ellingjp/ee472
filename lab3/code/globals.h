@@ -8,6 +8,7 @@
  */
 
 #include "hw/types.h"
+#include "CircularBuffer.h"
 
 #define DEBUG 0
 
@@ -24,36 +25,15 @@
 #define BATT_INIT 200
 
 typedef struct global_data {
-  typedef struct {
-    int buf[8];
-    int head;
-  } temperatureRaw; 
+  CircularBuffer *temperatureRaw;
+  CircularBuffer *systolicPressureRaw;
+  CircularBuffer *diastolicPressureRaw;
+  CircularBuffer *pulseRateRaw;
 
-  typedef struct {
-    int buf[16];
-    int sys_head;
-    int dia_head;
-  } bloodPressRaw;
-
-  typedef struct {
-    int buf[8];
-    int head;
-  } pulseRateRaw;
-
-  typedef struct {
-    float buf[8];
-    int   head;
-  } temperatureCorrected;
-
-  typedef struct {
-    float buf[16];
-    int   head;
-  } bloodPressCorrected;
-
-  typedef struct {
-    float buf[8];
-    int   head;
-  } prCorrected;
+  CircularBuffer *temperatureCorrected;
+  CircularBuffer *systolicPressureCorrected;
+  CircularBuffer *diastolicPressureCorrected;
+  CircularBuffer *pulseRateCorrected;
 
   unsigned short batteryState;
   unsigned short mode;
