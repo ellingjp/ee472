@@ -25,15 +25,15 @@
 #define BATT_INIT 200
 
 typedef struct global_data {
-  CircularBuffer *temperatureRaw;
-  CircularBuffer *systolicPressureRaw;
-  CircularBuffer *diastolicPressureRaw;
-  CircularBuffer *pulseRateRaw;
+  CircularBuffer temperatureRaw;
+  CircularBuffer systolicPressRaw;
+  CircularBuffer diastolicPressRaw;
+  CircularBuffer pulseRateRaw;
 
-  CircularBuffer *temperatureCorrected;
-  CircularBuffer *systolicPressureCorrected;
-  CircularBuffer *diastolicPressureCorrected;
-  CircularBuffer *pulseRateCorrected;
+  CircularBuffer temperatureCorrected;
+  CircularBuffer systolicPressCorrected;
+  CircularBuffer diastolicPressCorrected;
+  CircularBuffer pulseRateCorrected;
 
   unsigned short batteryState;
   unsigned short mode;
@@ -42,6 +42,6 @@ typedef struct global_data {
   unsigned short scroll;
 } GlobalData;
 
-extern GlobalData globalDataMem;
+extern GlobalData global;
 
 void initializeGlobalData();
