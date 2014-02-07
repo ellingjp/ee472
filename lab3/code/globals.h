@@ -7,7 +7,8 @@
  * MUST be initialized before using
  */
 
-#include "hw/types.h"
+#include "inc/hw_types.h"
+#include "intCircArray.h"
 
 #define DEBUG 0
 
@@ -24,44 +25,33 @@
 #define BATT_INIT 200
 
 typedef struct global_data {
-  typedef struct {
-    int buf[8];
-    int head;
-  } temperatureRaw; 
+  int tRawBuf[8];
+  int tRawHead;
 
-  typedef struct {
-    int buf[16];
-    int sys_head;
-    int dia_head;
-  } bloodPressRaw;
+  int bpRawBuf[16];
+  int bpRawSysHead;
+  int bpRawDiaHead;
 
-  typedef struct {
-    int buf[8];
-    int head;
-  } pulseRateRaw;
+  int prRawBuf[8];
+  int prRawHead;
 
-  typedef struct {
-    float buf[8];
-    int   head;
-  } temperatureCorrected;
+  float tCorrBuf[8];
+  int tCorrHead;
 
-  typedef struct {
-    float buf[16];
-    int   head;
-  } bloodPressCorrected;
+  float bpCorrBuf[16];
+  int bpCorrSysHead;
+  int bpCorrDiaHead;
 
-  typedef struct {
-    float buf[8];
-    int   head;
-  } prCorrected;
+  float prCorrBuf[8];
+  int prCorrHead;
 
   unsigned short batteryState;
   unsigned short mode;
-  unsigned short measurementSelection;
+  //unsigned short measurementSelection; // removed from lab
   tBoolean alarmAcknowledge;
   unsigned short scroll;
 } GlobalData;
 
-extern GlobalData globalDataMem;
+extern GlobalData global;
 
 void initializeGlobalData();

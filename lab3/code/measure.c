@@ -20,32 +20,39 @@
 #include <stdio.h>
 #endif 
 
+// prototype for compiler
+void measureRunFunction(void *dataptr);  
+
 // Internal data structure
 typedef struct measureData {
-  int *temperatureRaw;
-  int *systolicPressRaw;
-  int *diastolicPressRaw;
-  int *pulseRateRaw;
+  int *tRawBuf;
+  int *tRawHead;
+
+  int *bpRawBuf;
+  int *bpRawSysHead;
+  int *bpRawDiaHead;
+
+  int *prRawBuf;
+  int *prRawHead;
 } MeasureData;
 
 static MeasureData data;  // internal data
-TCB measureTask;          // task interface
-
-void measureRunFunction(void *dataptr);  // prototype for compiler
+TCB measureTask = {&measureRunFunction, &data};  // task interface
   
 void initializeMeasureTask() {
 #if DEBUG
   RIT128x96x4Init(1000000);
 #endif
   // Load data memory
-  data.temperatureRaw = &(globalDataMem.temperatureRaw);
-  data.systolicPressRaw = &(globalDataMem.systolicPressRaw);
-  data.diastolicPressRaw = &(globalDataMem.diastolicPressRaw);
-  data.pulseRateRaw = &(globalDataMem.pulseRateRaw);
+  data.tRawBuf = &(global.tRawBuf[0]);
+  data.tRawHead = &(global.tRawHead);
 
-  // Load TCB
-  measureTask.runTaskFunction = &measureRunFunction;
-  measureTask.taskDataPtr = &data;
+  data.bpRawBuf = &(global.bpRawBuf[0]);
+  data.bpRawSysHead = &(global.bpRawSysHead);
+  data.bpRawDiaHead = &(global.bpRawDiaHead);
+
+  data.prRawBuf = &(global.prRawBuf[0]);
+  data.prRawHead = &(global.prRawHead);
 }
 
 void setTemp(int *temp) {
@@ -128,14 +135,21 @@ void setPulse(int *pulse) {
 }
 
 void measureRunFunction(void *dataptr) {
+  static tBoolean onFirstRun = true;
+
+  if (onFirstRun) {
+    initializeMeasureTask();
+    onFirstRun = false;
+  }
+
   // only run on major cycle
   if (IS_MAJOR_CYCLE) {   // on major cycle
     MeasureData *data = (MeasureData *) dataptr;
 
-    setTemp(data->temperatureRaw);
-    setSysPress(data->systolicPressRaw);
-    setDiaPress(data->diastolicPressRaw);
-    setPulse(data->pulseRateRaw);
+    setTemp(data);
+    setSysPress(data);
+    setDiaPress(data);
+    setPulse(data);
     
 #if DEBUG
     char num[30];
