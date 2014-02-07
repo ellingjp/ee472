@@ -7,7 +7,7 @@
  * MUST be initialized before using
  */
 
-#include "hw/types.h"
+#include "inc/hw_types.h"
 #include "CircularBuffer.h"
 
 #define DEBUG 0

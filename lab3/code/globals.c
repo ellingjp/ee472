@@ -35,6 +35,16 @@ static CircularBuffer diastolicPressureCorrected;
 static CircularBuffer pulseRateCorrected;
 
 void initializeGlobalData() {
+  global.temperatureRaw = cbWrap(temperatureRawArr, sizeof(int), 8);
+  global.systolicPressureRaw = cbWrap(systolicPressureRawArr, sizeof(int), 8);
+  global.diastolicPressureRaw = cbWrap(diastolicPressureRawArr, sizeof(int), 8);
+  global.pulseRateRaw = cbWrap(pulseRateRawArr, sizeof(int), 8);
+
+  global.temperatureCorrected = cbWrap(temperatureCorrectedArr, sizeof(float), 8);
+  global.systolicPressureCorrected = cbWrap(systolicPressureCorrectedArr, sizeof(float), 8);
+  global.diastolicPressureCorrected = cbWrap(diastolicPressureCorrectedArr, sizeof(float), 8);
+  global.pulseRateCorrected = cbWrap(pulseRateCorrectedArr, sizeof(float), 8);
+
   global.temperatureRaw = &temperatureRaw;
   global.systolicPressureRaw = &systolicPressureRaw;
   global.diastolicPressureRaw = &diastolicPressureRaw;
