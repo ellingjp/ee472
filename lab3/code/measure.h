@@ -9,8 +9,5 @@
 
 #include "task.h"
 
-/* Initialize MeasureData, must be done before running measureTask() */
-void initializeMeasureTask();
-
 /* Points to the TCB for measure */
 extern TCB measureTask;

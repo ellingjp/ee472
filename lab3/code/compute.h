@@ -9,11 +9,5 @@
 
 #include "task.h"
 
-/*
- * Initializes the compute function. Should only be called once at the
- * beginning (i.e. at startup).
- */
-void initializeComputeTask();
-
 /* Points to the TCB for compute */
 extern TCB computeTask;
