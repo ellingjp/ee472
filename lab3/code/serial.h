@@ -13,8 +13,5 @@
 
 #include "task.h"  // for TCBs
 
-/* Initialize StatusData, must be done before running functions */
-void initializeStatusTask();
-
 /* The status Task */
-extern TCB statusTask;
+extern TCB serialTask;

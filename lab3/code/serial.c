@@ -10,6 +10,7 @@
 #include "globals.h"
 #include "timebase.h"
 #include "serial.h"
+#include "CircularBuffer.h"
 #include "inc/hw_types.h"
 #include "driverlib/uart.h"
 #include "driverlib/gpio.h"
@@ -19,31 +20,27 @@
 
 // Internal data structure
 typedef struct serialData {
-  float *temperatureCorrected;
-  float *systolicPressCorrected;
-  float *diastolicPressCorrected;
-  float *pulseRateCorrected;
-  int *batteryState;
+  CircularBuffer *temperatureCorrected;
+  CircularBuffer *systolicPressCorrected;
+  CircularBuffer *diastolicPressCorrected;
+  CircularBuffer *pulseRateCorrected;
+  unsigned short *batteryState;
 } SerialData;
-
-static SerialData data;  // internal data
-TCB serialTask;          // task interface
 
 // Prototype
 void UARTSend(const unsigned char *pucBuffer, unsigned long ulCount);
 void serialRunFunction(void *dataptr);
 
+static SerialData data;  // internal data
+TCB serialTask = {&serialRunFunction, &data};          // task interface
+
 void initializeSerialTask() {
   // Initialize Data
-  data.temperatureCorrected = &(globalDataMem.temperatureCorrected);
-  data.systolicPressCorrected = &(globalDataMem.systolicPressCorrected);
-  data.diastolicPressCorrected = &(globalDataMem.diastolicPressCorrected);
-  data.pulseRateCorrected = &(globalDataMem.pulseRateCorrected);
-  data.batteryState = &(globalDataMem.batteryState);
-
-  // TCB
-  serialTask.runTaskFunction = &serialRunFunction;
-  serialTask.taskDataPtr = &data;
+  data.temperatureCorrected = &(global.temperatureCorrected);
+  data.systolicPressCorrected = &(global.systolicPressCorrected);
+  data.diastolicPressCorrected = &(global.diastolicPressCorrected);
+  data.pulseRateCorrected = &(global.pulseRateCorrected);
+  data.batteryState = &(global.batteryState);
 
   // UART Stuff
   // Enable the peripherals used by this example.
@@ -51,28 +48,35 @@ void initializeSerialTask() {
   SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 
   // Set GPIO A0 (UART RX)
-  GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0);
+  GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_1);
 
   // Configure the UART for 115,200, 8-N-1 operation.
   UARTConfigSetExpClk(UART0_BASE, SysCtlClockGet(), 115200,
       (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
        UART_CONFIG_PAR_NONE));
 
-  // Might need UARTEnable(UART0_BASE);
+  UARTEnable(UART0_BASE);
 }
 
 void serialRunFunction(void *dataptr) {
+  static tBoolean onFirstRun = true;
+
+  if (onFirstRun) {
+    initializeSerialTask();
+    onFirstRun = false;
+  }
+  
   char buf[512];
   sprintf(buf,
-          "1. Temperature\t%f C\n"
-          "2. Systolic pressure:\t%f mm Hg\n"
-          "3. Diastolic pressure:\t%f mm Hg\n"
-          "4. Pulse rate:\t%f BPM\n"
-          "5. Battery:\t%d\n",
-          *(data.temperatureCorrected), 
-          *(data.systolicPressCorrected),
-          *(data.diastolicPressCorrected), 
-          *(data.pulseRateCorrected),
+          "\f1. Temperature\t%f C\n\r"
+          "2. Systolic pressure:\t%f mm Hg\n\r"
+          "3. Diastolic pressure:\t%f mm Hg\n\r"
+          "4. Pulse rate:\t%f BPM\n\r"
+          "5. Battery:\t%d\n\r",
+          *(float *)cbGet(data.temperatureCorrected), 
+          *(float *)cbGet(data.systolicPressCorrected),
+          *(float *)cbGet(data.diastolicPressCorrected), 
+          *(float *)cbGet(data.pulseRateCorrected),
           *(data.batteryState));
   
   // The cast removes a warning.  It is safe as long as buf contains
