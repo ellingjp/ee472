@@ -81,37 +81,38 @@ void setBloodPress(CircularBuffer *spbuf, CircularBuffer *dpbuf) {
 
     static tBoolean sysComplete = false;    
     static tBoolean diaComplete = false;
+    
     int syspress = *(int *)cbGet(spbuf);
     
     // Restart systolic measurement if diastolic is complete
-    if (diaComplete) {
-      int spInitial = SYS_RAW_INIT;
-      cbAdd(spbuf, &spInitial);
-    }
-    
+
     if (syspress > 100)
       sysComplete = true;
-
-    if (i%2==0) syspress+=3;
-    else syspress--;
-
-    cbAdd(spbuf, &syspress);
-
+    
+    if (! sysComplete) {
+      if (i%2==0) syspress+=3;
+      else syspress--;
+    }
 
     int diapress = *(int *)cbGet(dpbuf);
 
-    // Restart diastolic measurement if systolic is complete
-    if (sysComplete) {
-      int dpInitial = DIA_RAW_INIT;
-      cbAdd(dpbuf, &dpInitial);
-    }
-    
+    // Restart diastolic measurement if systolic is complete  
     if (diapress < 40)
       diaComplete = true;
     
-    if (i%2==0) diapress-=2;
-    else diapress++;
+    if (!diaComplete) {
+      if (i%2==0) diapress-=2;
+      else diapress++;
+    }
 
+    if (diaComplete && sysComplete) {
+      sysComplete = false;
+      diaComplete = false;
+      syspress = SYS_RAW_INIT;
+      diapress = DIA_RAW_INIT;
+    }
+    
+    cbAdd(spbuf, &syspress);
     cbAdd(dpbuf, &diapress);
     
     i++;
