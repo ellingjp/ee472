@@ -71,7 +71,7 @@ void setTemp(CircularBuffer *tbuf) {
     i++;
 }
 
-void setSysPress(CircularBuffer *spbuf) {
+void setBloodPress(CircularBuffer *spbuf, CircularBuffer *dpbuf) {
     // This is written to lab spec, with a flag to indicate "complete".
     // Right now, it does nothing, but I imagine it should probably be a global
     // variable to indicate to the compute task that the pressure measurement 
@@ -79,32 +79,35 @@ void setSysPress(CircularBuffer *spbuf) {
    
     static unsigned int i = 0;
 
-    tBoolean complete = false;    
+    static tBoolean sysComplete = false;    
+    static tBoolean diaComplete = false;
     int syspress = *(int *)cbGet(spbuf);
     
-    if (syspress > 100) {
-      complete = true;
-      syspress = SYS_RAW_INIT;
+    // Restart systolic measurement if diastolic is complete
+    if (diaComplete) {
+      int spInitial = SYS_RAW_INIT;
+      cbAdd(spbuf, &spInitial);
     }
+    
+    if (syspress > 100)
+      sysComplete = true;
 
     if (i%2==0) syspress+=3;
     else syspress--;
 
     cbAdd(spbuf, &syspress);
-    
-    i++;
-}
 
-void setDiaPress(CircularBuffer *dpbuf) {
-    static unsigned int i = 0;
 
-    tBoolean complete = false;
     int diapress = *(int *)cbGet(dpbuf);
 
-    if (diapress < 40) {
-      complete = true;
-      diapress = DIA_RAW_INIT;
+    // Restart diastolic measurement if systolic is complete
+    if (sysComplete) {
+      int dpInitial = DIA_RAW_INIT;
+      cbAdd(dpbuf, &dpInitial);
     }
+    
+    if (diapress < 40)
+      diaComplete = true;
     
     if (i%2==0) diapress-=2;
     else diapress++;
@@ -150,25 +153,24 @@ void measureRunFunction(void *dataptr) {
 
   // only run on major cycle
   if (IS_MAJOR_CYCLE) {   // on major cycle
-    MeasureData *data = (MeasureData *) dataptr;
+    MeasureData *mData = (MeasureData *) dataptr;
 
-    setTemp(data->temperatureRaw);
-    setSysPress(data->systolicPressRaw);
-    setDiaPress(data->diastolicPressRaw);
-    setPulse(data->pulseRateRaw);
+    setTemp(mData->temperatureRaw);
+    setBloodPress(mData->systolicPressRaw, mData->diastolicPressRaw);
+    setPulse(mData->pulseRateRaw);
     
 #if DEBUG
     char num[30];
-    sprintf(num, "Raw temp: %d", *(int *)cbGet(data->temperatureRaw));
+    sprintf(num, "Raw temp: %d", *(int *)cbGet(mData->temperatureRaw));
     RIT128x96x4StringDraw(num, 0, 0, 15);
     
-    sprintf(num, "Raw Syst: %d", *(int *)cbGet(data->systolicPressRaw));
+    sprintf(num, "Raw Syst: %d", *(int *)cbGet(mData->systolicPressRaw));
     RIT128x96x4StringDraw(num, 0, 10, 15);
     
-    sprintf(num, "Raw Dia: %d", *(int *)cbGet(data->diastolicPressRaw));
+    sprintf(num, "Raw Dia: %d", *(int *)cbGet(mData->diastolicPressRaw));
     RIT128x96x4StringDraw(num, 0, 20, 15);
     
-    sprintf(num, "Raw Pulse: %d", *(int *)cbGet(data->pulseRateRaw));
+    sprintf(num, "Raw Pulse: %d", *(int *)cbGet(mData->pulseRateRaw));
     RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
   }
