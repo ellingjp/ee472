@@ -68,11 +68,11 @@ void serialRunFunction(void *dataptr) {
   
   char buf[512];
   sprintf(buf,
-          "\f1. Temperature\t%f C\n\r"
-          "2. Systolic pressure:\t%f mm Hg\n\r"
-          "3. Diastolic pressure:\t%f mm Hg\n\r"
-          "4. Pulse rate:\t%f BPM\n\r"
-          "5. Battery:\t%d\n\r",
+          "\f1. Temperature:\t\t%.1f C\n\n\r"
+          "2. Systolic pressure:\t%.0f mm Hg\n\n\r"
+          "3. Diastolic pressure:\t%.0f mm Hg\n\n\r"
+          "4. Pulse rate:\t\t%.0f BPM\n\n\r"
+          "5. Battery:\t\t%d\n\n\r",
           *(float *)cbGet(data.temperatureCorrected), 
           *(float *)cbGet(data.systolicPressCorrected),
           *(float *)cbGet(data.diastolicPressCorrected), 
