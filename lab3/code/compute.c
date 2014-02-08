@@ -7,6 +7,7 @@
  */
 
 #include "task.h"
+#include "CircularBuffer.h"
 #include "compute.h"
 #include "globals.h"
 #include "timebase.h"
@@ -21,39 +22,36 @@
 // computeData structure internal to compute task
 typedef struct computeData {
   // raw data pointers
-  int *temperatureRaw;
-  int *systolicPressRaw;
-  int *diastolicPressRaw;
-  int *pulseRateRaw;
+  CircularBuffer *temperatureRaw;
+  CircularBuffer *systolicPressRaw;
+  CircularBuffer *diastolicPressRaw;
+  CircularBuffer *pulseRateRaw;
 
   //corrected data pointers
-  float *tempCorrected;
-  float *systPressCorrected;
-  float *diastPressCorrected;
-  float *pulseCorrected;
+  CircularBuffer *temperatureCorrected;
+  CircularBuffer *systolicPressCorrected;
+  CircularBuffer *diastolicPressCorrected;
+  CircularBuffer *pulseRateCorrected;
 } ComputeData;
 
-static ComputeData data;    // the internal data
-TCB computeTask;            // task interface
+void computeRunFunction(void *computeData);
 
-void computeRunFunction(void *computeData);  // prototype for compiler
-  
+static ComputeData data;    // the internal data
+TCB computeTask = {&computeRunFunction, &data};  // task interface
+
 /*
  * Initializes the computeData task values (pointers to variables, etc)
  */
 void initializeComputeTask() {
-  data.temperatureRaw = &(globalDataMem.temperatureRaw);
-  data.systolicPressRaw = &(globalDataMem.systolicPressRaw);
-  data.diastolicPressRaw = &(globalDataMem.diastolicPressRaw);
-  data.pulseRateRaw = &(globalDataMem.pulseRateRaw);
+  data.temperatureRaw = &(global.temperatureRaw);
+  data.systolicPressRaw = &(global.systolicPressRaw);
+  data.diastolicPressRaw = &(global.diastolicPressRaw);
+  data.pulseRateRaw = &(global.pulseRateRaw);
 
-  data.tempCorrected = &(globalDataMem.temperatureCorrected);
-  data.systPressCorrected = &(globalDataMem.systolicPressCorrected);
-  data.diastPressCorrected = &(globalDataMem.diastolicPressCorrected);
-  data.pulseCorrected = &(globalDataMem.pulseRateCorrected);
-
-  computeTask.runTaskFunction = &computeRunFunction;
-  computeTask.taskDataPtr = &data;
+  data.temperatureCorrected = &(global.temperatureCorrected);
+  data.systolicPressCorrected = &(global.systolicPressCorrected);
+  data.diastolicPressCorrected = &(global.diastolicPressCorrected);
+  data.pulseRateCorrected = &(global.pulseRateCorrected);
 }
 
 /* 
@@ -61,25 +59,38 @@ void initializeComputeTask() {
  * readable format
  */
 void computeRunFunction(void *computeData) {
+  static tBoolean onFirstRun = true;
+
+  if (onFirstRun) {
+    initializeComputeTask();
+    onFirstRun = false;
+  }
+
   if (IS_MAJOR_CYCLE) {
     ComputeData *cData = (ComputeData *) computeData;
-    *(cData->tempCorrected) = 5 + 0.75 * (*(cData->temperatureRaw));
-    *(cData->systPressCorrected) = 9 + 2 * (*(cData->systolicPressRaw));
-    *(cData->diastPressCorrected) = 6 + 1.5 * (*(cData->diastolicPressRaw));
-    *(cData->pulseCorrected) = 8 + 3 * (*(cData->pulseRateRaw));
+
+    float temp = 5 + 0.75 * (*(int*)cbGet(cData->temperatureRaw));
+    float systolic = 9 + 2 * (*(int*)cbGet(cData->systolicPressRaw));
+    float diastolic = 6 + 1.5 * (*(int*)cbGet(cData->diastolicPressRaw));
+    float pulseRate = 8 + 3 * (*(int*)cbGet(cData->pulseRateRaw));
+
+    cbAdd(cData->temperatureCorrected, &temp);
+    cbAdd(cData->systolicPressCorrected, &systolic);
+    cbAdd(cData->diastolicPressCorrected, &diastolic);
+    cbAdd(cData->pulseRateCorrected, &pulseRate);
 
 #if DEBUG
     char num[30];
-    sprintf(num, "Corrected temp: %f", *(cData->tempCorrected));
+    sprintf(num, "Corrected temp: %f", *(float*)cbGet(cData->temperatureCorrected));
     RIT128x96x4StringDraw(num, 0, 40, 15);
 
-    sprintf(num, "Raw Syst: %f", *(cData->systPressCorrected));
+    sprintf(num, "Raw Syst: %f", *(float*)cbGet(cData->systolicPressCorrected));
     RIT128x96x4StringDraw(num, 0, 50, 15);
 
-    sprintf(num, "Raw Dia: %f", *(cData->diastPressCorrected));
+    sprintf(num, "Raw Dia: %f", *(float*)cbGet(cData->diastolicPressCorrected));
     RIT128x96x4StringDraw(num, 0, 60, 15);
 
-    sprintf(num, "Raw Pulse: %f", *(cData->pulseCorrected));
+    sprintf(num, "Raw Pulse: %f", *(float*)cbGet(cData->pulseRateCorrected));
     RIT128x96x4StringDraw(num, 0, 70, 15);
 #endif
   }
