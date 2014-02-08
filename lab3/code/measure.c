@@ -159,16 +159,16 @@ void measureRunFunction(void *dataptr) {
     
 #if DEBUG
     char num[30];
-    sprintf(num, "Raw temp: %d", *(data->temperatureRaw));
+    sprintf(num, "Raw temp: %d", *(int *)cbGet(data->temperatureRaw));
     RIT128x96x4StringDraw(num, 0, 0, 15);
     
-    sprintf(num, "Raw Syst: %d", *(data->systolicPressRaw));
+    sprintf(num, "Raw Syst: %d", *(int *)cbGet(data->systolicPressRaw));
     RIT128x96x4StringDraw(num, 0, 10, 15);
     
-    sprintf(num, "Raw Dia: %d", *(data->diastolicPressRaw));
+    sprintf(num, "Raw Dia: %d", *(int *)cbGet(data->diastolicPressRaw));
     RIT128x96x4StringDraw(num, 0, 20, 15);
     
-    sprintf(num, "Raw Pulse: %d", *(data->pulseRateRaw));
+    sprintf(num, "Raw Pulse: %d", *(int *)cbGet(data->pulseRateRaw));
     RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
   }
