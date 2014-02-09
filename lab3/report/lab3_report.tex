@@ -299,6 +299,7 @@ o	The hardware timer will provide a system interrupt every 250ms or equal to the
 o	At runtime, upon a timer interrupt event, all tasks will be added or removed according to the task activation list. The tasks will then be run
 o	Task Control Blocks will have forward and backward pointers to allow references to the next task
 o	The scheduler cannot block for five seconds
+o	The scheduler will toggle a GPIO pin at least once during execution of the task queue	
 \end{itemize}
 
 \subsection{Software Implementation}

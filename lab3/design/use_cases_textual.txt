@@ -47,7 +47,7 @@ USE CASE: Acknowledge Alarms
         - sounds alarm and flashes, until user acknowledgement
         - if ack'd
             -turn off audible alarm (continue visual)
-            - if time passes and still out of range
+            - if time interval of 5 measurement cycles passes and still out of range
                     - recommence audible alarm
 
 
