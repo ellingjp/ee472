@@ -144,10 +144,59 @@ At the present time, only two subsystems must be produced: the display and alarm
       \item Provide visual indication of warning states
       \item Provide an audible indicator of alarm states
     \end{itemize}
+  \item In addition to the requirements from Phase I of the project, the following requirements have been added:
+    \begin{itemize}[$\bullet$]
+      \item Utilize a hardware-based time reference
+      \item support dynamic task creation and deletion
+      \item support a user input device
+      \item support data logging capabilities
+      \item support remote communication capability
+      \item Improve overall system performace
+      \item Improve overall system safety
+    \end{itemize}
 \end{itemize}
 
-\subsubsection{Detailed Specifications}
-For this project, these requirements have been further specified as follows:
+\subsubsection{Identified Use Cases}
+Taking the functional requirements listed above, several use cases were
+developed. A Use case diagram of these scenarios is given in
+Figure~\ref{fig:useCases}. Each use case is expanded and explained below.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../design/use_cases_graphical.png}
+	\caption{Use case diagram}
+	\label{fig:useCases}
+\end{figure}
+
+~\\
+\textbf{Use Case \#1: View Vital Measurements } \\
+In the first use case, the user views the basic measurements picked up by the
+sensors connected to the device. \\
+During normal operation, once the device is turned on by the user, the system
+records the value output by each sensor. This raw value is linearized and 
+converted into a human-readable form. Finally, this value is displayed on-screen.
+
+Three exceptional conditions were identified for this use case: 
+\begin{itemize}
+  \item \emph{One or more of the expected sensors is not connected} - If this occurs, the measurements taken by the device may be erratic. At the present moment, no action will be taken in such events. Later revisions may address the issue
+\item \emph{A measured value is outside 5\% of the specified normal range} - In this case, a warning signal will flash as an indication of the warning condition
+\item \emph{A measured value falls outside 10\% of a specified "normal" range} - In this case, an audible alarm will sound to indicate the alarm condition
+\end{itemize}
+
+~\\
+\textbf{Use Case \#2: Acknowledge Alarm} \\
+In the second case, the system is in an alarm state. The user acknowledges
+the alarm condition by pressing a button.
+
+Upon pressing the button, the system silences the audible alarm. Any visual warnings continue to flash during the silenced period. If a specified amount 
+time passes and the sensor reading(s) continue to maintain an alarmed state,
+the audible alarm will recommence.
+
+No exceptional conditions were identified for this use case.\\
+
+
+\subsubsection{Detailed Specifications (update)}
+For this project, the requirements have been further specified as follows:
 
 \begin{itemize}[$$]
   \item The system must have the following inputs:
@@ -208,44 +257,7 @@ Additionally, the system must be implemented using the Stellaris
 EKI-LM3S8962 ARM Cortex-M3 microcomputer board, The software for the system 
 must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
-\subsubsection{Identified Use Cases}
-Taking the functional requirements listed above, several use cases were
- developed. A Use case diagram of these scenarios is given in Figure~\ref{fig:useCases}. Each use case is expanded and explained below.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{../design/use_cases_graphical.png}
-	\caption{Use case diagram}
-	\label{fig:useCases}
-\end{figure}
-
-~\\
-\textbf{Use Case \#1: View Vital Measurements } \\
-In the first use case, the user views the basic measurements picked up by the
-sensors connected to the device. \\
-During normal operation, once the device is turned on by the user, the system
-records the value output by each sensor. This raw value is linearized and 
-converted into a human-readable form. Finally, this value is displayed on-screen.
-
-Three exceptional conditions were identified for this use case: 
-\begin{itemize}
-  \item \emph{One or more of the expected sensors is not connected} - If this occurs, the measurements taken by the device may be erratic. At the present moment, no action will be taken in such events. Later revisions may address the issue
-\item \emph{A measured value is outside 5\% of the specified normal range} - In this case, a warning signal will flash as an indication of the warning condition
-\item \emph{A measured value falls outside 10\% of a specified "normal" range} - In this case, an audible alarm will sound to indicate the alarm condition
-\end{itemize}
-
-~\\
-\textbf{Use Case \#2: Acknowledge Alarm} \\
-In the second case, the system is in an alarm state. The user acknowledges
-the alarm condition by pressing a button.
-
-Upon pressing the button, the system silences the audible alarm. Any visual warnings continue to flash during the silenced period. If a specified amount 
-time passes and the sensor reading(s) continue to maintain an alarmed state,
-the audible alarm will recommence.
-
-No exceptional conditions were identified for this use case.\\
-
-\subsubsection{Detailed Task Specifications}
+\subsubsection{Detailed Task Specifications (update)}
 
 \begin{itemize}
   \item
@@ -253,7 +265,7 @@ No exceptional conditions were identified for this use case.\\
 o	Once a complete set of measurements has been taken, the compute task is added to the task queue
 o	Pointers to the variables used in the measure task will be relocated to accommodate the new data architecture
 o	The pulse measurement will monitor and count the frequency of a pulse rate event interrupt
-+	A new value will be stored to memory if the present reading is grater than $\pm$15\% of the previous measurement
++	A new value will be stored to memory if the present reading is greater than $\pm$15\% of the previous measurement
 +	The measurement limits will correspond to 200bpm and 10bpm, determined empirically. 
 
 •	Changes to ComputeTask:
@@ -300,6 +312,9 @@ o	At runtime, upon a timer interrupt event, all tasks will be added or removed a
 o	Task Control Blocks will have forward and backward pointers to allow references to the next task
 o	The scheduler cannot block for five seconds
 o	The scheduler will toggle a GPIO pin at least once during execution of the task queue	
+
+	Changes to StatusTask:
+	There are no changes to the status task
 \end{itemize}
 
 \subsection{Software Implementation}
