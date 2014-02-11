@@ -12,6 +12,8 @@
 typedef struct tcb_struct {
   void (*runTaskFunction) (void*);
   void *taskDataPtr;
+  struct tcb_struct *nextTCB; // pointer to next TCB
+  struct tcb_struct *prevTCB; // points to previous TCB
 } TCB;
 
 #endif // _TASK_H
