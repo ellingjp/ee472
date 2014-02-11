@@ -44,4 +44,5 @@ typedef struct global_data {
 
 extern GlobalData global;
 
+// initializes the global variables for use by system
 void initializeGlobalData();
