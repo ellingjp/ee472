@@ -66,3 +66,18 @@ cases:
    return;
  }
 }
+
+/*
+ * Initializes an instance of a linked list, returns a pointer to the current
+ * position in the list.
+ */
+void* initializeLinkedList(){
+	linkedlist myList;
+
+	mylist.length = 0;
+	mylist.head = NULL;
+	mylist.tail = NULL;
+	mylist.current = NULL;
+
+	return mylist.current;
+}
