@@ -27,6 +27,9 @@ tBoolean endOfList() {
   return NULL == *current;
 }
 
+/*
+ * inserts the given node as the next node in the list
+ */
 void addNode(void* newNode) {
   if(NULL == head) {	// empty list
     head = newNode;
@@ -44,4 +47,37 @@ void addNode(void* newNode) {
     }
   }
   size++;
+}
+
+/*
+ * removes the current node  from the list. The current pointer is unchanged
+ */
+void deleteNode() {
+cases:
+  if(NULL == current || NULL == head)	// no elements in list or last in list
+    return;
+  
+ if (NULL == head -> next) // one-element list
+   head = NULL;
+ 	return;
+ else {	//any other list
+   (current -> prev) -> next = current -> next;
+   (current -> next) -> prev = current -> prev;
+   return;
+ }
+}
+
+/*
+ * Initializes an instance of a linked list, returns a pointer to the current
+ * position in the list.
+ */
+void* initializeLinkedList(){
+	linkedlist myList;
+
+	mylist.length = 0;
+	mylist.head = NULL;
+	mylist.tail = NULL;
+	mylist.current = NULL;
+
+	return mylist.current;
 }

@@ -19,15 +19,19 @@
 #include "status.h"
 #include "serial.h"
 
-#define NUM_TASKS 2
+#define NUM_TASKS 4
 
 static TCB taskQueue[NUM_TASKS];    // The taskQueue holding TCB for each task
 unsigned int minor_cycle_ctr = 0;   // minor cycle counter
 
 // Private functions
-TCB *getNextTask();
 void initializeQueue();
 void delay_in_ms(int ms);
+TCB *currentTask;
+TCB *listHead;
+TCB *listTail;
+tBoolean computeActive;
+tBoolean RemoteActive;
 
 // Must initialize before running this function!
 void runTasks() {
@@ -44,22 +48,54 @@ void initialize() {
   // Initialize global data
   initializeGlobalData();   // from globals.h
   
+  // neither remote or compute task runs at start up
+  computeActive = false;
+  remoteActive = false;
+
   // schedule each task
   initializeQueue();
 }
 
 // Initialize the taskQueue with each task
 void initializeQueue() {
-  // Load tasks
-  taskQueue[0] = measureTask; // from measure.h
-  taskQueue[1] = computeTask; // from compute.h
-  //taskQueue[2] = serialTask;
-  //taskQueue[3] = statusTask;
-  //taskQueue[2] = displayTask; // from display.h
-  //taskQueue[3] = warningTask; // from warning.h
-  //taskQueue[4] = statusTask;  // from status.h
+	// listhead > measure > keyMonitor > display > warn > status
+	listHead = &measureTask; // from measure.h
+	measureTask.next = &keyMonitorTask;
+	keyMonitorTask.next = &displayTask;
+	displayTask.next = &warningTask;
+	warningTask.next = &statusTask;
+	statusTask.next = NULL;
+
+	// set up backwards pointers listTail > status > ...
+	listTail = &statusTask;
+	statusTask.prevTCB = &warning;
+	warningTask.prevTCB = &displayTask;
+	displayTask.prevTCB = &keyMonitorTask;
+	keyMonitorTask.prevTCB = &measureTask;
+	monitorTask.prevTCB = NULL;
+
+	currentTask = *listHead;	// and set up to start at the top
 }
 
+// inserts the given node into the list as the next node
+void insertNode(tcb_struct* newNode) {
+  if(NULL == head) {	// empty list
+    head = newNode;
+    tail = newNode;
+    size++;
+  }
+  else {	// insert the newNode between two nodes
+    newNode -> next = current -> next;
+    current -> next = newNode;
+    newNode -> prev = current;
+    if (NULL == (newNode -> next)) {	// just added to end of list
+      tail = newNode;
+    } else {	// in the middle somewhere
+      newNode -> next -> prev = newNode;
+    }
+  }
+  size++;
+}
 // Software delay
 void delay_in_ms(int ms) {
   for (volatile int i = 0; i < ms; i++)
