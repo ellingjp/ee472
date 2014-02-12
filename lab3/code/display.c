@@ -30,7 +30,7 @@ typedef struct oledDisplayData {
   Boolean select;
 } DisplayData;
 
-static DisplayData dData;  // internal data
+static DisplayData data;  // internal data
 TCB displayTask;          // task interface
 
 void displayRunFunction(void *dataptr);  // prototype for compiler
@@ -62,15 +62,15 @@ void initializeDisplayTask() {
 void displayRunFunction(void *dataptr) {
   // only run on major cycle
   //  if (IS_MAJOR_CYCLE) {   // on major cycle
-  DisplayData *data = (DisplayData *) dataptr;
+  DisplayData *dData = (DisplayData *) dataptr;
   
-  Boolean selection = *(data->selection);
-  int scroll = *(data->scroll);
+  Boolean selection = *(dData->selection);
+  int scroll = *(dData->scroll);
 
   char num[40];
   char buf1[30];
   char buf2[30];
-	if(0 == *(data->mode))
+	if(0 == *(dData->mode))
 	{
 		if(false == selection)
 		{

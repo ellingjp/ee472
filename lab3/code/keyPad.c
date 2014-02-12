@@ -10,6 +10,11 @@
 #include "globals.h"
 #include "timebase.h"
 #include "Boolean.h"
+#define UP_SW (GPIO_PORTE_BASE, GPIO_PIN_0)
+#define DOWN_SW (GPIO_PORTE_BASE, GPIO_PIN_1)
+#define LEFT_SW (GPIO_PORTE_BASE, GPIO_PIN_2)
+#define RIGHT_SW (GPIO_PORTE_BASE, GPIO_PIN_3)
+#define ACK_SW (GPIO_PORTE_BASE, GPIO_PIN_3)
 
 // StatusData structure internal to compute task
 typedef struct {
@@ -22,7 +27,7 @@ typedef struct {
 
 void keyPadRunFunction(void *data);  // prototype for compiler
 
-static KeyPadData kdata;  // the internal data
+static KeyPadData data;  // the internal data
 TCB keyPadTask = {&keyPadRunFunction, &data}; // task interface
 
 /* Initialize the StatusData task values */
@@ -33,15 +38,32 @@ void initializeKeyPadTask() {
 	 GPIOPadConfigSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_STRENGTH_2MA,
      GPIO_PIN_TYPE_STD_WPU);
 	 GPIODirModeSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_DIR_MODE_IN);
+	 
+	 GPIOPadConfigSet(GPIO_PORTE_BASE, GPIO_PIN_1, GPIO_STRENGTH_2MA,
+     GPIO_PIN_TYPE_STD_WPU);
+	 GPIODirModeSet(GPIO_PORTE_BASE, GPIO_PIN_1, GPIO_DIR_MODE_IN);
+	 
+	 GPIOPadConfigSet(GPIO_PORTE_BASE, GPIO_PIN_2, GPIO_STRENGTH_2MA,
+     GPIO_PIN_TYPE_STD_WPU);
+	 GPIODirModeSet(GPIO_PORTE_BASE, GPIO_PIN_2, GPIO_DIR_MODE_IN);
+	 
+	 GPIOPadConfigSet(GPIO_PORTE_BASE, GPIO_PIN_3, GPIO_STRENGTH_2MA,
+     GPIO_PIN_TYPE_STD_WPU);
+	 GPIODirModeSet(GPIO_PORTE_BASE, GPIO_PIN_3, GPIO_DIR_MODE_IN);
 
+	 //for ack switch
+	 /* GPIOPadConfigSet(GPIO_PORTE_BASE, GPIO_PIN_3, GPIO_STRENGTH_2MA,
+     GPIO_PIN_TYPE_STD_WPU);
+	 GPIODirModeSet(GPIO_PORTE_BASE, GPIO_PIN_3, GPIO_DIR_MODE_IN);*/
 
+	 
 
   // Load data
-  kdata.mode = &(global.mode);
-  kdata.measurementSelection = &(global.measurementSelection);  
-  kdata.scroll = &(global.scroll);
-  kdata.alarmAcknowledge = &(global.alarmAcknowledge);
-  kdata.select = &(global.select);
+  data.mode = &(global.mode);
+  data.measurementSelection = &(global.measurementSelection);  
+  data.scroll = &(global.scroll);
+  data.alarmAcknowledge = &(global.alarmAcknowledge);
+  data.select = &(global.select);
 
   // Load TCB
   keyPadTask.runTaskFunction = &keyPadRunFunction;
@@ -52,6 +74,7 @@ void initializeKeyPadTask() {
 void keyPadRunFunction(void *data){
  
   if (IS_MAJOR_CYCLE) {//change this to every 2 seconds
+	KeyPadData *kData = (KeyPadData *) keyPadData;
 	if( 0 == *(kdata->mode))
 	{
 		if(LEFT_SW)
