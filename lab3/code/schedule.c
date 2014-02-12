@@ -19,7 +19,7 @@
 #include "status.h"
 #include "serial.h"
 
-#define NUM_TASKS 4
+#define NUM_TASKS 2
 
 static TCB taskQueue[NUM_TASKS];    // The taskQueue holding TCB for each task
 unsigned int minor_cycle_ctr = 0;   // minor cycle counter
@@ -53,8 +53,8 @@ void initializeQueue() {
   // Load tasks
   taskQueue[0] = measureTask; // from measure.h
   taskQueue[1] = computeTask; // from compute.h
-  taskQueue[2] = serialTask;
-  taskQueue[3] = statusTask;
+  //taskQueue[2] = serialTask;
+  //taskQueue[3] = statusTask;
   //taskQueue[2] = displayTask; // from display.h
   //taskQueue[3] = warningTask; // from warning.h
   //taskQueue[4] = statusTask;  // from status.h
