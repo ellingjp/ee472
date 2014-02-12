@@ -59,5 +59,6 @@ void initializeGlobalData() {
   global.mode = 0;
   global.measurementSelection = 0;
   global.alarmAcknowledge = false;
+  global.select = false;
   global.scroll = 0;
 }
