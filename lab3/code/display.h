@@ -1,16 +1,16 @@
 /* 
  * display.h
- * Author(s): Jarrett Gaddy, Jonathan Ellington
- * 1/28/2014, updated 2/3/2014
+ * Author(s): Jarrett Gaddy
+ * 1/28/2014, updated 2/10/2014
  *
- * Defines the interface for the measureTask.  
- * initializeMeasureData() should be called before running measureTask()
+ * Defines the interface for the displayTask.  
+ * initializeDisplayData() should be called before running displayTask()
  */
 
 #include "task.h"
 
-/* Initialize MeasureData, must be done before running measureTask() */
+/* Initialize DisplayData, must be done before running displayTask() */
 void initializeDisplayTask();
 
-/* Points to the TCB for measure */
+/* Points to the TCB for display */
 extern TCB displayTask;
