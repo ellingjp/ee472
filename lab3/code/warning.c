@@ -24,8 +24,8 @@
 #include "driverlib/sysctl.h"
 #include "drivers/rit128x96x4.h"
 
-#define ALARM_SLEEP_PERIOD	20   // duration to sleep in terms of minor cycles
-#define ALARM_CYCLE_RATE	8    // period of one alarm cycle (on/off)
+#define ALARM_SLEEP_PERIOD	100   // duration to sleep in terms of minor cycles
+#define ALARM_CYCLE_RATE	8    // period of one alarm cycle (on/off) minor cycles
 
 #define WARN_RATE_PULSE    	4    // flash rate in terms of minor cycles
 #define WARN_RATE_TEMP     	2
@@ -162,6 +162,15 @@ void warningRunFunction(void *dataptr) {
   prevState = wState;
   
   static int wakeUpAlarmAt = 0;
+
+  static tBoolean onFirstRun = true;
+  
+  if (onFirstRun){
+    initializeWarningTask();
+// initialize the circular buffers?
+    onFirstRun = false;
+  }
+
 
   // Get measurement data
   WarningData *data = (WarningData *) dataptr;
