@@ -1,7 +1,7 @@
 /* 
  * display.c
  * Author(s): jarrett Gaddy
- * 1/28/2014
+ * 2/10/2014
  *
  * Implements display.h
  */

@@ -1,15 +1,17 @@
 /*
- * status.c
- * Author(s): PatrickMa
- * 1/28/2014
+ * keyPad.c
+ * Author(s): Jarrett Gaddy
+ * 2/10/2014
  *
- * implements status.h
+ * implements keyPad.h
  */
 
-#include "status.h"
+#include "keyPad.h"
 #include "globals.h"
 #include "timebase.h"
 #include "Boolean.h"
+#include "inc/hw_types.h"
+
 #define UP_SW (GPIO_PORTE_BASE, GPIO_PIN_0)
 #define DOWN_SW (GPIO_PORTE_BASE, GPIO_PIN_1)
 #define LEFT_SW (GPIO_PORTE_BASE, GPIO_PIN_2)
