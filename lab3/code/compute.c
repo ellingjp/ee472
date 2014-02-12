@@ -15,8 +15,7 @@
 // Used for debug display
 #if DEBUG
 #include "drivers/rit128x96x4.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include "utils/ustdlib.h"
 #endif 
 
 // computeData structure internal to compute task
@@ -81,17 +80,17 @@ void computeRunFunction(void *computeData) {
 
 #if DEBUG
     char num[30];
-    sprintf(num, "Corrected temp: %f", *(float*)cbGet(cData->temperatureCorrected));
-    RIT128x96x4StringDraw(num, 0, 40, 15);
-
-    sprintf(num, "Raw Syst: %f", *(float*)cbGet(cData->systolicPressCorrected));
+    usnprintf(num, 30, "Corrected temp: %d", (unsigned int) temp);
     RIT128x96x4StringDraw(num, 0, 50, 15);
 
-    sprintf(num, "Raw Dia: %f", *(float*)cbGet(cData->diastolicPressCorrected));
+    usnprintf(num, 30, "Corrected Syst: %d", (unsigned int) systolic);
     RIT128x96x4StringDraw(num, 0, 60, 15);
 
-    sprintf(num, "Raw Pulse: %f", *(float*)cbGet(cData->pulseRateCorrected));
+    usnprintf(num, 30, "Corrected Dia: %d", (unsigned int) diastolic);
     RIT128x96x4StringDraw(num, 0, 70, 15);
+
+    usnprintf(num, 30, "Corrected Pulse: %d", (unsigned int) pulseRate);
+    RIT128x96x4StringDraw(num, 0, 80, 15);
 #endif
   }
 }
