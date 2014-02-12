@@ -19,26 +19,34 @@
 #include "status.h"
 #include "serial.h"
 
-#define NUM_TASKS 4
 
-static TCB taskQueue[NUM_TASKS];    // The taskQueue holding TCB for each task
 unsigned int minor_cycle_ctr = 0;   // minor cycle counter
+static TCB *currentTask;	// taskQueue pointers
+static TCB *listHead;
+static TCB *listTail;
+
+// flags to track task states
+static tBoolean computeInQueue;
+extern tBoolean computeActive;	
+extern tBoolean remoteActive;
+static tBoolean remoteInQueue;
 
 // Private functions
 void initializeQueue();
 void delay_in_ms(int ms);
-TCB *currentTask;
-TCB *listHead;
-TCB *listTail;
-tBoolean computeActive;
-tBoolean RemoteActive;
+void insertNode(TCB *newNode);
+void deleteNode();
+void updateQueue();
 
 // Must initialize before running this function!
 void runTasks() {
-  for (int i = 0; i < NUM_TASKS; i++) {
-    TCB *task = &taskQueue[i];
-    task->runTaskFunction(task->taskDataPtr);
+  while (NULL != currentTask) {
+    currentTask->runTaskFunction(currentTask->taskDataPtr);
+    currentTask = currentTask->nextTCB; // go to next task
   }
+  updateQueue();
+
+  // TODO figure this part out with hw delay!
   delay_in_ms(MINOR_CYCLE);
   minor_cycle_ctr = minor_cycle_ctr+1;
 }
@@ -48,12 +56,10 @@ void initialize() {
   // Initialize global data
   initializeGlobalData();   // from globals.h
   
-  // neither remote or compute task runs at start up
-  computeActive = false;
+  computeActive = false;	// neither remote or compute task runs at start up
   remoteActive = false;
 
-  // schedule each task
-  initializeQueue();
+  initializeQueue(); // start up task queue with basic tasks
 }
 
 // Initialize the taskQueue with each task
@@ -66,7 +72,7 @@ void initializeQueue() {
 	warningTask.next = &statusTask;
 	statusTask.next = NULL;
 
-	// set up backwards pointers listTail > status > ...
+	// backwards pointers listTail > status > ...
 	listTail = &statusTask;
 	statusTask.prevTCB = &warning;
 	warningTask.prevTCB = &displayTask;
@@ -77,25 +83,68 @@ void initializeQueue() {
 	currentTask = *listHead;	// and set up to start at the top
 }
 
-// inserts the given node into the list as the next node
-void insertNode(tcb_struct* newNode) {
-  if(NULL == head) {	// empty list
-    head = newNode;
-    tail = newNode;
-    size++;
+/* Traverse the taskQueue and insert/delete tasks based on set flags.
+ * currentTask pointer is reset to the head of the list */
+void updateQueue() {
+  // update computeTask
+  if (computeActive && !computeInQueue) {
+    currentTask = measureTask;
+    insertNode(computeTask);
+    computeInQueue = true;
+  }
+  if (!computeActive && computeInQueue) {
+    currentTask = computeTask;
+    deleteNode();
+    computeInQueue = false;
+  }
+  // update remoteTask
+  if (remoteActive && !remoteInQueue) {
+    currentTask = warningTask;
+    insertNode(remoteTask);
+    remoteInQueue = true;
+  }
+  if (!remoteActive && remoteInQueue) {
+    currentTask = remoteTask;
+    deleteNode();
+    remoteInQueue = false;
+  }
+  currentTask = listHead;
+}
+
+// inserts the given node into the list as the next node. currentTask pointer
+// moves to point at the newly inserted node.
+// Source: code derived in part from JD Olsen, Innovative Softwear and TA, Ltd
+void insertNode(TCB *newNode) {
+  if(NULL == listHead) {	// empty list
+    listHead = newNode;
+    listTail = newNode;
   }
   else {	// insert the newNode between two nodes
-    newNode -> next = current -> next;
-    current -> next = newNode;
-    newNode -> prev = current;
-    if (NULL == (newNode -> next)) {	// just added to end of list
-      tail = newNode;
+    newNode -> nextTCB = currentTask -> nextTCB;
+    currentTask -> nextTCB = newNode;
+    newNode -> prevTCB = currentTask;
+    if (NULL == (newNode -> nextTCB)) {	// newest node is at list end
+      listTail = newNode;
     } else {	// in the middle somewhere
-      newNode -> next -> prev = newNode;
+      newNode -> nextTCB -> prevTCB = newNode;
     }
   }
+  currentTask = newNode;
   size++;
 }
+
+/* Removes the currentTask node from the taskQueue. Moves currentTaskTask
+ * pointer to the nextTCB task in the list. */
+void deleteNode() {
+  if (NULL == (*currentTaskTask).nextTCB)	// edge case: at last task
+    listTail = (*currentTaskTask).prevTCB;
+  else {	// reassign pointers
+    *((*currentTask).nextTCB).prevTCB = (*currentTask).prevTCB;	
+    *((*currentTask).prevTCB).nextTCB = (*currentTask).nextTCB;
+  }
+  currentTask = (*currentTask).nextTCB;	// update currentTask pointer
+}
+
 // Software delay
 void delay_in_ms(int ms) {
   for (volatile int i = 0; i < ms; i++)

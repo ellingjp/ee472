@@ -8,6 +8,10 @@
  * schedule.
  */
 
+// globally setable variables
+extern tBoolean computeActive;	
+extern tBoolean remoteActive;
+
 /*
  * Must be called before runTasks()
  * Initializes schedule required data structures
