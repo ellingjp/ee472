@@ -24,11 +24,12 @@
 #include "driverlib/sysctl.h"
 #include "drivers/rit128x96x4.h"
 
-#define ALARM_SLEEP_PERIOD 50   // duration to sleep in terms of minor cycles
+#define ALARM_SLEEP_PERIOD	20   // duration to sleep in terms of minor cycles
+#define ALARM_CYCLE_RATE	8    // period of one alarm cycle (on/off)
 
-#define WARN_RATE_PULSE    4    // flash rate in terms of minor cycles
-#define WARN_RATE_TEMP     2
-#define WARN_RATE_PRESS    1
+#define WARN_RATE_PULSE    	4    // flash rate in terms of minor cycles
+#define WARN_RATE_TEMP     	2
+#define WARN_RATE_PRESS    	1
 
 #define LED_GREEN GPIO_PIN_6
 #define LED_RED   GPIO_PIN_5
@@ -50,8 +51,8 @@ typedef struct WarningData {
   int *batteryState;
 } WarningData;
 
+static unsigned long ulPeriod; // sets the alarm tone period
 static WarningData data;        // internal data
-static unsigned long ulPeriod;
 
 TCB warningTask;  // task interface
 
@@ -268,6 +269,13 @@ void warningRunFunction(void *dataptr) {
       break;
   }
 
+  // activate the remote terminal task if in ANY warn or alarm state
+  if (NONE == wState || OFF == aState)
+    remoteActive = false;
+  else
+    remoteActive = true;
+
+  // battery state indicator
   if (bState == LOW) {
     GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0xFF);
     GPIOPinWrite(GPIO_PORTC_BASE, LED_GREEN, 0x00);
@@ -292,6 +300,6 @@ void warningRunFunction(void *dataptr) {
   // Check whether to resound alarm
   if (minor_cycle_ctr == wakeUpAlarmAt && aState == ASLEEP) {
     aState = ON;
-    GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0X00);  // for debug, kills led
+    //GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0X00);  // for debug, kills led
   }
 }
