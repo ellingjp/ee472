@@ -86,18 +86,18 @@ void displayRunFunction(void *dataptr) {
 		}
 		else
 		{
-		
+			RIT128x96x4StringDraw("                                      ", 0, 0, 15);		
 			if(0 == scroll%4)
-				buf1 = "Blood Pressure:";
+				RIT128x96x4StringDraw("Blood Pressure:", 0, 0, 15);
 			else if(1 == scroll%4)
-				buf1 = "Temperature:";
+				RIT128x96x4StringDraw("Temperature:", 0, 0, 15);
 			else if(2 == scroll%4)
-				buf1 = "Pulse Rate:";
+				RIT128x96x4StringDraw("Pulse Rate:", 0, 0, 15);
 			else if(3 == scroll%4)
-				buf1 = " Battery:";
-			else buf1 = "oops"; //just in case
-			RIT128x96x4StringDraw("                                      ", 0, 0, 15);
-			RIT128x96x4StringDraw(buf1, 0, 0, 15);
+				RIT128x96x4StringDraw("Battery:", 0, 0, 15);
+			else RIT128x96x4StringDraw("oops", 0, 0, 15);//just in case
+
+			
 			
 			if(0 == scroll%4)
 				usprintf(buf2,30, "Systolic: %.0f mm Hg ", (*(int*)cbGet(dData->systolicPressCorrected)));
@@ -107,7 +107,7 @@ void displayRunFunction(void *dataptr) {
 				usprintf(buf2,30, "%d BPM ", (*(int*)cbGet(dData->pulseRateCorrected)));
 			else if(3 == scroll%4)
 				usprintf(buf2,30, "%d %%  ", (*(dData->batteryState))/2);
-			else buf2 = "oops"; //just in case			
+			//else buf2 = "oops"; //just in case			
 			
 			RIT128x96x4StringDraw("                                      ", 0, 10, 15);
 			RIT128x96x4StringDraw(buf2, 0, 10, 15);
