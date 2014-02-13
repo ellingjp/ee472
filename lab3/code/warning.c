@@ -23,10 +23,18 @@
 #include "driverlib/gpio.h"
 #include "driverlib/pwm.h"
 #include "driverlib/sysctl.h"
-#include "drivers/rit128x96x4.h"
 
-#define ALARM_OFF_PERIOD	100   // duration to sleep in terms of minor cycles
-#define ALARM_CYCLE_RATE	8    // period of one alarm cycle (on/off) minor cycles
+#if DEBUG
+#include "drivers/rit128x96x4.h"
+#include "utils/ustdlib.h"
+#endif
+
+// duration to sleep in terms of minor cycles
+#define SLEEP_PERIOD_ALARM	(5 * MAJOR_CYCLE * MINOR_CYCLE) 
+
+// alarm cycle period (on/off) in milliseconds
+#define ALARM_PERIOD 2000
+#define ALARM_CYCLE_RATE	(ALARM_PERIOD / MINOR_CYCLE)
 
 #define WARN_RATE_PULSE    	4    // flash rate in terms of minor cycles
 #define WARN_RATE_TEMP     	2
@@ -43,6 +51,9 @@ typedef enum {NORMAL, LOW} batteryState;
 //pin E0 for input on switch 3
 //pin C5 C6 and C7 for led out
 
+// compiler prototypes
+void warningRunFunction(void *dataptr);  // prototype for compiler
+
 // Internal data structure
 typedef struct WarningData {
   CircularBuffer *temperatureCorrected;
@@ -52,12 +63,12 @@ typedef struct WarningData {
   unsigned short *batteryState;
 } WarningData;
 
+extern tBoolean serialActive;
 static unsigned long ulPeriod; // sets the alarm tone period
 static WarningData data;        // internal data
 
-TCB warningTask;  // task interface
+TCB warningTask = {&warningRunFunction, &data};  // task interface
 
-void warningRunFunction(void *dataptr);  // prototype for compiler
 
 /* 
  * initializes task variables
@@ -143,9 +154,6 @@ void initializeWarningTask() {
   data.pulseRateCorrected = &(global.pulseRateCorrected);
   data.batteryState = &(global.batteryState);
 
-  // Load the TCB
-  warningTask.runTaskFunction = &warningRunFunction;
-  warningTask.taskDataPtr = &data;
 }
 
 ////////////////////////////////////////////////////////////
@@ -158,17 +166,16 @@ void warningRunFunction(void *dataptr) {
   static alarmState aState = OFF;
   static warningState wState = NONE;
   static batteryState bState = NORMAL;
-  
+
   static warningState prevState;
   prevState = wState;
-  
+
   static int wakeUpAlarmAt = 0;
 
   static tBoolean onFirstRun = true;
-  
+
   if (onFirstRun){
     initializeWarningTask();
-// initialize the circular buffers?
     onFirstRun = false;
   }
 
@@ -182,10 +189,10 @@ void warningRunFunction(void *dataptr) {
   unsigned short battery = *(wData->batteryState);
 
   // Alarm condition
-  if ( (temp < TEMP_MIN*ALARM_LOW || temp > (TEMP_MAX*ALARM_HIGH)) ||
-      (sysPress > SYS_MAX*ALARM_HIGH) ||
-      (diaPress > DIA_MAX*ALARM_HIGH) ||
-      (pulse < PULSE_MIN*ALARM_LOW || pulse > PULSE_MAX*ALARM_HIGH) ) {
+  if ( (sysPress > SYS_MAX*ALARM_HIGH) ) { //|| // Commented lines = lab2
+     // (temp < TEMP_MIN*ALARM_LOW || temp > (TEMP_MAX*ALARM_HIGH)) ||
+     // (diaPress > DIA_MAX*ALARM_HIGH) ||
+     // (pulse < PULSE_MIN*ALARM_LOW || pulse > PULSE_MAX*ALARM_HIGH) ) {
 
     // Should only turn alarm ON if it was previously OFF.  If it is
     // ASLEEP, shouldn't do anything.
@@ -209,9 +216,16 @@ void warningRunFunction(void *dataptr) {
     bState = LOW;
 
   // Handle speaker, based on alarm state
+  static tBoolean pwmEnable = false;
   switch (aState) {
     case ON:
-      PWMGenEnable(PWM0_BASE, PWM_GEN_0);
+      if (minor_cycle_ctr % SLEEP_PERIOD_ALARM) { // toggle between on/off
+        if (pwmEnable) 
+          PWMGenEnable(PWM0_BASE, PWM_GEN_0);
+        else
+          PWMGenDisable(PWM0_BASE, PWM_GEN_0);
+        pwmEnable = !pwmEnable;
+      }
       break;
     case ASLEEP:
       PWMGenDisable(PWM0_BASE, PWM_GEN_0);
@@ -226,51 +240,45 @@ void warningRunFunction(void *dataptr) {
   switch (wState) {
     case WARN_PRESS:
       GPIOPinWrite(GPIO_PORTC_BASE, LED_GREEN, 0X00);
-      
+
       if (wState != prevState) {
-        GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
+        GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); 
         toggletime = WARN_RATE_PRESS;
       }
       else if (0 == minor_cycle_ctr%toggletime) {
         if (GPIOPinRead(GPIO_PORTC_BASE, LED_RED) == 0)
-          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
+          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); 
         else
-          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0X00); // need to flash
-        
-        //toggletime+=WARN_RATE_PRESS;
+          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0X00); 
       }
-      
+
       break;
     case WARN_TEMP:
       GPIOPinWrite(GPIO_PORTC_BASE, LED_GREEN, 0X00);
-      
+
       if (wState != prevState) {
-        GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
+        GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); 
         toggletime = WARN_RATE_TEMP;
       }
       else if (0 == minor_cycle_ctr%toggletime) {
         if (GPIOPinRead(GPIO_PORTC_BASE, LED_RED) == 0)
-          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
+          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); 
         else
-          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0X00); // need to flash
-        
-        //toggletime+=WARN_RATE_TEMP;
+          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0X00); 
       }
       break;
     case WARN_PULSE:
       GPIOPinWrite(GPIO_PORTC_BASE, LED_GREEN, 0X00);
-      
+
       if (wState != prevState) {
-        GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
+        GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); 
         toggletime = WARN_RATE_PULSE;
       }
       else if (0==minor_cycle_ctr%toggletime) {
         if (GPIOPinRead(GPIO_PORTC_BASE, LED_RED) == 0)
-          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); // need to flash
+          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0XFF); 
         else
-          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0X00); // need to flash
-        
-        //toggletime+=WARN_RATE_PULSE;
+          GPIOPinWrite(GPIO_PORTC_BASE, LED_RED, 0X00); 
       }
       break;
     default:  // NORMAL
@@ -280,10 +288,10 @@ void warningRunFunction(void *dataptr) {
   }
 
   // activate the remote terminal task if in ANY warn or alarm state
-  if (NONE == wState || OFF == aState)
-    remoteActive = false;
+  if (NONE == wState && OFF == aState)
+    serialActive = false;
   else
-    remoteActive = true;
+    serialActive = true;
 
   // battery state indicator
   if (bState == LOW) {
@@ -300,11 +308,11 @@ void warningRunFunction(void *dataptr) {
    * If the button is pushed, the value returned is 0
    * If the button is NOT pushed, the value is non-zero
    */
-  if (0 == GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_0) && (aState == ON) )
+  if (global.alarmAcknowledge && (aState == ON) )
   {
     //GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0XFF);  // for debug, lights led
     aState = ASLEEP;
-    wakeUpAlarmAt = minor_cycle_ctr + ALARM_SLEEP_PERIOD;
+    wakeUpAlarmAt = minor_cycle_ctr + SLEEP_PERIOD_ALARM;
   }
 
   // Check whether to resound alarm
@@ -312,4 +320,34 @@ void warningRunFunction(void *dataptr) {
     aState = ON;
     //GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0X00);  // for debug, kills led
   }
+  
+#if DEBUG
+    char num[30];
+
+
+//    usnprintf(num, 30, "Raw temp: %d  ", (int) temp);
+//    RIT128x96x4StringDraw(num, 0, 0, 15);
+//
+//    usnprintf(num, 30, "Raw Syst: %d  ", (int) sysPress);
+//    RIT128x96x4StringDraw(num, 0, 10, 15);
+//
+//    usnprintf(num, 30, "Raw Dia: %d  ", (int) diaPress);
+//    RIT128x96x4StringDraw(num, 0, 20, 15);
+//
+//    usnprintf(num, 30, "Raw Pulse: %d  ", (int) pulse);
+//    RIT128x96x4StringDraw(num, 0, 30, 15);
+//    
+//    usnprintf(num, 30, "Raw Batt: %d  ", (unsigned short) battery);
+//    RIT128x96x4StringDraw(num, 0, 40, 15);
+//
+//    
+//    usnprintf(num, 30, "aState: %d  ", aState);
+//    RIT128x96x4StringDraw(num, 0, 50, 15);
+//
+//    usnprintf(num, 30, "alarmAck: %d  ", global.alarmAcknowledge);
+//    RIT128x96x4StringDraw(num, 0, 60, 15);
+//    
+//    usnprintf(num, 30, "pwmEn: %d  ", pwmEnable);
+//    RIT128x96x4StringDraw(num, 0, 70, 15);
+#endif
 }

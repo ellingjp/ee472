@@ -13,6 +13,7 @@
 #include "globals.h"
 #include "timebase.h"
 #include "measure.h"
+#include "schedule.h"
 
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
@@ -152,6 +153,7 @@ void setBloodPress(CircularBuffer *spbuf, CircularBuffer *dpbuf) {
   i++;
 }
 
+// pulse rate interrupt handler
 void PulseRateISR(void) {
   pulseRate++;
   
@@ -169,6 +171,7 @@ void measureRunFunction(void *dataptr) {
     onFirstRun = false;
   }
   
+  // capture pulse rate
   if (IS_PULSE_CYCLE) {
     // Divide by two so raw pulse rate matches frequency
     rate = pulseRate/2;
@@ -183,8 +186,10 @@ void measureRunFunction(void *dataptr) {
       unsigned int prev = *(unsigned int*) cbGet(mData->pulseRateRaw);
       
       // Only save if +- 15%
-      //if (rate < prev*0.85 || rate > prev*1.15)
+      if (rate < prev*0.85 || rate > prev*1.15) {
         cbAdd(mData->pulseRateRaw, (void *)&rate);
+      }
+    computeActive = true;   // run the compute task
      
 #if DEBUG
     char num[30];
@@ -192,6 +197,7 @@ void measureRunFunction(void *dataptr) {
     int sys = *(int *)cbGet(mData->systolicPressRaw);
     int dia = *(int *)cbGet(mData->diastolicPressRaw);
     int pulse = *(int *)cbGet(mData->pulseRateRaw);
+    int batt = global.batteryState;
 
     usnprintf(num, 30, "Raw temp: %d  ", temp);
     RIT128x96x4StringDraw(num, 0, 0, 15);
@@ -204,6 +210,9 @@ void measureRunFunction(void *dataptr) {
 
     usnprintf(num, 30, "Raw Pulse: %d  ", pulse);
     RIT128x96x4StringDraw(num, 0, 30, 15);
+    
+    usnprintf(num, 30, "Raw Batt: %d  ", batt);
+    RIT128x96x4StringDraw(num, 0, 40, 15);
 #endif
   }
 }

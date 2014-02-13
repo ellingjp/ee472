@@ -20,6 +20,12 @@
 #include "serial.h"
 #include "keyPad.h"
 
+// Used for debug display
+#if DEBUG
+#include "drivers/rit128x96x4.h"
+#include "utils/ustdlib.h"
+#endif 
+
  
 unsigned int minor_cycle_ctr = 0;   // minor cycle counter
 static TCB *currentTaskPtr;	// taskQueue pointers
@@ -27,10 +33,10 @@ static TCB *listHeadPtr;
 static TCB *listTailPtr;
 
 // flags to track task states
+tBoolean computeActive;	
+tBoolean serialActive;
 static tBoolean computeInQueue;
-extern tBoolean computeActive;	
-extern tBoolean remoteActive;
-static tBoolean remoteInQueue;
+static tBoolean serialInQueue;
 
 // Private functions
 void initializeQueue();
@@ -38,47 +44,54 @@ void delay_in_ms(int ms);
 void insertNode(TCB *newNode);
 void deleteNode();
 void updateQueue();
+void debug();
 
 // Must initialize before running this function!
 void runTasks() {
+  
+  updateQueue();
+  debug();
   while (NULL != currentTaskPtr) {
     currentTaskPtr->runTaskFunction(currentTaskPtr->taskDataPtr);
     currentTaskPtr = currentTaskPtr->nextTCB; // go to next task
   }
-  updateQueue();
-
+ 
   // TODO figure this part out with hw delay!
-  delay_in_ms(MINOR_CYCLE);
-  minor_cycle_ctr = minor_cycle_ctr+1;
+  //delay_in_ms(MINOR_CYCLE);
+  //minor_cycle_ctr = minor_cycle_ctr+1;
 }
 
 // Initialize datastructures
 void initialize() {
+  #if DEBUG
+  RIT128x96x4Init(1000000);
+  #endif
+  
   // Initialize global data
   initializeGlobalData();   // from globals.h
-  
-  computeActive = false;	// neither remote or compute task runs at start up
-  remoteActive = false;
+
+  computeActive = false;	// neither serial or compute task runs at start up
+  serialActive = false;
 
   initializeQueue(); // start up task queue with basic tasks
 }
 
 // Initialize the taskQueue with each task
 void initializeQueue() {
-	// listhead > measure > keyPad > display > warn > status
+	// listhead > measure > keyPad > display > warn > status > null
 	listHeadPtr = &measureTask; // from measure.h
-	measureTask.nextTCB = &keyPadTask;
-	keyPadTask.nextTCB = &displayTask;
-	displayTask.nextTCB = &warningTask;
+	measureTask.nextTCB = &warningTask; //&keyPadTask;
+//	keyPadTask.nextTCB = &displayTask;
+//	displayTask.nextTCB = &warningTask;
 	warningTask.nextTCB = &statusTask;
 	statusTask.nextTCB = NULL;
 
 	// backwards pointers listTailPtr > status > ...
 	listTailPtr = &statusTask;
 	statusTask.prevTCB = &warningTask;
-	warningTask.prevTCB = &displayTask;
-	displayTask.prevTCB = &keyPadTask;
-	keyPadTask.prevTCB = &measureTask;
+	warningTask.prevTCB = &measureTask; //&displayTask;
+//	displayTask.prevTCB = &keyPadTask;
+//	keyPadTask.prevTCB = &measureTask;
 	measureTask.prevTCB = NULL;
 
 	currentTaskPtr = listHeadPtr;	// and set up to start at the top
@@ -99,15 +112,15 @@ void updateQueue() {
     computeInQueue = false;
   }
   // update serialTask
-  if (remoteActive && !remoteInQueue) {
+  if (serialActive && !serialInQueue) {
     currentTaskPtr = &warningTask;
     insertNode(&serialTask);
-    remoteInQueue = true;
+    serialInQueue = true;
   }
-  if (!remoteActive && remoteInQueue) {
+  if (!serialActive && serialInQueue) {
     currentTaskPtr = &serialTask;
     deleteNode();
-    remoteInQueue = false;
+    serialInQueue = false;
   }
   currentTaskPtr = listHeadPtr;
 }
@@ -133,16 +146,17 @@ void insertNode(TCB *newNode) {
   currentTaskPtr = newNode;
 }
 
-/* Removes the currentTaskPtr node from the taskQueue. Moves currentTaskPtrTask
- * pointer to the nextTCB task in the list. */
+/* Removes the currentTaskPtr node from the taskQueue. 
+ * Moves currentTaskPtr pointer to the nextTCB task in the list. */
 void deleteNode() {
-  if (NULL == (*currentTaskPtr).nextTCB)	// edge case: at last task
-    listTailPtr = (*currentTaskPtr).prevTCB;
-  else {	// reassign pointers
-    (*(*currentTaskPtr).nextTCB).prevTCB = (*currentTaskPtr).prevTCB;	
-    (*(*currentTaskPtr).prevTCB).nextTCB = (*currentTaskPtr).nextTCB;
+  if (NULL == currentTaskPtr -> nextTCB) {	// edge case: at last task
+    listTailPtr = currentTaskPtr -> prevTCB;
+    listTailPtr -> nextTCB = NULL;
+  } else {	// reassign pointers
+    currentTaskPtr -> nextTCB -> prevTCB = currentTaskPtr ->prevTCB;	
+    currentTaskPtr -> prevTCB -> nextTCB = currentTaskPtr -> nextTCB;
   }
-  currentTaskPtr = (*currentTaskPtr).nextTCB;	// update currentTaskPtr pointer
+  currentTaskPtr = currentTaskPtr -> nextTCB;	// update currentTaskPtr pointer
 }
 
 // Software delay
@@ -150,3 +164,13 @@ void delay_in_ms(int ms) {
   for (volatile int i = 0; i < ms; i++)
     for (volatile int j = 0; j < 800; j++);
 }
+
+// for debug (obviously)
+void debug() {
+    char num[30];
+    static int test = 0;
+    usnprintf(num, 30, "Test number: %d  ", test);
+    RIT128x96x4StringDraw(num, 0, 90, 15);
+    test++;
+}
+

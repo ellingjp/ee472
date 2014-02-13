@@ -12,7 +12,7 @@
 
 // globally setable variables
 extern tBoolean computeActive;	
-extern tBoolean remoteActive;
+extern tBoolean serialActive;
 
 /*
  * Must be called before runTasks()

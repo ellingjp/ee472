@@ -33,7 +33,7 @@ void SysTickIntHandler (void) {
  * configure the hw interrupt for minor cycle
  */
 void initializeHWCounter() {
-SysTickPeriodSet(SysCtrlPeriodGet() * MINOR_CYCLE / 1000);	// set timer period
+SysTickPeriodSet(SysCtlClockGet() * MINOR_CYCLE / 1000);  // set timer period
 
 // enable interrupts (master)
 IntMasterEnable();	// this may be redundant, consider moving
@@ -46,14 +46,14 @@ int main(void) {
   SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
       SYSCTL_XTAL_8MHZ);
 
-//  initializeHWCounter();	// start the hw timer
+  initializeHWCounter();	// start the hw timer
 
   initialize();  // from schedule.h
 
   while (1) {
- //   if (runSchedule) {
- //     runSchedule = false;
+    if (runSchedule) {
+      runSchedule = false;
       runTasks();  // from schedule.h
- //   }  
+    }  
   }
 }

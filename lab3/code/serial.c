@@ -10,13 +10,15 @@
 #include "globals.h"
 #include "timebase.h"
 #include "serial.h"
+#include "schedule.h"
 #include "CircularBuffer.h"
 #include "inc/hw_types.h"
 #include "driverlib/uart.h"
 #include "driverlib/gpio.h"
 #include "inc/hw_memmap.h"
-#include <stdio.h>
+#include "utils/ustdlib.h"
 #include <string.h>
+
 
 // Internal data structure
 typedef struct serialData {
@@ -66,22 +68,26 @@ void serialRunFunction(void *dataptr) {
     onFirstRun = false;
   }
   
-  char buf[512];
-  sprintf(buf,
-          "\f1. Temperature:\t\t%.1f C\n\n\r"
-          "2. Systolic pressure:\t%.0f mm Hg\n\n\r"
-          "3. Diastolic pressure:\t%.0f mm Hg\n\n\r"
-          "4. Pulse rate:\t\t%.0f BPM\n\n\r"
-          "5. Battery:\t\t%d\n\n\r",
-          *(float *)cbGet(data.temperatureCorrected), 
-          *(float *)cbGet(data.systolicPressCorrected),
-          *(float *)cbGet(data.diastolicPressCorrected), 
-          *(float *)cbGet(data.pulseRateCorrected),
-          *(data.batteryState));
+  int temp = (int) (*(float *)cbGet(data.temperatureCorrected));
+  int sys = (int) (*(float *)cbGet(data.systolicPressCorrected));
+  int dia = (int) (*(float *)cbGet(data.diastolicPressCorrected));
+  int pulse = (int) (*(float *)cbGet(data.pulseRateCorrected));
+  int batt = *(data.batteryState);
+  
+//  char buf[512];
+//  usnprintf(buf, 512,
+//          "\f1. Temperature:\t\t%d C\n\n\r"
+//          "2. Systolic pressure:\t%d mm Hg\n\n\r"
+//          "3. Diastolic pressure:\t%d mm Hg\n\n\r"
+//          "4. Pulse rate:\t\t%d BPM\n\n\r"
+//          "5. Battery:\t\t%d\n\n\r", 0, 1, 2, 3, 4
+//          temp, sys, dia, pulse, batt);
   
   // The cast removes a warning.  It is safe as long as buf contains
   // plain ASCII (non extended)
-  UARTSend( (unsigned char *) buf, strlen(buf));
+//  UARTSend( (unsigned char *) buf, strlen(buf));
+  
+  serialActive = false;
 }
 
 void UARTSend(const unsigned char *pucBuffer, unsigned long ulCount) {

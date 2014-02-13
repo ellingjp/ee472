@@ -38,10 +38,10 @@ void initializeGlobalData() {
   int dr = DIA_RAW_INIT;
   int pr = PULSE_RAW_INIT;
 
-  int tc = TEMP_CORR_INIT;
-  int sc = SYS_CORR_INIT;
-  int dc = DIA_CORR_INIT;
-  int pc = PULSE_CORR_INIT;
+  float tc = TEMP_CORR_INIT;
+  float sc = SYS_CORR_INIT;
+  float dc = DIA_CORR_INIT;
+  float pc = PULSE_CORR_INIT;
 
   // Add initial values
   cbAdd(&(global.temperatureRaw), &tr);

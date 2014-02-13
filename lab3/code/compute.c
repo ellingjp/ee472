@@ -11,6 +11,7 @@
 #include "compute.h"
 #include "globals.h"
 #include "timebase.h"
+#include "schedule.h"
 
 // Used for debug display
 #if DEBUG
@@ -77,6 +78,8 @@ void computeRunFunction(void *computeData) {
     cbAdd(cData->systolicPressCorrected, &systolic);
     cbAdd(cData->diastolicPressCorrected, &diastolic);
     cbAdd(cData->pulseRateCorrected, &pulseRate);
+    
+    computeActive = false;  // remove self from task queue
 
 #if DEBUG
     char num[30];
