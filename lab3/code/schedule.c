@@ -18,8 +18,9 @@
 #include "warning.h"
 #include "status.h"
 #include "serial.h"
+#include "keyPad.h"
 
-
+ 
 unsigned int minor_cycle_ctr = 0;   // minor cycle counter
 static TCB *currentTask;	// taskQueue pointers
 static TCB *listHead;
@@ -64,23 +65,23 @@ void initialize() {
 
 // Initialize the taskQueue with each task
 void initializeQueue() {
-	// listhead > measure > keyMonitor > display > warn > status
-	listHead = &measureTask; // from measure.h
-	measureTask.next = &keyMonitorTask;
-	keyMonitorTask.next = &displayTask;
-	displayTask.next = &warningTask;
-	warningTask.next = &statusTask;
-	statusTask.next = NULL;
+	// listhead > measure > keyPad > display > warn > status
+	listHead = measureTask; // from measure.h
+	measureTask.nextTCB = keyPadTask;
+	keyPadTask.nextTCB = displayTask;
+	displayTask.nextTCB = &warningTask;
+	warningTask.nextTCB = statusTask;
+	statusTask.nextTCB = NULL;
 
 	// backwards pointers listTail > status > ...
 	listTail = &statusTask;
-	statusTask.prevTCB = &warning;
-	warningTask.prevTCB = &displayTask;
-	displayTask.prevTCB = &keyMonitorTask;
-	keyMonitorTask.prevTCB = &measureTask;
-	monitorTask.prevTCB = NULL;
+	statusTask.prevTCB = warningTask;
+	warningTask.prevTCB = displayTask;
+	displayTask.prevTCB = keyPadTask;
+	keyPadTask.prevTCB = measureTask;
+	measureTask.prevTCB = NULL;
 
-	currentTask = *listHead;	// and set up to start at the top
+	currentTask = listHead;	// and set up to start at the top
 }
 
 /* Traverse the taskQueue and insert/delete tasks based on set flags.
@@ -97,14 +98,14 @@ void updateQueue() {
     deleteNode();
     computeInQueue = false;
   }
-  // update remoteTask
+  // update serialTask
   if (remoteActive && !remoteInQueue) {
     currentTask = warningTask;
-    insertNode(remoteTask);
+    insertNode(serialTask);
     remoteInQueue = true;
   }
   if (!remoteActive && remoteInQueue) {
-    currentTask = remoteTask;
+    currentTask = serialTask;
     deleteNode();
     remoteInQueue = false;
   }
@@ -130,17 +131,16 @@ void insertNode(TCB *newNode) {
     }
   }
   currentTask = newNode;
-  size++;
 }
 
 /* Removes the currentTask node from the taskQueue. Moves currentTaskTask
  * pointer to the nextTCB task in the list. */
 void deleteNode() {
-  if (NULL == (*currentTaskTask).nextTCB)	// edge case: at last task
-    listTail = (*currentTaskTask).prevTCB;
+  if (NULL == (*currentTask).nextTCB)	// edge case: at last task
+    listTail = (*currentTask).prevTCB;
   else {	// reassign pointers
-    *((*currentTask).nextTCB).prevTCB = (*currentTask).prevTCB;	
-    *((*currentTask).prevTCB).nextTCB = (*currentTask).nextTCB;
+    (*(*currentTask).nextTCB).prevTCB = (*currentTask).prevTCB;	
+    (*(*currentTask).prevTCB).nextTCB = (*currentTask).nextTCB;
   }
   currentTask = (*currentTask).nextTCB;	// update currentTask pointer
 }

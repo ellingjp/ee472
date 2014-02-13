@@ -8,6 +8,8 @@
  * schedule.
  */
 
+#include "inc\hw_types.h"
+
 // globally setable variables
 extern tBoolean computeActive;	
 extern tBoolean remoteActive;

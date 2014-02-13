@@ -9,7 +9,7 @@
 
 #include "inc/hw_types.h"
 #include "CircularBuffer.h"
-#include "Boolean.h"
+#include "stddef.h"
 
 #define DEBUG 1
 
@@ -39,8 +39,8 @@ typedef struct global_data {
   unsigned short batteryState;
   unsigned short mode;
   unsigned short measurementSelection;
-  Boolean alarmAcknowledge;
-  Boolean select;
+  tBoolean alarmAcknowledge;
+  tBoolean select;
   unsigned short scroll;
 } GlobalData;
 

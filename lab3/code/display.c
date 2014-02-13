@@ -22,12 +22,13 @@ typedef struct oledDisplayData {
   CircularBuffer *systolicPressCorrected;
   CircularBuffer *diastolicPressCorrected;
   CircularBuffer *pulseRateCorrected;
-  int *batteryState;
+  unsigned short *batteryState;
   unsigned short *mode;
   unsigned short *measurementSelection;
   unsigned short *scroll;
-  Boolean alarmAcknowledge;
-  Boolean select;
+  tBoolean *alarmAcknowledge;
+  tBoolean *select;
+  unsigned short *selection;
 } DisplayData;
 
 static DisplayData data;  // internal data
@@ -39,11 +40,11 @@ void initializeDisplayTask() {
   RIT128x96x4Init(1000000);
 
   // Load data
-  data.temperatureCorrected = &(globalDataMem.temperatureCorrected);
-  data.systolicPressCorrected = &(globalDataMem.systolicPressCorrected);
-  data.diastolicPressCorrected = &(globalDataMem.diastolicPressCorrected);
-  data.pulseRateCorrected = &(globalDataMem.pulseRateCorrected);
-  data.batteryState = &(globalDataMem.batteryState);
+  data.temperatureCorrected = &(global.temperatureCorrected);
+  data.systolicPressCorrected = &(global.systolicPressCorrected);
+  data.diastolicPressCorrected = &(global.diastolicPressCorrected);
+  data.pulseRateCorrected = &(global.pulseRateCorrected);
+  data.batteryState = &(global.batteryState);
 
   
   data.mode = &(global.mode);
@@ -64,7 +65,7 @@ void displayRunFunction(void *dataptr) {
   //  if (IS_MAJOR_CYCLE) {   // on major cycle
   DisplayData *dData = (DisplayData *) dataptr;
   
-  Boolean selection = *(dData->selection);
+  tBoolean selection = *(dData->select);
   int scroll = *(dData->scroll);
 
   char num[40];
@@ -103,7 +104,7 @@ void displayRunFunction(void *dataptr) {
 			else if(1 == scroll%4)
 				usprintf(buf2,30,"%.2f C ", (*(int*)cbGet(dData->temperatureCorrected)));
 			else if(2 == scroll%4)
-				usprintf(buf2,30, "%d BPM ", (*(int*)cbGet(dData->temperatureRaw)));
+				usprintf(buf2,30, "%d BPM ", (*(int*)cbGet(dData->pulseRateCorrected)));
 			else if(3 == scroll%4)
 				usprintf(buf2,30, "%d %%  ", (*(dData->batteryState))/2);
 			else buf2 = "oops"; //just in case			
@@ -139,10 +140,10 @@ void displayRunFunction(void *dataptr) {
 	  usprintf(num,40, "%.0f mm Hg                      ", (*(int*)cbGet(dData->diastolicPressCorrected)));
 	  RIT128x96x4StringDraw(num, 0, 40, 15);
 
-	  usprintf(num,40, "Pulse rate: %d BPM              ", (*(int*)cbGet(dData->PulseRateCorrected)));
+	  usprintf(num,40, "Pulse rate: %d BPM              ", (*(int*)cbGet(dData->pulseRateCorrected)));
 	  RIT128x96x4StringDraw(num, 0, 50, 15);
 
-	  usprintf(num,40, "Battery: %d %%                 ", (*(int*)cbGet(dData->batteryState))/2);
+	  usprintf(num,40, "Battery: %d %%                 ", *(dData->batteryState)/2);
 	  RIT128x96x4StringDraw(num,0, 60,15);
 	}
   //  }

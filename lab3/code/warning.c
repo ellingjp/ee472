@@ -10,6 +10,7 @@
 #include "task.h"
 #include "timebase.h"
 #include "warning.h"
+#include "schedule.h"
 #include "inc/hw_types.h"
 #include "drivers/rit128x96x4.h"
 #include <stdlib.h>
@@ -24,7 +25,7 @@
 #include "driverlib/sysctl.h"
 #include "drivers/rit128x96x4.h"
 
-#define ALARM_SLEEP_PERIOD	100   // duration to sleep in terms of minor cycles
+#define ALARM_OFF_PERIOD	100   // duration to sleep in terms of minor cycles
 #define ALARM_CYCLE_RATE	8    // period of one alarm cycle (on/off) minor cycles
 
 #define WARN_RATE_PULSE    	4    // flash rate in terms of minor cycles
@@ -136,11 +137,11 @@ void initializeWarningTask() {
   PWMOutputState(PWM0_BASE, PWM_OUT_0_BIT | PWM_OUT_1_BIT, true);
 
   // initialize the warning data pointers
-  data.temperatureCorrected = &(globalDataMem.temperatureCorrected);
-  data.systolicPressCorrected = &(globalDataMem.systolicPressCorrected);
-  data.diastolicPressCorrected = &(globalDataMem.diastolicPressCorrected);
-  data.pulseRateCorrected = &(globalDataMem.pulseRateCorrected);
-  data.batteryState = &(globalDataMem.batteryState);
+  data.temperatureCorrected = &(global.temperatureCorrected);
+  data.systolicPressCorrected = &(global.systolicPressCorrected);
+  data.diastolicPressCorrected = &(global.diastolicPressCorrected);
+  data.pulseRateCorrected = &(global.pulseRateCorrected);
+  data.batteryState = &(global.batteryState);
 
   // Load the TCB
   warningTask.runTaskFunction = &warningRunFunction;
@@ -174,11 +175,11 @@ void warningRunFunction(void *dataptr) {
 
   // Get measurement data
   WarningData *data = (WarningData *) dataptr;
-  float temp = *(data->temperatureCorrected);
-  float sysPress = *(data->systolicPressCorrected);
-  float diaPress = *(data->diastolicPressCorrected);
-  float pulse = *(data->pulseRateCorrected);
-  int battery = *(data->batteryState);
+  float temp = *( (float*) cbGet(data->temperatureCorrected));
+  float sysPress = *( (float*) data->systolicPressCorrected));
+  float diaPress = *( (float*) data->diastolicPressCorrected));
+  float pulse = *( (float*) data->pulseRateCorrected));
+  int battery = *( (float*) data->batteryState));
 
   // Alarm condition
   if ( (temp < TEMP_MIN*ALARM_LOW || temp > (TEMP_MAX*ALARM_HIGH)) ||

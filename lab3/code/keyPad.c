@@ -9,22 +9,25 @@
 #include "keyPad.h"
 #include "globals.h"
 #include "timebase.h"
-#include "Boolean.h"
+//#include "tBoolean.h"
 #include "inc/hw_types.h"
+#include "driverlib/sysctl.h"
+#include "driverlib/gpio.h"
+#include "inc/hw_memmap.h"
 
-#define UP_SW (GPIO_PORTE_BASE, GPIO_PIN_0)
-#define DOWN_SW (GPIO_PORTE_BASE, GPIO_PIN_1)
-#define LEFT_SW (GPIO_PORTE_BASE, GPIO_PIN_2)
-#define RIGHT_SW (GPIO_PORTE_BASE, GPIO_PIN_3)
-#define ACK_SW (GPIO_PORTE_BASE, GPIO_PIN_3)
+#define UP_SW GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_0)
+#define DOWN_SW GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_1)
+#define LEFT_SW GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_2)
+#define RIGHT_SW GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_3)
+#define ACK_SW GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_3)
 
 // StatusData structure internal to compute task
 typedef struct {
   unsigned short *mode;
   unsigned short *measurementSelection;
   unsigned short *scroll;
-  Boolean alarmAcknowledge;
-  Boolean select;
+  tBoolean *alarmAcknowledge;
+  tBoolean *select;
 } KeyPadData;
 
 void keyPadRunFunction(void *data);  // prototype for compiler
@@ -73,17 +76,17 @@ void initializeKeyPadTask() {
 }
 
 /* Perform status tasks */
-void keyPadRunFunction(void *data){
+void keyPadRunFunction(void *keyPadData){
  
   if (IS_MAJOR_CYCLE) {//change this to every 2 seconds
-	KeyPadData *kData = (KeyPadData *) keyPadData;
+	KeyPadData *kdata = (KeyPadData *) keyPadData;
 	if( 0 == *(kdata->mode))
 	{
 		if(LEFT_SW)
 		{
 			*(kdata->mode) = 1;
 		}
-		if(false == *(kdata->select)
+		if(false == *(kdata->select))
 		{
 			if(UP_SW)
 				*(kdata->scroll) = *(kdata->scroll) +1;
