@@ -85,7 +85,7 @@ void displayRunFunction(void *dataptr) {
       RIT128x96x4StringDraw("->", 0, 10*((scroll%4+1)), 15);
     }
     else
-    {
+    
       RIT128x96x4StringDraw("                                      ", 0, 0, 15);    
       if(0 == scroll%4)
         RIT128x96x4StringDraw("Blood Pressure:", 0, 0, 15);
@@ -100,9 +100,9 @@ void displayRunFunction(void *dataptr) {
 
 
       if(0 == scroll%4)
-        usnprintf(buf2,30, "Systolic: %.0f mm Hg ", (*(int*)cbGet(dData->systolicPressCorrected)));
+        usnprintf(buf2,30, "Systolic: %d mm Hg ", (*(int*)cbGet(dData->systolicPressCorrected)));
       else if(1 == scroll%4)
-        usnprintf(buf2,30,"%.2f C ", (*(int*)cbGet(dData->temperatureCorrected)));
+        usnprintf(buf2,30,"%d C ", (*(int*)cbGet(dData->temperatureCorrected)));
       else if(2 == scroll%4)
         usnprintf(buf2,30, "%d BPM ", (*(int*)cbGet(dData->pulseRateCorrected)));
       else if(3 == scroll%4)
@@ -112,7 +112,7 @@ void displayRunFunction(void *dataptr) {
       RIT128x96x4StringDraw("                                      ", 0, 10, 15);
       RIT128x96x4StringDraw(buf2, 0, 10, 15);
       if(1 == scroll%4)
-        usnprintf(buf2,30, "Diastolic: %.0f mm Hg        ", (*(int*)cbGet(dData->diastolicPressCorrected)));
+        usnprintf(buf2,30, "Diastolic: %d mm Hg        ", (*(int*)cbGet(dData->diastolicPressCorrected)));
       //    else buf2 = "                                                             ";
       RIT128x96x4StringDraw(buf2, 0, 20, 15);
       RIT128x96x4StringDraw("                                      ", 0, 30, 15);
@@ -125,19 +125,19 @@ void displayRunFunction(void *dataptr) {
 
   else//(1 == *(data->mode)
   {
-    usnprintf(num,40,"Temperature: %.2f C           ", (*(int*)cbGet(dData->temperatureCorrected)));
+    usnprintf(num,40,"Temperature: %d C           ", (*(int*)cbGet(dData->temperatureCorrected)));
     RIT128x96x4StringDraw(num, 0, 0, 15);
 
     usnprintf(num,40, "Systolic Pressure:             ");
     RIT128x96x4StringDraw(num, 0, 10, 15);
 
-    usnprintf(num,40, "%.0f mm Hg                   ", (*(int*)cbGet(dData->systolicPressCorrected)));
+    usnprintf(num,40, "%d mm Hg                   ", (*(int*)cbGet(dData->systolicPressCorrected)));
     RIT128x96x4StringDraw(num, 0, 20, 15);
 
     usnprintf(num,40, "Diastolic Pressure:            ");
     RIT128x96x4StringDraw(num, 0, 30, 15);
 
-    usnprintf(num,40, "%.0f mm Hg                      ", (*(int*)cbGet(dData->diastolicPressCorrected)));
+    usnprintf(num,40, "%d mm Hg                      ", (*(int*)cbGet(dData->diastolicPressCorrected)));
     RIT128x96x4StringDraw(num, 0, 40, 15);
 
     usnprintf(num,40, "Pulse rate: %d BPM              ", (*(int*)cbGet(dData->pulseRateCorrected)));
