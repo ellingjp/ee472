@@ -82,7 +82,6 @@ void initializeKeyPadTask() {
 /* Perform status tasks */
 void keyPadRunFunction(void *keyPadData){
  
-  if (IS_MAJOR_CYCLE) {//change this to every 2 seconds
 	KeyPadData *kdata = (KeyPadData *) keyPadData;
 	if( 0 == *(kdata->mode))
 	{
@@ -118,8 +117,4 @@ void keyPadRunFunction(void *keyPadData){
 	}
 	else
 		*(kdata->alarmAcknowledge) = false;
-	
-	
-	
-  }
 }
