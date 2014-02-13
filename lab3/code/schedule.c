@@ -22,9 +22,9 @@
 
  
 unsigned int minor_cycle_ctr = 0;   // minor cycle counter
-static TCB *currentTask;	// taskQueue pointers
-static TCB *listHead;
-static TCB *listTail;
+static TCB *currentTaskPtr;	// taskQueue pointers
+static TCB *listHeadPtr;
+static TCB *listTailPtr;
 
 // flags to track task states
 static tBoolean computeInQueue;
@@ -41,9 +41,9 @@ void updateQueue();
 
 // Must initialize before running this function!
 void runTasks() {
-  while (NULL != currentTask) {
-    currentTask->runTaskFunction(currentTask->taskDataPtr);
-    currentTask = currentTask->nextTCB; // go to next task
+  while (NULL != currentTaskPtr) {
+    currentTaskPtr->runTaskFunction(currentTaskPtr->taskDataPtr);
+    currentTaskPtr = currentTaskPtr->nextTCB; // go to next task
   }
   updateQueue();
 
@@ -66,83 +66,83 @@ void initialize() {
 // Initialize the taskQueue with each task
 void initializeQueue() {
 	// listhead > measure > keyPad > display > warn > status
-	listHead = measureTask; // from measure.h
-	measureTask.nextTCB = keyPadTask;
-	keyPadTask.nextTCB = displayTask;
+	listHeadPtr = &measureTask; // from measure.h
+	measureTask.nextTCB = &keyPadTask;
+	keyPadTask.nextTCB = &displayTask;
 	displayTask.nextTCB = &warningTask;
-	warningTask.nextTCB = statusTask;
+	warningTask.nextTCB = &statusTask;
 	statusTask.nextTCB = NULL;
 
-	// backwards pointers listTail > status > ...
-	listTail = &statusTask;
-	statusTask.prevTCB = warningTask;
-	warningTask.prevTCB = displayTask;
-	displayTask.prevTCB = keyPadTask;
-	keyPadTask.prevTCB = measureTask;
+	// backwards pointers listTailPtr > status > ...
+	listTailPtr = &statusTask;
+	statusTask.prevTCB = &warningTask;
+	warningTask.prevTCB = &displayTask;
+	displayTask.prevTCB = &keyPadTask;
+	keyPadTask.prevTCB = &measureTask;
 	measureTask.prevTCB = NULL;
 
-	currentTask = listHead;	// and set up to start at the top
+	currentTaskPtr = listHeadPtr;	// and set up to start at the top
 }
 
 /* Traverse the taskQueue and insert/delete tasks based on set flags.
- * currentTask pointer is reset to the head of the list */
+ * currentTaskPtr pointer is reset to the head of the list */
 void updateQueue() {
   // update computeTask
   if (computeActive && !computeInQueue) {
-    currentTask = measureTask;
-    insertNode(computeTask);
+    currentTaskPtr = &measureTask;
+    insertNode(&computeTask);
     computeInQueue = true;
   }
   if (!computeActive && computeInQueue) {
-    currentTask = computeTask;
+    currentTaskPtr = &computeTask;
     deleteNode();
     computeInQueue = false;
   }
   // update serialTask
   if (remoteActive && !remoteInQueue) {
-    currentTask = warningTask;
-    insertNode(serialTask);
+    currentTaskPtr = &warningTask;
+    insertNode(&serialTask);
     remoteInQueue = true;
   }
   if (!remoteActive && remoteInQueue) {
-    currentTask = serialTask;
+    currentTaskPtr = &serialTask;
     deleteNode();
     remoteInQueue = false;
   }
-  currentTask = listHead;
+  currentTaskPtr = listHeadPtr;
 }
 
-// inserts the given node into the list as the next node. currentTask pointer
+// inserts the given node into the list as the next node. currentTaskPtr pointer
 // moves to point at the newly inserted node.
 // Source: code derived in part from JD Olsen, Innovative Softwear and TA, Ltd
 void insertNode(TCB *newNode) {
-  if(NULL == listHead) {	// empty list
-    listHead = newNode;
-    listTail = newNode;
+  if(NULL == listHeadPtr) {	// empty list
+    listHeadPtr = newNode;
+    listTailPtr = newNode;
   }
   else {	// insert the newNode between two nodes
-    newNode -> nextTCB = currentTask -> nextTCB;
-    currentTask -> nextTCB = newNode;
-    newNode -> prevTCB = currentTask;
+    newNode -> nextTCB = currentTaskPtr -> nextTCB;
+    currentTaskPtr -> nextTCB = newNode;
+    newNode -> prevTCB = currentTaskPtr;
     if (NULL == (newNode -> nextTCB)) {	// newest node is at list end
-      listTail = newNode;
+      listTailPtr = newNode;
     } else {	// in the middle somewhere
       newNode -> nextTCB -> prevTCB = newNode;
     }
   }
-  currentTask = newNode;
+  currentTaskPtr = newNode;
 }
 
-/* Removes the currentTask node from the taskQueue. Moves currentTaskTask
+/* Removes the currentTaskPtr node from the taskQueue. Moves currentTaskPtrTask
  * pointer to the nextTCB task in the list. */
 void deleteNode() {
-  if (NULL == (*currentTask).nextTCB)	// edge case: at last task
-    listTail = (*currentTask).prevTCB;
+  if (NULL == (*currentTaskPtr).nextTCB)	// edge case: at last task
+    listTailPtr = (*currentTaskPtr).prevTCB;
   else {	// reassign pointers
-    (*(*currentTask).nextTCB).prevTCB = (*currentTask).prevTCB;	
-    (*(*currentTask).prevTCB).nextTCB = (*currentTask).nextTCB;
+    (*(*currentTaskPtr).nextTCB).prevTCB = (*currentTaskPtr).prevTCB;	
+    (*(*currentTaskPtr).prevTCB).nextTCB = (*currentTaskPtr).nextTCB;
   }
-  currentTask = (*currentTask).nextTCB;	// update currentTask pointer
+  currentTaskPtr = (*currentTaskPtr).nextTCB;	// update currentTaskPtr pointer
 }
 
 // Software delay

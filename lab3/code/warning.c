@@ -45,11 +45,11 @@ typedef enum {NORMAL, LOW} batteryState;
 
 // Internal data structure
 typedef struct WarningData {
-  float *temperatureCorrected;
-  float *systolicPressCorrected;
-  float *diastolicPressCorrected;
-  float *pulseRateCorrected;
-  int *batteryState;
+  CircularBuffer *temperatureCorrected;
+  CircularBuffer *systolicPressCorrected;
+  CircularBuffer *diastolicPressCorrected;
+  CircularBuffer *pulseRateCorrected;
+  unsigned short *batteryState;
 } WarningData;
 
 static unsigned long ulPeriod; // sets the alarm tone period
@@ -174,12 +174,12 @@ void warningRunFunction(void *dataptr) {
 
 
   // Get measurement data
-  WarningData *data = (WarningData *) dataptr;
-  float temp = *( (float*) cbGet(data->temperatureCorrected));
-  float sysPress = *( (float*) data->systolicPressCorrected));
-  float diaPress = *( (float*) data->diastolicPressCorrected));
-  float pulse = *( (float*) data->pulseRateCorrected));
-  int battery = *( (float*) data->batteryState));
+  WarningData *wData = (WarningData *) dataptr;
+  float temp = *( (float*) cbGet(wData->temperatureCorrected));
+  float sysPress = *( (float*) cbGet(wData->systolicPressCorrected));
+  float diaPress = *( (float*) cbGet(wData->diastolicPressCorrected));
+  float pulse = *( (float*) cbGet(wData->pulseRateCorrected));
+  unsigned short battery = *(wData->batteryState);
 
   // Alarm condition
   if ( (temp < TEMP_MIN*ALARM_LOW || temp > (TEMP_MAX*ALARM_HIGH)) ||
