@@ -62,31 +62,31 @@ void initializeSerialTask() {
 
 void serialRunFunction(void *dataptr) {
   static tBoolean onFirstRun = true;
-
+  SerialData *sData = (SerialData *) dataptr;
   if (onFirstRun) {
     initializeSerialTask();
     onFirstRun = false;
   }
   
-  int temp = (int) (*(float *)cbGet(data.temperatureCorrected));
-  int sys = (int) (*(float *)cbGet(data.systolicPressCorrected));
-  int dia = (int) (*(float *)cbGet(data.diastolicPressCorrected));
-  int pulse = (int) (*(float *)cbGet(data.pulseRateCorrected));
+  int temp = (int) *((float *)cbGet(sData->temperatureCorrected));
+  int sys = (int) *((float *)cbGet(sData->systolicPressCorrected));
+  int dia = (int) *((float *)cbGet(sData->diastolicPressCorrected));
+  int pulse = (int) (*(float *)cbGet(sData->pulseRateCorrected));
   int batt = *(data.batteryState);
   
-//  char buf[512];
+  char buf[512];
 //  usnprintf(buf, 512,
 //          "\f1. Temperature:\t\t%d C\n\n\r"
 //          "2. Systolic pressure:\t%d mm Hg\n\n\r"
 //          "3. Diastolic pressure:\t%d mm Hg\n\n\r"
 //          "4. Pulse rate:\t\t%d BPM\n\n\r"
-//          "5. Battery:\t\t%d\n\n\r", 0, 1, 2, 3, 4
+//          "5. Battery:\t\t%d\n\n\r",
 //          temp, sys, dia, pulse, batt);
   
   // The cast removes a warning.  It is safe as long as buf contains
   // plain ASCII (non extended)
-//  UARTSend( (unsigned char *) buf, strlen(buf));
-  
+  UARTSend( (unsigned char *) buf, strlen(buf));
+
   serialActive = false;
 }
 
