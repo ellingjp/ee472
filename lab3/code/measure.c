@@ -41,7 +41,7 @@ typedef struct measureData {
   CircularBuffer *pulseRateRaw;
 } MeasureData;
 
-static unsigned int pulseRate = 0;
+static int pulseRate = 0;
 static MeasureData data;  // internal data
 TCB measureTask = {&measureRunFunction, &data};  // task interface
 
@@ -162,7 +162,7 @@ void PulseRateISR(void) {
 
 void measureRunFunction(void *dataptr) {
   static tBoolean onFirstRun = true;
-  static unsigned int rate;
+  static int rate;
   MeasureData *mData = (MeasureData *) dataptr;
 
   if (onFirstRun) {
@@ -183,7 +183,7 @@ void measureRunFunction(void *dataptr) {
     setTemp(mData->temperatureRaw);
     setBloodPress(mData->systolicPressRaw, mData->diastolicPressRaw);
 
-      unsigned int prev = *(unsigned int*) cbGet(mData->pulseRateRaw);
+      int prev = *(int*) cbGet(mData->pulseRateRaw);
       
       // Only save if +- 15%
       if (rate < prev*0.85 || rate > prev*1.15) {
