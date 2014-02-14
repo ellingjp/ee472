@@ -445,42 +445,9 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
   \item Changes to StatusTask:
     \begin{itemize}
-	There are no changes to the status task
+      \item There are no changes to the status task
     \end{itemize}
 \end{itemize}
-
-    \subsection{Software Implementation}
-
-    A top-down design approach was used to develop the system. First, a functional
-    decomposition of the problem was carried out based on the identified use cases.
-    Next, the system architecture was developed. After understanding the system
-    architecture, the high-level project file structure in C was defined, followed
-    by the low-level implementation of the tasks.
-
-    \subsubsection{Functional Decomposition}
-
-%- User use cases (need to fix)
-% + Take measurements
-% + Acknowledge alarm
-%- High level blocks
-% + Functional decomposition
-% o User
-      \item This task is to run once each time the system is started
-      \item It will not be part of the task queue
-      \item It will perform any necessary system initialization, configure and begin the system timebase.
-      \item After completing these tasks, the task will exit and normal operation will commence.
-
-      \item Changes to Schedule:
-      \item System will maintain a list of activated and deactivated tasks. The list must be updatable during runtime based on the system state
-      \item The hardware timer will provide a system interrupt every 250ms or equal to the minor cycle, whichever is shorter
-      \item At runtime, upon a timer interrupt event, all tasks will be added or removed according to the task activation list. The tasks will then be run
-      \item Task Control Blocks will have forward and backward pointers to allow references to the next task
-      \item The scheduler cannot block for five seconds
-      \item The scheduler will toggle a GPIO pin at least once during execution of the task queue 
-
-	Changes to StatusTask:
-	There are no changes to the status task
-    \end{itemize}
 
     \subsection{Software Implementation}
 
@@ -773,14 +740,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
     \textbf{Answers to the last three questions in the list of items to include
     in the project report:}
-    \emph{You don't find the stealth submarine. That's why they are so
-      expensive; at that cost, you take great pains to never lose one.
-
-      A helium balloon always rises. It just rises upside-down. 
-
-      If you really managed to lose the stealth submersible, you first have to
-      tell the government, which will deny it has any stealth submersibles, then
-    you have to comb the seven seas until your comb hits the sub.}
+    \emph{You don't find the stealth submarine. That's why they are so expensive; at that cost, you take great pains to never lose one.\\  A helium balloon always rises. It just rises upside-down. \\ If you really managed to lose the stealth submersible, you first have to tell the government, which will deny it has any stealth submersibles, then you have to comb the seven seas until your comb hits the sub.}
 
     \subsection{Discussion of Results}
     The ease of change in the code is the result of a large amount of time spent on
