@@ -892,7 +892,7 @@ struct TCB {
     data to a buffer, however, the students found that usnprintf does not have
     the ability to print floating point data. This issue was resolved by
     changing measurements that were previously printed as floats to be printed
-    as integers. Usnprintf also caused issues when printing certain data for
+    as integers. usnprintf also caused issues when printing certain data for
     the serial task. In this case the usnprintf was causing a runtime error and
     freezing the operation of our device. This issue remained unresolved. 
     
@@ -940,7 +940,7 @@ struct TCB {
       \item Warning task alarm meets the following two requirements
 	\begin{enumerate}
 	  \item Has one (1) second tones; a total period of 2 seconds
-	  \item Activates only when systoic pressure is greater than 20\% above
+	  \item Activates only when systolic pressure is greater than 20\% above
 	    normal
 	  \item Has an auditory deactivation or ``sleep'' period of 5
 	    measurement cycles
@@ -948,8 +948,8 @@ struct TCB {
 	\item Serial task displays the temperature, blood pressure, pulse rate,
 	  and battery status as listed in Section~\ref{sec:designSpec}
 	\item Keypad task captures user inputs, sets the appropriate inputs,
-	  and causes the assocated changes in system state
-	\item Hardware timer updates the system's mnor cycle counter
+	  and causes the associated changes in system state
+	\item Hardware timer updates the system's minor cycle counter
     \end{itemize}
 
     More detailed explanation of the tests performed is provided in the
