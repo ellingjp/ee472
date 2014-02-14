@@ -1065,84 +1065,101 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 5. Battery                  0 % 
 \end{lstlisting}
 
-    \subsubsection{Status Task}
-    Since the initial design does not use a battery, the status task simulates the
-    battery state using the CPU. For now, it simply decrements the state of the
-    battery. The test should show that the battery state is decremented by one
-    every major cycle.
+    \subsubsection{Status Task} Since the initial design does not use a
+    battery, the status task simulates the battery state using the CPU. For
+    now, it simply decrements the state of the battery. The test should show
+    that the battery state is decremented by one every major cycle.
 
-    \subsection{Test Cases}
-
-    The students begin testing by examining if the alarm sounds at the proper time.
-    This is initially tested by disabling the functions that simulate measurements
-    being made on each of the data measurements, and setting their initial values
-    to be either within the alarm range or outside of the alarm range. The warning
-    states were also initially tested this way. The initial values for raw data
-    given in Table~\ref{tab:sensorDefs} on page \pageref{tab:sensorDefs} were used
-    to test the normal state of the machine because each falls within the
+    \subsection{Test Cases} The students begin testing by examining if the
+    alarm sounds at the proper time.  This is initially tested by disabling the
+    functions that simulate measurements being made on each of the data
+    measurements, and setting their initial values to be either within the
+    alarm range or outside of the alarm range. The warning states were also
+    initially tested this way. The initial values for raw data given in
+    Table~\ref{tab:sensorDefs} on page \pageref{tab:sensorDefs} were used to
+    test the normal state of the machine because each falls within the
     acceptable range of measurements for corrected data (also given in
-    Table~\ref{tab:sensorDefs}) that does not require a warning.
-    Using these initial values, the code was programmed onto the Stellaris board.
-    Correct operation was verified by the alarm not sounding, and the red led being
-    off, indicating that no warning state was in effect. In addition the green led
-    was on indicating a normal state. Next the students varied one parameter at a
-    time to be outside of the acceptable range by more than 10\%. Starting with the
-    temperature being set to an initial raw value of 50, the alarm was verified by
-    hearing the aural annunciation coming from the system. In addition, the
-    temperature warning stat was also in effect. This means that the green led was
-    off and the red led was blinking. To verify correct operation we needed to make
-    sure the led was blinking with a period of 1 second. The correct flashing
-    pattern was verified by counting the number of times the led flashed in 6
-    seconds. In this case, for temperature, the led flashed 6 times in 6 seconds
-    indicating a 1 second period, and correct operation. After this test, the
-    temperature value was returned to 42 and the Pulse was instead set to 45. The
-    same methods were used to verify that the alarm and warning states for pulse
-    rate were working correctly, but this time the warning led turned on 3 times in
-    6 seconds indicating a 2 second period which is the intended period of
-    flashing. The pulse rate was then returned to 25 and each pressure reading was
-    checked for correct operation individually by being set to an initial raw value
-    of 100. Once again, the green led started off because the system was not in a
-    normal state. The alarm was sounding due to the extremely high blood pressure
-    measurements, and the red warning led flashed 12 times in 6 seconds indicating
-    the correct period of .5 seconds for a blood pressure warning. In addition to
-    testing the validity of each warning state and alarm state, the acknowledgement
-    of the alarm was also tested during each of these tests. This was tested by
-    hitting the acknowledge button once during each measurements test. During each
-    test, hitting the acknowledge button turned the alarm sound off for a short
-    time, as intended. 
+    Table~\ref{tab:sensorDefs}) that does not require a warning.  Using these
+    initial values, the code was programmed onto the Stellaris board.  Correct
+    operation was verified by the alarm not sounding, and the red led being
+    off, indicating that no warning state was in effect. In addition the green
+    led was on indicating a normal state. Next the students varied one
+    parameter at a time to be outside of the acceptable range by more than
+    10\%. Starting with the temperature being set to an initial raw value of
+    50, the alarm was verified by hearing the aural annunciation coming from
+    the system. In addition, the temperature warning stat was also in effect.
+    This means that the green led was off and the red led was blinking. To
+    verify correct operation we needed to make sure the led was blinking with a
+    period of 1 second. The correct flashing pattern was verified by counting
+    the number of times the led flashed in 6 seconds.  In this case, for
+    temperature, the led flashed 6 times in 6 seconds indicating a 1 second
+    period, and correct operation. After this test, the temperature value was
+    returned to 42 and the Pulse was instead set to 45.  The same methods were
+    used to verify that the alarm and warning states for pulse rate were
+    working correctly, but this time the warning led turned on 3 times in 6
+    seconds indicating a 2 second period which is the intended period of
+    flashing. The pulse rate was then returned to 25 and each pressure reading
+    was checked for correct operation individually by being set to an initial
+    raw value of 100. Once again, the green led started off because the system
+    was not in a normal state. The alarm was sounding due to the extremely high
+    blood pressure measurements, and the red warning led flashed 12 times in 6
+    seconds indicating the correct period of .5 seconds for a blood pressure
+    warning. In addition to testing the validity of each warning state and
+    alarm state, the acknowledgment of the alarm was also tested during each
+    of these tests. This was tested by hitting the acknowledge button once
+    during each measurements test. During each test, hitting the acknowledge
+    button turned the alarm sound off for a short time, as intended. 
 
 
     Next the measurement simulation functions were tested. This was done by
     re-enabling each one that had been disabled from the previous test one at a
     time. The initial raw values were again set to the values in Figure 5. When
-    each measurement was re-enabled, the students could watch the temperature change
-    at each major cycle using the OLED display. Since the OLED display indicated
-    that the corrected temperature went up .75 degrees on a major cycle then down
-    1.5 degrees on the next, the temperature measurement was working as intended.
-    This situation also gave the students an opportunity to verify that the warning
-    and alarm states initiated as the temperature fell out of the acceptable range.
-    The Led began flashing with a 1 second period after a few major cycles, then
-    the alarm began sounding, indicating correct operation. Since temperature was
-    working correctly, the temperature measurement function was once again disabled
-    and each blood pressure measurement was
-    re-enabled individually for testing. The Systolic pressure began by rising 4 mm
-    Hg on a major cycle then falling 2 mm Hg on the next, and the Diastolic
-    pressure by rising 3 on a Major cycle and falling 1.5 on the next, this was
-    consistent with the design. The warning and alarm states were activated as each
-    passed its threshold and the red led was blinking with a period of .5 seconds.
-    The warning led was also tested in the case that all warning states were
-    active. To do this all initial values were set to 100. In this case, as
-    designed by the students, the red warning led indicated the fastest blinking
-    warning with a .5 second period. 
+    each measurement was re-enabled, the students could watch the temperature
+    change at each major cycle using the OLED display. Since the OLED display
+    indicated that the corrected temperature went up .75 degrees on a major
+    cycle then down 1.5 degrees on the next, the temperature measurement was
+    working as intended.  This situation also gave the students an opportunity
+    to verify that the warning and alarm states initiated as the temperature
+    fell out of the acceptable range.  The Led began flashing with a 1 second
+    period after a few major cycles, then the alarm began sounding, indicating
+    correct operation. Since temperature was working correctly, the temperature
+    measurement function was once again disabled and each blood pressure
+    measurement was re-enabled individually for testing. The Systolic pressure
+    began by rising 4 mm Hg on a major cycle then falling 2 mm Hg on the next,
+    and the Diastolic pressure by rising 3 on a Major cycle and falling 1.5 on
+    the next, this was consistent with the design. The warning and alarm states
+    were activated as each passed its threshold and the red led was blinking
+    with a period of .5 seconds.  The warning led was also tested in the case
+    that all warning states were active. To do this all initial values were set
+    to 100. In this case, as designed by the students, the red warning led
+    indicated the fastest blinking warning with a .5 second period. 
     
-    In this device, a new pulse rate monitor device was added. To test the pulse rate monitor  the monitor input was connected to a function generator generating square waves. As the square wave frequency was increased the pulse rate value was expected to increase. This was verified to be working correctly. As the pulse rate passed through the warning zones the design for pulse rate warnings was also verified to be working correctly.
+    In this device, a new pulse rate monitor device was added. To test the
+    pulse rate monitor  the monitor input was connected to a function generator
+    generating square waves. As the square wave frequency was increased the
+    pulse rate value was expected to increase. This was verified to be working
+    correctly. As the pulse rate passed through the warning zones the design
+    for pulse rate warnings was also verified to be working correctly.
     
-    Additionaly, the improved medical device now has a menu that is displayed on the oled display and navigated using the testbench keypad. The design operating these functions was tested by navigating to each part of the menu using the keys on the keypad and visually verifying that each part of the menu displayed the correct data. Each menu, annunciation, main menu, and each measurements selection mode, was visually verified to be working as intended. The keypad functionality was verified as each button was used to navigate through the menu.
+    Additionally, the improved medical device now has a menu that is displayed
+    on the OLED display and navigated using the testbench keypad. The design
+    operating these functions was tested by navigating to each part of the menu
+    using the keys on the keypad and visually verifying that each part of the
+    menu displayed the correct data. Each menu, annunciation, main menu, and
+    each measurements selection mode, was visually verified to be working as
+    intended. The keypad functionality was verified as each button was used to
+    navigate through the menu.
     
-    The newly added serial communication was then tested using the hyperterm program on the lab station PC. The serial connection was established over a virtual COM port on the usb connection from the PC to the Stellaris board. The program had the intended functionality of displaying each of the measurements, and its current data on the serial port whenever the alarm state was entered. The functionality could be verified by watching the hyperterm screen to see if the data displayed when a warning state occured. The data on hyperterm could then be compared to the oled display data to verify its accuracy. 
+    The newly added serial communication was then tested using the hyperterm
+    program on the lab station PC. The serial connection was established over a
+    virtual COM port on the USB connection from the PC to the Stellaris board.
+    The program had the intended functionality of displaying each of the
+    measurements, and its current data on the serial port whenever the alarm
+    state was entered. The functionality could be verified by watching the
+    hyperterm screen to see if the data displayed when a warning state occurred.
+    The data on hyperterm could then be compared to the OLED display data to
+    verify its accuracy. 
     
-    
-
     The final bit of testing preformed on the system was timing each task within
     the system. This was done by adding a general purpose output pin in the
     scheduler code. This output was set high right before the execution of a task,
