@@ -158,10 +158,10 @@ ranges, or the user fails to comply with a prescribed logging regimen. \\
   \item In addition, the following requirements have been added:
     \begin{itemize}[$\bullet$]
       \item Utilize a hardware-based time reference
-      \item support dynamic task creation and deletion
-      \item support a user input device
-      \item support data logging capabilities
-      \item support remote communication capability
+      \item Support dynamic task creation and deletion
+      \item Support a user input device
+      \item Support data logging capabilities
+      \item Support remote communication capability
       \item Improve overall system performace
       \item Improve overall system safety
     \end{itemize}
@@ -1345,5 +1345,8 @@ struct TCB {
     \subsection{Circular Buffer}
     \lstinputlisting{../code/CircularBuffer.h}
     \lstinputlisting{../code/CircularBuffer.c}
+
+    \subsection{Warm up File (For Interrupt Initialization)}
+    \lstinputlisting{../code/startup_ewarm.c}
 
     \end{document}
