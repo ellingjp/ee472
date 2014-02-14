@@ -319,7 +319,11 @@ o	The scheduler will toggle a GPIO pin at least once during execution of the tas
 
 \subsection{Software Implementation}
 
-A top-down design approach was used to develop the system.  First, a functional decomposition of the problem was carried out based on the identified use cases.  Next, the system architecture was developed.  After understanding the system architecture, the high-level project file structure in C was defined, followed by the low-level implementation of the tasks.
+A top-down design approach was used to develop the system.  First, a functional
+decomposition of the problem was carried out based on the identified use cases.
+Next, the system architecture was developed.  After understanding the system
+architecture, the high-level project file structure in C was defined, followed
+by the low-level implementation of the tasks.
 
 \subsubsection{Functional Decomposition}
 
@@ -348,19 +352,21 @@ A top-down design approach was used to develop the system.  First, a functional 
 %    o Own data is hidden from rest of program, single pointer exposed
 %    o Every task gets an initialization to initialize data
 
-After understanding how the user would interact with the device, the system was
-functionally decomposed into high-level blocks as shown in
-Figure~\ref{fig:func}.  The main system control is located in the CPU, which
-controls all data flow into and out of the peripheral devices.  The OLED
-displays the user's current vitals including blood pressure (systolic and
-diastolic), temperature, and pulse rate.  In the future external sensors will
-be added, but for now the values are simulated using the CPU.  The CPU also
-controls three LEDs colored green, yellow, and red.  These LEDs are used to
-inform the user on the current state of their vitals as well as the state of
-the device.  Under normal circumstances, the green LED will be lit.  If the
-users' vitals fall outside of a specified range, the red LED will flash at a
-specified rate, depending on which vital is out of range.  If the battery is
-low, the yellow LED will be illuminated.
+After understanding how the user would interact with the device, the high level
+functional blocks were developed.  These blocks are shown in
+Figure~\ref{fig:func}.  
+
+% The main system control is located in the CPU, which
+% controls all data flow into and out of the peripheral devices.  The OLED
+% displays the user's current vitals including blood pressure (systolic and
+% diastolic), temperature, and pulse rate.  In the future external sensors will
+% be added, but for now the values are simulated using the CPU.  The CPU also
+% controls three LEDs colored green, yellow, and red.  These LEDs are used to
+% inform the user on the current state of their vitals as well as the state of
+% the device.  Under normal circumstances, the green LED will be lit.  If the
+% users' vitals fall outside of a specified range, the red LED will flash at a
+% specified rate, depending on which vital is out of range.  If the battery is
+% low, the yellow LED will be illuminated.
 
 \begin{figure}[h]
     \centering
@@ -381,17 +387,50 @@ the task concept is abstracted into a Task Control Block (TCB), and the
 scheduler maintains a queue of TCBs to run.  The TCB abstraction is shown in
 Figure~\ref{fig:arch} using inheritance, and the fact that the scheduler has a
 queue of TCBs is shown with composition.  The core functionality of the system
-was divided into the following five main tasks:
-\begin{itemize}
-  \item \textbf{Measure Task} - In charge of interacting with the blood pressure, temperature, and pulse sensors (simulated)
-  \item \textbf{Compute Task} - Converts sensor data into human readable format
-  \item \textbf{Display Task} - Displays the measurements on the Stellaris OLED
-  \item \textbf{Warning/Alarm Task} - Interacts with the red, yellow, and green LEDs, as well as the speaker to annunciate warning and alarm information
-  \item \textbf{Status Task} - Receives battery information from the device
-\end{itemize}
+was divided into the following eight main tasks:
+
+\paragraph{Initialization Task} This task Initializes data structures and does
+system startup-related jobs.  This task is not actually scheduled to run, it
+only executes a single time at system startup.
+
+\paragraph{Measure Task} The measurement task is in charge of interacting with
+the blood pressure, temperature, and pulse sensors.  Each of these is
+simulated.  The blood pressure and temperature are simulated in the CPU.  The
+task will measure the pulse rate by parsing an externally generated square wave
+of varying frequency; the pulse rate being proportional to the frequency.
+
+\paragraph{Compute Task} Compute takes the simulated raw data and converts it to the
+correct units of measurement.  Raw temperature data to Celsius, blood pressure
+to mm Hg, and pulse rate to BPM.
+
+\paragraph{Keypad Monitor} Keypad will check the keypad for user input.  It
+should provide the user with four keys: two for scrolling, one for selection,
+and one to go back.
+
+\paragraph{Display Task} The display task will show a user interface on the
+Stellaris OLED.  The user will interact with the display using a keypad.  Under
+normal operation, a menu will be displayed asking users which measurement they
+would like to see.  If the user presses back while in this menu, they enter
+annunciate mode which displays all the measurements currently in warning or
+alarm state.
+
+\paragraph{Warning/Alarm Task} Under normal operation, this task will light a
+green LED signifying that everything is OK.  If one of the measurements enters
+a warning state, the task will flash a red LED at a rate specific to the
+warning for that measurement.  If there is an alarm state, it sound the alarm
+by driving the speaker.  At any time if the battery goes too low, the yellow
+LED will illuminate.
+
+\paragraph{Remote Communication Task} This task is in charge of sending data to
+a remote terminal.  If any of the states are in a warning or alarm condition,
+this task will transmit the (corrected) data to the remote terminal.
+
+\paragraph{Status Task} Status receives information about the battery on the
+system and updates it's current data accordingly.
+\\\\
 Each of these tasks interact using the shared data shown in Figure~\ref{fig:arch}. 
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{../design/System_Architecture}
     \caption{System Architecture Diagram}
@@ -404,6 +443,7 @@ After developing the system architecture, the design needed to be translated int
   \item \textbf{globals.c/globals.h} - Used to define the Shared Data used among the tasks
   \item \textbf{schedule.c/schedule.h} - Defines the scheduler interface and it's implementation, as well as the TCB structure
   \item \textbf{timebase.h} - Defines the timebase used for the scheduler and tasks
+  \item \textbf{task.h} - Defines the TCB interface for a task
 \end{itemize}
 Each task also has it's corresponding ``.c'' and ``.h'' file (for example, measure.c and measure.h).
 
