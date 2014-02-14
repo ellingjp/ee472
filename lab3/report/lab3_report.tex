@@ -783,13 +783,35 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 %required pull up). P or J can talk about design solutions that did not work.
 %On the whole, had problems with going too deep, too quickly.
 
-  The medical instrument design in this project was completed and tested
-    successfully to meet almost all the requirements, the designers did face a few difficulties in designing the device, however, because this design was additional functionality added to a previous projects design, many of the errors previously encountered were easily avoided due to experience of the students, and already completed coding work.
+    The medical instrument design in this project was completed and tested
+    successfully to meet almost all the requirements, the designers did face a
+    few difficulties in designing the device, however, because this design was
+    additional functionality added to a previous projects design, many of the
+    errors previously encountered were easily avoided due to experience of the
+    students, and already completed coding work.
     
     
-    Many of the challenges the designers of this project faced were in the keypad input and the data output. The keypad input posed a difficult hardware challenge as there are 16 input keys on the keypad but only 8 connections for the microprocessor to connect to the keypad. This means that to identify a single key press 4 connections must be set as outputs and 4 as inputs. The inputs can then be scanned as the outputs are set 1 at a time to find which key is pressed. Instead of implementing this design, the students instead opted to use only 4 buttons on the keypad. This allowed the strobe design to be ignored. Instead 1 row of keys was activated all the time and that row was scanned for button presses.
+    Many of the challenges the designers of this project faced were in the
+    keypad input and the data output. The keypad input posed a difficult
+    hardware challenge as there are 16 input keys on the keypad but only 8
+    connections for the microprocessor to connect to the keypad. This means
+    that to identify a single key press 4 connections must be set as outputs
+    and 4 as inputs. The inputs can then be scanned as the outputs are set 1 at
+    a time to find which key is pressed. Instead of implementing this design,
+    the students instead opted to use only 4 buttons on the keypad. This
+    allowed the strobe design to be ignored. Instead 1 row of keys was
+    activated all the time and that row was scanned for button presses.
     
-    In addition to keypad input, there was also difficulty in implementing data formatting functions. After adding a hardware delay, IAR workbench no longer allows the use of sprintf which had previously been used to print and format data. The usnprintf command was instead used to format and print data to a buffer, however, the students found that usnprintf does not have the ability to print floating point data. This issue was resolved by changing measurements that were previously printed as floats to be printed as integers. Usnprintf also caused issues when printing certain data for the serial task. In this case the usnprintf was causing a runtime error and freezing the operation of our device. This issue remained unresolved. 
+    In addition to keypad input, there was also difficulty in implementing data
+    formatting functions. After adding a hardware delay, IAR workbench no
+    longer allows the use of sprintf which had previously been used to print
+    and format data. The usnprintf command was instead used to format and print
+    data to a buffer, however, the students found that usnprintf does not have
+    the ability to print floating point data. This issue was resolved by
+    changing measurements that were previously printed as floats to be printed
+    as integers. Usnprintf also caused issues when printing certain data for
+    the serial task. In this case the usnprintf was causing a runtime error and
+    freezing the operation of our device. This issue remained unresolved. 
     
     
     
