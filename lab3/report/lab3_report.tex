@@ -559,14 +559,14 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     The TCB structure that the scheduler uses must work for all tasks, and must
     not contain any task-specific information. Instead, the TCB consists of
     only a void pointer to the tasks data, and a pointer to a function that
-    returns void and takes a void pointer, as follows:
+    returns void and takes a void pointer, as shown in Listing~\ref{lst:tcb}.
 
-    \begin{lstlisting}
-    struct TCB {
-      void *taskDataPtr;
-      void (*taskRunFn)(void *);
-    }
-    \end{lstlisting}
+\begin{lstlisting}[caption=TCB Construct, captionpos=b, label=lst:tcb]
+struct TCB {
+    void *taskDataPtr;
+    void (*taskRunFn)(void *);
+}
+\end{lstlisting}
     Leaving out the type information allows the scheduler to pass the task's data
     (*taskDataPtr) into the task's run function completely unaware of the kind of
     data the task uses or how the task works.
@@ -1056,11 +1056,11 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \subsubsection{Serial Task}
     If any of the measurements are in warning or alarm state, this task should
     send this data serially to a remote terminal.  The task should send all the
-    data (not just the data in warning or alarm state).  It should be printed in 
-    the following format:
+    data (not just the data in warning or alarm state).  It should be printed as
+    shown in Listing~\ref{lst:term}.\\
 
     % Oddly, the following can't be indented or weird stuff will happen
-\begin{lstlisting}
+\begin{lstlisting}[caption=Remote Terminal Output, captionpos=b, label=lst:term]
 1. Temperature              0 C
 2. Systolic Blood Pressure  0 mm Hg
 3. Diastolic Blood Pressure 0 mm Hg
