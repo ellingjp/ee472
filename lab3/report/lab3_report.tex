@@ -790,6 +790,15 @@ struct TCB {
     \emph{You don't find the stealth submarine. That's why they are so expensive; at that cost, you take great pains to never lose one.\\  A helium balloon always rises. It just rises upside-down. \\ If you really managed to lose the stealth submersible, you first have to tell the government, which will deny it has any stealth submersibles, then you have to comb the seven seas until your comb hits the sub.}
 
     \subsection{Discussion of Results}
+    The primary issue we encountered was a partially operational serialTask
+    function. In particular, the system would run the task successfully at
+    least once before freezing. When we analyzed the output and stepped through
+    the program with a debugger, we discovered that the system would properly
+    link the task and pass the proper variable to runTaskFunction(). However,
+    when processing the computed values for serial transmittal, the system
+    encounters an fault interrupt. The culprit was not usnprintf, but
+    appears to occur just prior as the computed data values are accessed from the circular buffer. The circular buffer was rigorously tested before and after this discovery, so we are confident that it is not the source of the fault. When we examined the compiled assembly code, the pointer is never overwritten, yet the pointer memory address appears to be consistently set to a null value. 
+
     The ease of change in the code is the result of a large amount of time spent on
     design. The design makes it easy to configure flash times, add new tasks, and
     to reason about tasks independently of the whole system. The solid high-level
@@ -806,9 +815,11 @@ struct TCB {
 	Task & Instructions \\ \hline
 	Measure & 187 \\ \hline
 	Compute & 443 \\ \hline
-	Display & 183,200 \\ \hline
+	Display & 12240 \\ \hline
 	Warning & 219 \\ \hline
 	Status & 45 \\ \hline
+  KeyPad & 374 \\ \hline
+  Serial & 5917 \\ \hline
       \end{tabular}
       \caption{Estimated instructions per task, rounded to the nearest instruction}
       \label{tab:instr}
