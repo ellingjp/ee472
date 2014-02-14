@@ -107,12 +107,12 @@
 
 
 section{Abstract} In this lab the students are to take on the role of an
-embedded system design team. They will design an exciting new medical
-instrument to monitor various patient metrics. When the device finds metrics
-are out of the acceptable range, the user will be notified, thus saving them
-from potential health risks. The students must first layout the design for
-their system using various design tools, then they must implement the system in
-software. Finally the students must test their system to make sure that it is
+embedded system design team. They will design modifications to the medical
+instrument previously designed. When the device finds metrics
+are out of the acceptable range, the user is notified, thus saving them
+from potential health risks. The students first laid out the design for
+their system using various design tools, then they implemented the system in
+software. Finally the students tested their system and verified that it is
 ready to start saving lives. 
 
 \section{Introduction}
@@ -124,9 +124,10 @@ The design must indicate when a monitored value is outside of a specified range
 by flashing an LED on the test board. When a value deviates even further from
 the valid range an alarm will sound. This alarm will sound until the values
 return to the valid range or the user acknowledges the alarm with a button. The
-values of each measurement will also be printed to the oled screen.
+values of each measurement will also be printed to the oled screen. This implementation will build upon the previous implementation of the device by adding functionality. Added functions include heart rate sensor, keypad input, menu display, data logging, and UART serial communication.
 
-The design will be tested to verify proper behavior on alarm and warning notifications. In addition the implementation will be tested by measuring the amount of time that each of the 5 program tasks running the instrument take to execute. These tasks are mini programs that each handle a part of the instruments purpose.
+The design will be tested to verify proper behavior on alarm and warning notifications. In addition the implementation will be tested by measuring the amount of time that each of the 8 program tasks running the instrument take to execute. These tasks are mini programs that each handle a part of the instruments purpose.
+
 \section{Discussion of the Lab}
 
 \subsection{Design Specification\label{sec:designSpec}} 
@@ -746,9 +747,8 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
 
     \subsection{Analysis of Any Errors}
-    The project was completed without any residual errors or unsolved problems.
-    See the following section for analysis of issues encountered while working
-    on the project itself.
+   All problems but one were solved before demonstrating the product to the interested
+	parties. The final project contained an error in the Serial communication protocol in which the usnprintf command used to format the data was causing a runtime error when printing formatted data to a buffer. As such the serial task could only print random values instead of the actual data.
 
     \subsection{Analysis of Implementation Issues and Workarounds}
 
@@ -761,32 +761,20 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 %required pull up). P or J can talk about design solutions that did not work.
 %On the whole, had problems with going too deep, too quickly.
 
-    The medical instrument design in this project was completed and tested
-    successfully to meet all the requirements, the designers did face a number
-    of errors and difficulties in the process. Most of the challenges faced in
-    this design were in implementing the inputs and outputs from the ARM micro
-    processor. In this implementation, the students originally consulted the
-    driver library documentation and found how to enable a general purpose
-    input output (GPIO) pin, and how to read from a GPIO pin. However, when the
-    code to enable a GPIO pin was executed, the execution of tasks within the
-    scheduler froze completely until a reset. This problem was caused by the
-    students failure to enable the peripheral bank that the GPIO pins existed
-    on. After learning how to do this, code was added to enable the peripheral
-    and the task execution no longer froze on enabling a pin.
-
-    Another problem encountered by the design team was that initially after
-    setting up a GPIO pin as an input to take a button press from the Stellaris
-    test board, pressing the button did not have the intended effect. The push
-    button did not change the state of the input. The students were originally
-    perplexed and tried a number of solutions to this problem. Testing
-    indicated that the code for the GPIO input was correct as a 3.3 V signal
-    directly to the pin could trigger the intended event on the input.
-    Eventually it was found that to use the push button switch the GPIO pin's
-    pad must be configured to accept a pull up resistor type of input.
-
-    All problems were solved before demonstrating the product to the interested
-    parties. As such, the final design did not have any errors.
-
+  The medical instrument design in this project was completed and tested
+    successfully to meet almost all the requirements, the designers did face a few difficulties in designing the device, however, because this design was additional functionality added to a previous projects design, many of the errors previously encountered were easily avoided due to experience of the students, and already completed coding work.
+    
+    
+    Many of the challenges the designers of this project faced were in the keypad input and the data output. The keypad input posed a difficult hardware challenge as there are 16 input keys on the keypad but only 8 connections for the microprocessor to connect to the keypad. This means that to identify a single key press 4 connections must be set as outputs and 4 as inputs. The inputs can then be scanned as the outputs are set 1 at a time to find which key is pressed. Instead of implementing this design, the students instead opted to use only 4 buttons on the keypad. This allowed the strobe design to be ignored. Instead 1 row of keys was activated all the time and that row was scanned for button presses.
+    
+    In addition to keypad input, there was also difficulty in implementing data formatting functions. After adding a hardware delay, IAR workbench no longer allows the use of sprintf which had previously been used to print and format data. The usnprintf command was instead used to format and print data to a buffer, however, the students found that usnprintf does not have the ability to print floating point data. This issue was resolved by changing measurements that were previously printed as floats to be printed as integers. Usnprintf also caused issues when printing certain data for the serial task. In this case the usnprintf was causing a runtime error and freezing the operation of our device. This issue remained unresolved. 
+    
+    
+    
+    
+    All problems but one were solved before demonstrating the product to the interested
+    parties. The final project still contained the serial error previously mentioned.
+    
     \section{Test Plan} patrick
 
     To ensure that this project meets the specifications listed in 
