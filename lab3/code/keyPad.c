@@ -9,7 +9,6 @@
 #include "keyPad.h"
 #include "globals.h"
 #include "timebase.h"
-//#include "tBoolean.h"
 #include "inc/hw_types.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/gpio.h"
@@ -38,8 +37,11 @@ TCB keyPadTask = {&keyPadRunFunction, &data}; // task interface
 /* Initialize the StatusData task values */
 void initializeKeyPadTask() {
 
-	 SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE); 
+      SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);  
+      SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE); 
 
+         
+         
 	 GPIOPadConfigSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_STRENGTH_2MA,
      GPIO_PIN_TYPE_STD_WPU);
 	 GPIODirModeSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_DIR_MODE_IN);
@@ -82,25 +84,34 @@ void initializeKeyPadTask() {
 /* Perform status tasks */
 void keyPadRunFunction(void *keyPadData){
  
+  static tBoolean onFirstRun = true;
+   
+  if (onFirstRun) {
+    initializeKeyPadTask();
+    onFirstRun = false;
+  }
 	KeyPadData *kdata = (KeyPadData *) keyPadData;
 	if( 0 == *(kdata->mode))
 	{
-		if(LEFT_SW)
-		{
-			*(kdata->mode) = 1;
-		}
+
 		if(false == *(kdata->select))
 		{
+
 			if(UP_SW)
 				*(kdata->scroll) = *(kdata->scroll) +1;
 			else if(DOWN_SW)
 				*(kdata->scroll) = *(kdata->scroll) -1;
 			else if(RIGHT_SW)
 				*(kdata->select) = true;
+                        else if(LEFT_SW)
+                        {
+                            *(kdata->mode) = 1;
+                        }
 			
 		}
 		else
 		{
+                    if(LEFT_SW)
 			*(kdata->select) = false;
 		}
 	}
@@ -111,7 +122,7 @@ void keyPadRunFunction(void *keyPadData){
 			*(kdata->mode) = 0;
 		}
 	}
-	if( 1 == ACK_SW)
+	if(1 == ACK_SW)
 	{
 		*(kdata->alarmAcknowledge) = true;
 	}

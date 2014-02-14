@@ -1,4 +1,4 @@
-/* 
+/*
  * task.h
  * Author(s): Jonathan Ellington
  * 1/28/2014
