@@ -317,6 +317,41 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 \subsubsection{Detailed Task Specifications (updates)}
 
 \begin{itemize}
+  \item New task: KeypadTask
+    \begin{itemize}
+      \item The keypad task will scan the keypad and decode any keypresses
+      \item The task will have support the following user inputs:
+      \item Mode selection between 2 modes (1 button)
+      \item Menu selection between 3 options (1 button)
+      \item Alarm acknowledgement (1 button)
+      \item Up and down scroll functionality (1-2 buttons)
+      \item A new set of global variable will be created to store the state of the keypad and key presses
+    \end{itemize}
+
+  \item New Task: Initialize (Startup):
+    \begin{itemize}
+      \item Changes to Warn/AlarmTask:
+      \item The warnings will be activated and indicated as before in project 1
+      \item The alarm state is changed to activate only when the systolic
+	pressure is 20\% above the normal range.
+      \item The alarm will sound in 1 second tones (1 second on, 1 second off)
+      \item When an alarm or warning state occurs, the serial communication
+	task will be added to the task queue
+      \item The deactivation period of the alarm sound is defined as 5
+	measurement periods
+    \end{itemize}
+
+  \item New task: Serial Communication:
+    \begin{itemize}
+      \item The task is enabled by the warn/alarm task
+      \item When run, the task will open an RS-232 connection at XXXX baud,
+	XXinsertdetails hereXXX
+      \item The present corrected measurement will be displayed on the terminal
+	in the same fashion as the display task annunciation mode
+      \item After sending data to the terminal, the serial communication task
+	will remove itself from the task queue
+    \end{itemize}
+
   \item Changes to the MeasureTask:
     \begin{itemize}
       \item Once a complete set of measurements has been taken, the compute
@@ -359,72 +394,6 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 	task will be added to the task queue
       \item The deactivation period of the alarm sound is defined as 5
 	measurement periods
-    \end{itemize}
-
-    \begin{itemize}
-      \item New task: Serial Communication:
-      \item The task is enabled by the warn/alarm task
-      \item When run, the task will open an RS-232 connection at XXXX baud,
-	XXinsertdetails hereXXX
-      \item The present corrected measurement will be displayed on the terminal
-	in the same fashion as the display task annunciation mode
-      \item After sending data to the terminal, the serial communication task
-	will remove itself from the task queue
-    \end{itemize}
-
-  \item New task: KeypadTask
-    \begin{itemize}
-      \item The keypad task will scan the keypad and decode any keypresses
-      \item The task will have support the following user inputs:
-      \item Mode selection between 2 modes (1 button)
-      \item Menu selection between 3 options (1 button)
-      \item Alarm acknowledgement (1 button)
-      \item Up and down scroll functionality (1-2 buttons)
-      \item A new set of global variable will be created to store the state of the keypad and key presses
-    \end{itemize}
-
-  \item New Task: Initialize (Startup):
-    \begin{itemize}
-      \item Changes to Warn/AlarmTask:
-      \item The warnings will be activated and indicated as before in project 1
-      \item The alarm state is changed to activate only when the systolic
-	pressure is 20\% above the normal range.
-      \item The alarm will sound in 1 second tones (1 second on, 1 second off)
-      \item When an alarm or warning state occurs, the serial communication
-	task will be added to the task queue
-      \item The deactivation period of the alarm sound is defined as 5
-	measurement periods
-    \end{itemize}
-
-  \item New task: Serial Communication:
-  \item The task is enabled by the warn/alarm task
-  \item When run, the task will open an RS-232 connection at XXXX baud,
-    XXinsertdetails hereXXX
-  \item The present corrected measurement will be displayed on the terminal
-    in the same fashion as the display task annunciation mode
-  \item After sending data to the terminal, the serial communication task
-    will remove itself from the task queue
-
-  \item New task: KeypadTask
-    \begin{itemize}
-      \item The keypad task will scan the keypad and decode any keypresses
-      \item The task will have support the following user inputs:
-      \item Mode selection between 2 modes (1 button)
-      \item Menu selection between 3 options (1 button)
-      \item Alarm acknowledgement (1 button)
-      \item Up and down scroll functionality (1-2 buttons)
-      \item A new set of global variable will be created to store the state of
-	the keypad and key presses
-    \end{itemize}
-
-  \item New Task: Initialize (Startup):
-    \begin{itemize}
-      \item This task is to run once each time the system is started
-      \item It will not be part of the task queue
-      \item It will perform any necessary system initialization, configure and
-	begin the system timebase.
-      \item After completing these tasks, the task will exit and normal
-	operation will commence.
     \end{itemize}
 
   \item Changes to Schedule:
