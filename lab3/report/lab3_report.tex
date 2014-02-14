@@ -638,7 +638,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     out of range of the accepted values. If any value is more than 5\% out of its
     range then a warning will be displayed on the red led connected to pin C 5
     using the GPIOPinWrite function. Depending on the value that is out of range
-    the period the led flashes at will vary. The final subsystem is the battery
+    the period the led flashes at will vary. In addition to the led flashing the warning will also tell the scheduler to add the serialCommunication task to the task list. The final subsystem is the battery
     check. This system checks if there is more than 30\% of battery left on the
     device. This is taken from the battery state data field. If there is less than
     20\% battery left then a yellow led connected to pin C7 is illuminated, if
@@ -647,7 +647,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     
     
 	\paragraph{Keypad Task}
-    yo
+    The keyPad task uses the gpio libraries to set up 5 inputs. 1 input is pin E 0 and is used as the alarm acknowledge button. The other 4 pins are inputs on pins D 4, D 5, D 6, and D 7, and are used to detect button presses on the external keypad. The keypad works by connecting 2 of the outputs from the keypad together. There are 4 row outputs and 4 column outputs for a total of 16 possible combinations. The design was simplified by only using 1 column of 4 buttons. By doing this, the column keyPad wire can be supplied with a constant 5V from the Stellaris board, then each of the 4 row lines can be connected to a GPIO input. when a button in the live column is pushed the 5V column line is connected to 1 of the GPIO pins which lets the keyPad task know which button was pushed. Every time the keyPad task is run the GPIO will tell the task what buttons are pressed. 2 of the buttons correspond to up and down for scroll in the menu, 1 button corresponds to select in the menu, and 1 button changes the mode between menu and annunciation. The data that the buttons manipulate are the global keyPad data parts which are global.select, global.scroll, and global.mode. Additionaly the input on pin E 0 manipulates the global.alarmAcknowledge signal. The activity diagram for this task is shown in the appendix in Figure~\ref{fig:keyPadActivity}.
     \paragraph{Display Task}
     To show a user their current medical measurements, the system also has an
     oledDisplay task. This task uses the corrected data from measurements, the
@@ -659,14 +659,13 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     using the driver library rit128x96x4 functions. The display has 2 modes. The mode that the screen currently displays is determined by the global.mode data which is set in the keyPad task. When mode is 0 this is the menu mode. This mode displays each of the 4 measurement types, temperature, blood pressure, pulse rate, and battery without the data for each. The task then takes the global.scroll data from keyPad and displays a cursor next to the measurement that scroll is currently at, 0 corresponding to temperature, 1 to blood pressure, and so on. If the global.select is set to 1 in keyPad then the currently scrolled to measurement is selected and the screen will change to showing only that measurement and its data. When global.mode is equal to 0 the annunciation screen will instead be displayed. This screen shows each measurement followed by its data.
     
 	\paragraph{Serial Task}
-    yo
+    The serial task is only run when a warning occurs. The warning causes the TCB for the serial task to be added to the TCB schedule linked list. When the serial task is run the first time it will initialize a UART connection using UARTConfigSet and UARTEnable driver functions to enable the UART that communicates to an FTDI chip on the Stellaris board. The FTDI chip then converts the UART to a virtual serial port over the usb cable to the PC. After the UART is initialized on the first run and in all subsequent runs of the serial task, all the measurements and their data are formatted and printed into 1 buffer using the usnprintf function. A loop then itterates through the buffer writing each character in the buffer to the UART. An activity diagram showing the serial task is located in the appendix as Figure~\ref{fig:serialActivity}.
     
     \paragraph{Status Task}
     The last task is the status task. This task only deals with one piece of data
     which is the battery state data. The only thing the status task does is that on
     a major cycle, it decrements the battery state by 1. This is shown in the
     activity diagram in Figure~\ref{fig:statusActivity} in the appendix.
-
 
     \section{Presentation, Discussion, and Analysis of the Results}
 
