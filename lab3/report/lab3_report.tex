@@ -108,25 +108,31 @@
 
 \section{Abstract} In this lab the students are to take on the role of an
 embedded system design team. They will design modifications to the medical
-instrument previously designed. When the device finds metrics
-are out of the acceptable range, the user is notified, thus saving them
-from potential health risks. The students first laid out the design for
-their system using various design tools, then they implemented the system in
-software. Finally the students tested their system and verified that it is
-ready to start saving lives. 
+instrument previously designed. When the device finds metrics are out of the
+acceptable range, the user is notified, thus saving them from potential health
+risks. The students first laid out the design for their system using various
+design tools, then they implemented the system in software. Finally the
+students tested their system and verified that it is ready to start saving
+lives. 
 
-\section{Introduction}
-The students are to design an embedded system on the Texas Instruments
-Stellaris EKI-LM3S8962 and EE 472 embedded design testboard. The design must
-implement a medical monitoring device. This device must monitor a patient's
-temperature, heart rate, and blood pressure, as well as its own battery state.
-The design must indicate when a monitored value is outside of a specified range
-by flashing an LED on the test board. When a value deviates even further from
-the valid range an alarm will sound. This alarm will sound until the values
-return to the valid range or the user acknowledges the alarm with a button. The
-values of each measurement will also be printed to the oled screen. This implementation will build upon the previous implementation of the device by adding functionality. Added functions include heart rate sensor, keypad input, menu display, data logging, and UART serial communication.
+\section{Introduction} The students are to design an embedded system on the
+Texas Instruments Stellaris EKI-LM3S8962 and EE 472 embedded design testboard.
+The design must implement a medical monitoring device. This device must monitor
+a patient's temperature, heart rate, and blood pressure, as well as its own
+battery state.  The design must indicate when a monitored value is outside of a
+specified range by flashing an LED on the test board. When a value deviates
+even further from the valid range an alarm will sound. This alarm will sound
+until the values return to the valid range or the user acknowledges the alarm
+with a button. The values of each measurement will also be printed to the oled
+screen. This implementation will build upon the previous implementation of the
+device by adding functionality. Added functions include heart rate sensor,
+keypad input, menu display, data logging, and UART serial communication.
 
-The design will be tested to verify proper behavior on alarm and warning notifications. In addition the implementation will be tested by measuring the amount of time that each of the 8 program tasks running the instrument take to execute. These tasks are mini programs that each handle a part of the instruments purpose.
+The design will be tested to verify proper behavior on alarm and warning
+notifications. In addition the implementation will be tested by measuring the
+amount of time that each of the 8 program tasks running the instrument take to
+execute. These tasks are mini programs that each handle a part of the
+instruments purpose.
 
 \section{Discussion of the Lab}
 
@@ -1074,23 +1080,33 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
     \section{Summary and Conclusion}
 
-    \subsection{Final Summary} The students began creating their medical instrument
-    through a rigorous design process at different levels of detail. The students
-    then continued work by implementing their design in C code for the ARM Cortex
-    A3 microprocessor. Next the code was tested and debugged using the IAR
-    workbench debugging tool, as well as visual queues programmed into the design.
-    Finally, after verifying that the system worked as specified, it was presented
-    to the instructor.
+    \subsection{Final Summary} 
 
-    \subsection{Project Conclusions} This project contained 3 major phases, the
-    design, implementation, and testing steps. The students were immediately
-    introduced to using the unified modeling language(UML) to design embedded
-    systems. This is the first time many students will have used UML for system
-    design which caused some confusion and difficulty. In the end through the use
-    of the UML guidelines for design, the students were able to implement their
-    system in code for the Texas Instruments Stellaris EKI-LM3S8962 much more
-    quickly and with far fewer errors than if they had spent less time in the
-    design phase of this project. 
+    A medical monitoring system with a user interface, alarm notification, and
+    remote terminal display was designed, implemented, and tested.  The design
+    simulated temperature and blood pressure, and obtained pulse rate data from
+    an external function generator.  These results were converted to a human
+    readable form, and tested to see if there was a warning or alarm state.
+    In the event of warning or alarm, the user was notified visually with LEDs
+    and aurally with an alarm sound.  The warning and alarm data was transferred
+    to a remote terminal.  
+
+    Some implementation errors were encountered.  The pulse rate range could
+    not fit the specification exactly, and the serial communications task was
+    not printing the correct values to the remote terminal. Aside from these
+    two implementation errors, the device worked as specified.
+
+    \subsection{Project Conclusions} 
+    
+    This project contained 3 major phases, the design, implementation, and
+    testing steps. The students were immediately introduced to using the
+    unified modeling language(UML) to design embedded systems. This is the
+    first time many students will have used UML for system design which caused
+    some confusion and difficulty. In the end through the use of the UML
+    guidelines for design, the students were able to implement their system in
+    code for the Texas Instruments Stellaris EKI-LM3S8962 much more quickly and
+    with far fewer errors than if they had spent less time in the design phase
+    of this project. 
 
     Effective design tools allowed the students to quickly implement their embedded
     system in C code for an ARM Cortex A3 processor, and move onto the testing
