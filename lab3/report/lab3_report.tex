@@ -1166,6 +1166,13 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
     \begin{figure}
       \centering
+      \includegraphics[width=\textwidth]{../design/serial_activity.png}
+      \caption{Serial Activity Diagram}
+      \label{fig:serialActivity}
+    \end{figure}
+
+    \begin{figure}
+      \centering
       \includegraphics[width=\textwidth]{../design/display_activity.png}
       \caption{Display Activity Diagram}
       \label{fig:displayActivity}
@@ -1199,6 +1206,13 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \lstinputlisting{../code/schedule.c}
 
     \subsection{Tasks}
+    \subsubsection{Task Interface}
+    \lstinputlisting{../code/task.h}
+
+    \subsubsection{Startup Task}
+    \lstinputlisting{../code/startup.h}
+    \lstinputlisting{../code/startup.c}
+
     \subsubsection{Measure Task}
     \lstinputlisting{../code/measure.h}
     \lstinputlisting{../code/measure.c}
@@ -1206,6 +1220,10 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \subsubsection{Compute Task}
     \lstinputlisting{../code/compute.h}
     \lstinputlisting{../code/compute.c}
+
+    \subsubsection{Keypad Task}
+    \lstinputlisting{../code/keypad.h}
+    \lstinputlisting{../code/keypad.c}
 
     \subsubsection{Display Task}
     \lstinputlisting{../code/display.h}
@@ -1215,8 +1233,16 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \lstinputlisting{../code/warning.h}
     \lstinputlisting{../code/warning.c}
 
+    \subsubsection{Serial Task}
+    \lstinputlisting{../code/serial.h}
+    \lstinputlisting{../code/serial.c}
+
     \subsubsection{Status}
     \lstinputlisting{../code/status.h}
     \lstinputlisting{../code/status.c}
+
+    \subsection{Circular Buffer}
+    \lstinputlisting{../code/CircularBuffer.h}
+    \lstinputlisting{../code/CircularBuffer.c}
 
     \end{document}
