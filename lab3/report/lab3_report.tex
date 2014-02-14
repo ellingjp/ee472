@@ -461,13 +461,17 @@ control flow is shown in Figure~\ref{fig:Control}.
 \end{figure}
 
 Each task has its own unique purpose in the system, and each uses a different
-part of the global data. The Measure task (Figure~\ref{fig:measureActivity} in the
+part of the global data.
+
+\paragraph{Measure Task}
+The Measure task (Figure~\ref{fig:measureActivity} in the
 appendix), deals only with the raw data from the instruments. This task is
 meant to act in place of the instruments that are unavailable. The task only
 runs if the scheduler has set the global value is Major Cycle to 1. On a major
 cycle the measure function either increments the data of each measurement by 1
 or 2 or decrements the data by 1 or 2.
 
+\paragraph{Compute Task}
 The compute task is very simple. Like the measure task it only runs on a minor
 cycle. It takes the raw data that has been set by the measure task, multiplies
 by a constant and adds a constant to each piece of raw data to get the
@@ -475,6 +479,7 @@ corrected data. The compute task then puts the values for the corrected data in
 memory at the location of the global data pointer. Compute uses every data
 value except the battery.
 
+\paragraph{Warning Task}
 After compute, the warning task begins checking for warning or alarm states. The
 warning task only deals with the corrected data from compute and the battery
 state. This task also must deal with the input and output signals used to
@@ -504,6 +509,7 @@ device. This is taken from the battery state data field. If there is less than
 there is more then 20\% battery, and the device is not in a warning or alarm
 state then the green led on pin C 6 is illuminated. 
 
+\paragraph{Display Task}
 To show a user their current medical measurements, the system also has an
 oledDisplay task. This task uses the corrected data from measurements, and the
 battery state. The display task has an activity diagram shown in
@@ -513,6 +519,7 @@ and properly format these data values into a string which is stored in a
 buffer. The string contained in the buffer is then printed to the OLED screen
 using the driver library rit128x96x4 functions.
 
+\paragraph{Measurement Task}
 The last task is the status task. This task only deals with one piece of data
 which is the battery state data. The only thing the status task does is that on
 a major cycle, it decrements the battery state by 1. This is shown in the
