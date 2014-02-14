@@ -556,8 +556,11 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \end{itemize}
     Each task also has it's corresponding ``.c'' and ``.h'' file (for example, measure.c and measure.h).
 
-    The TCB structure that the scheduler uses must work for all tasks, and must not
-    contain any task-specific information. Instead, the TCB consists of only a void pointer to the tasks data, and a pointer to a function that returns void and takes a void pointer, as follows:
+    The TCB structure that the scheduler uses must work for all tasks, and must
+    not contain any task-specific information. Instead, the TCB consists of
+    only a void pointer to the tasks data, and a pointer to a function that
+    returns void and takes a void pointer, as follows:
+
     \begin{lstlisting}
     struct TCB {
       void *taskDataPtr;
@@ -592,7 +595,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     runTask flag is then set to false so that the tasks will not be executed
     again until the hardware interrupt has again been triggered. The tasks
     included in this project are Compute, Measure, Warning, keyPad,
-    oledDisplay, Serial, and status. Each task has a public interface of 2 void
+    OLEDDisplay, Serial, and status. Each task has a public interface of 2 void
     pointers. One that when initialized by the main method will point to the
     preform task function, and another that, when initialized, points to a
     struct containing pointers to the data required by that task. Each task has
@@ -688,7 +691,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     green led on pin C 6 is illuminated. 
     
     
-    \paragraph{Keypad Task} The keyPad task uses the gpio libraries to set up 5
+    \paragraph{Keypad Task} The keyPad task uses the GPIO libraries to set up 5
     inputs. 1 input is pin E 0 and is used as the alarm acknowledge button. The
     other 4 pins are inputs on pins D 4, D 5, D 6, and D 7, and are used to
     detect button presses on the external keypad. The keypad works by
@@ -734,10 +737,10 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     initialize a UART connection using UARTConfigSet and UARTEnable driver
     functions to enable the UART that communicates to an FTDI chip on the
     Stellaris board. The FTDI chip then converts the UART to a virtual serial
-    port over the usb cable to the PC. After the UART is initialized on the
+    port over the USB cable to the PC. After the UART is initialized on the
     first run and in all subsequent runs of the serial task, all the
     measurements and their data are formatted and printed into 1 buffer using
-    the usnprintf function. A loop then itterates through the buffer writing
+    the usnprintf function. A loop then iterates through the buffer writing
     each character in the buffer to the UART. An activity diagram showing the
     serial task is located in the appendix as Figure~\ref{fig:serialActivity}.
     
@@ -920,7 +923,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     required.
 
     The inclusion of additional specifications for Phase II of the project
-    requires additonal tests to ensure the system meets the customer
+    requires additional tests to ensure the system meets the customer
     requirements.
 
     \textbf{Phase II Tests:}
