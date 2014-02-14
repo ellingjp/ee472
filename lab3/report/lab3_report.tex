@@ -747,8 +747,35 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
 
     \subsection{Analysis of Any Errors}
-   All problems but one were solved before demonstrating the product to the interested
-	parties. The final project contained an error in the Serial communication protocol in which the usnprintf command used to format the data was causing a runtime error when printing formatted data to a buffer. As such the serial task could only print random values instead of the actual data.
+
+    - BPM Range error
+    - Serial error
+    
+    There were two errors found in the final project.  First, the pulse rate
+    range is not exactly as specified.  Second, it was found that the serial
+    communications task did not produce the correct values.
+
+    The specified corrected pulse rate was to be between 10 BPM and 200 BPM.
+    For simplicity, the raw pulse rate was implemented as a 1-1 mapping from
+    frequency to raw pulse rate.  For example, a 1 Hz frequency would produce a
+    value of 1 for raw pulse rate, and a 15 Hz signal would produce a value of
+    15 for raw pulse rate.  This caused two issues.  When the Input frequency
+    is 1, the measured BPM (using the specified raw to correct conversion) is
+    $8 + 3\cdot(1) = 11 BPM$.  This is larger than the specified 10 BPM
+    minimum.  Also, when the input frequency is 64 Hz, a corrected value of 
+    $8 + 3\cdot(64) = 200 BPM$ is expected.  However, as the frequency
+    increased, the overhead of the other running tasks became significant.
+    As a result, more rising edges could fit in our measurement interval
+    than we expected.  This resulted in a maximum BPM of roughly 206 BPM.
+
+    There was also an error in the Serial communication protocol in which the
+    usnprintf command used to format the data was causing a runtime error when
+    printing formatted data to a buffer.  Rather than printing the actual
+    corrected values to the buffer (to be sent to the remote terminal), it
+    seemed the command was printing addresses.  It was believed this was
+    caused by an error with the CircularBuffer implementation, though no
+    other tasks had issues with it (and extensive tests validated the 
+    CircularBuffer).  
 
     \subsection{Analysis of Implementation Issues and Workarounds}
 
@@ -775,7 +802,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     All problems but one were solved before demonstrating the product to the interested
     parties. The final project still contained the serial error previously mentioned.
     
-    \section{Test Plan} patrick
+    \section{Test Plan}
 
     To ensure that this project meets the specifications listed in 
     section~\ref{sec:designSpec}, the following parts of the system must be 
@@ -828,25 +855,22 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     More detailed explanation of the tests performed is provided in the
     following sections.
     
-    \subsection{Test Specification} Patrick?
-
-    Annotated description of what is to be tested and the test limits. This
-    specification quantifies inputs, outputs, and constraints on the system.
-    That is, it provides specific values for each. 
-
-    Note, this does not specify test implementation...this is what to do, not
-    how to do it.
+    \subsection{Test Specification}
 
     \subsubsection{Scheduler}
     The scheduler needs to be shown to correctly schedule and dispatch tasks.
     This means that task should execute in the right order, and at the right
     time. Given a minor cycle of 50 ms, every task should run roughly once
-    every 50 ms. 
+    every 50 ms.   Also, the scheduler needs to successfully add and remove
+    tasks from the queue dynamically.  Specifically, the Measure Task
+    should be able to tell the scheduler to add the Compute Task and the
+    Warning/Alarm Task should be able to schedule the Serial Task.  Both
+    Compute and Serial should be able to be removed from the schedule.
 
     \subsubsection{Measure Task}
-    For this design, no external sensors were used; instead they were
-    simulated. Each simulated sensor should be tested and verified against the
-    specification, as follow.
+    For this design, the temperature and blood pressure values were simulated
+    on the CPU.  The pulse rate was simulated using an externally generated
+    square wave of varying frequency.  
     \begin{itemize}
       \item \textbf{Temperature} The temperature should increase by two every
 	even major cycle (5 seconds) and decrease by one ever odd major cycle
@@ -854,9 +878,9 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 	(decrease by two every even major cycle and increase by one every odd
 	major cycle), until it dips below 15, and the whole process should be
 	started over again. 
-      \item \textbf{Pulse} The pulse requirements are very similar to measure,
-	except the pulse should increase by three rather than two, and the
-	range is between 15 and 40.
+      \item \textbf{Pulse}  The pulse rate should match one-to-one with the
+    frequency of the input signal.  For example, a 15 Hz signal should produce
+    a raw pulse rate of 15.
       \item \textbf{Systolic Pressure} The systolic pressure should increase by
 	three every even major cycle and decreases by one every odd major
 	cycle. If it exceeds 100, it should reset to an initial value.
@@ -864,6 +888,9 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 	by two on even major cycles and decrease by one on odd major cycles,
 	until it drops below 40, when it should restart the process.
     \end{itemize}
+
+    The Measurement Task should also successfully add the Compute Task to the 
+    schedule queue.
 
     \subsubsection{Compute Task}
     The compute task should be verified to convert raw simulated sensor data
@@ -875,9 +902,23 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
       \item $CorrectedPulseRate = 8 + 3 * RawTemperature$
     \end{itemize}
 
+    The compute task should also successfully remove itself from the schedule
+    queue.
+
+    \subsubsection{Keypad Task} 
+    The keypad should be tested to successfully
+    capture user input.  When the select button is pressed, the measurement
+    selection value should reflect the selected measurement.  When the up
+    scroll button is pressed, the scroll value should be incremented, and when
+    the down scroll button is pressed, the scroll value should be decremented.  
+    If the alarm acknowledge button is pressed, this should be reflected in 
+    the alarmAcknowledge global value.
+
     \subsubsection{Display Task}
-    The display task should be tested to print each corrected value properly on
-    the screen, and update them as the computations are done.
+    On load, the display task should present the user with an option to select
+    the desired measurement.  If the back button is pressed, the annunciation
+    screen should be displayed, showing the measurements in warning or alarm
+    state.  
 
     \subsubsection{Warning/Alarm Task} 
     The warning/alarm system needs to be tested to do several things. When in a
@@ -901,6 +942,24 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
       \caption{Initial values and warning/alarm states}
       \label{tab:ranges}
     \end{table}
+
+    This task should also add the Serial task if any of the measurements are in
+    a warning or alarm condition.
+
+    \subsubsection{Serial Task}
+    If any of the measurements are in warning or alarm state, this task should
+    send this data serially to a remote terminal.  The task should send all the
+    data (not just the data in warning or alarm state).  It should be printed in 
+    the following format:
+
+    % Oddly, the following can't be indented or weird stuff will happen
+\begin{lstlisting}
+1. Temperature              0 C
+2. Systolic Blood Pressure  0 mm Hg
+3. Diastolic Blood Pressure 0 mm Hg
+4. Pulse Rate               0 BPM
+5. Battery                  0 % 
+\end{lstlisting}
 
     \subsubsection{Status Task}
     Since the initial design does not use a battery, the status task simulates the
