@@ -17,8 +17,6 @@
 #include <stdio.h>
 
 #include "inc/hw_memmap.h"
-#include "inc/hw_types.h"
-#include "driverlib/gpio.h"
 #include "driverlib/debug.h"
 #include "driverlib/gpio.h"
 #include "driverlib/pwm.h"
@@ -29,16 +27,12 @@
 #include "utils/ustdlib.h"
 #endif
 
-// duration to sleep in terms of minor cycles
-#define SLEEP_PERIOD_ALARM	(5 * MAJOR_CYCLE * MINOR_CYCLE) 
-
-// alarm cycle period (on/off) in milliseconds
+// alarm cycle period (on/off) in millisecond
 #define ALARM_PERIOD 2000
-#define ALARM_CYCLE_RATE	(ALARM_PERIOD / MINOR_CYCLE)
+#define ALARM_CYCLE_RATE    (ALARM_PERIOD / MINOR_CYCLE / 2)
 
-#define WARN_RATE_PULSE    	4    // flash rate in terms of minor cycles
-#define WARN_RATE_TEMP     	2
-#define WARN_RATE_PRESS    	1
+// duration to sleep in terms of minor cycles
+#define ALARM_SLEEP_PERIOD   (5 * MAJOR_CYCLE)
 
 #define LED_GREEN GPIO_PIN_6
 #define LED_RED   GPIO_PIN_5
@@ -162,7 +156,7 @@ void initializeWarningTask() {
  * Warning task function
  */
 void warningRunFunction(void *dataptr) {
-
+  
   static alarmState aState = OFF;
   static warningState wState = NONE;
   static batteryState bState = NORMAL;
@@ -219,7 +213,8 @@ void warningRunFunction(void *dataptr) {
   static tBoolean pwmEnable = false;
   switch (aState) {
     case ON:
-      if (minor_cycle_ctr % SLEEP_PERIOD_ALARM) { // toggle between on/off
+      
+      if (0 == (minor_cycle_ctr % ALARM_CYCLE_RATE)) { // toggle between on/off
         if (pwmEnable) 
           PWMGenEnable(PWM0_BASE, PWM_GEN_0);
         else
@@ -232,6 +227,7 @@ void warningRunFunction(void *dataptr) {
       break;
     default:  // OFF
       PWMGenDisable(PWM0_BASE, PWM_GEN_0);
+      
       break;
   }
 
@@ -308,11 +304,11 @@ void warningRunFunction(void *dataptr) {
    * If the button is pushed, the value returned is 0
    * If the button is NOT pushed, the value is non-zero
    */
-  if (global.alarmAcknowledge && (aState == ON) )
+  if ( ( 0 == global.alarmAcknowledge) && (aState == ON) )
   {
     //GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0XFF);  // for debug, lights led
     aState = ASLEEP;
-    wakeUpAlarmAt = minor_cycle_ctr + SLEEP_PERIOD_ALARM;
+    wakeUpAlarmAt = minor_cycle_ctr + ALARM_SLEEP_PERIOD;
   }
 
   // Check whether to resound alarm
@@ -325,29 +321,29 @@ void warningRunFunction(void *dataptr) {
     char num[30];
 
 
-//    usnprintf(num, 30, "Raw temp: %d  ", (int) temp);
-//    RIT128x96x4StringDraw(num, 0, 0, 15);
-//
-//    usnprintf(num, 30, "Raw Syst: %d  ", (int) sysPress);
-//    RIT128x96x4StringDraw(num, 0, 10, 15);
-//
-//    usnprintf(num, 30, "Raw Dia: %d  ", (int) diaPress);
-//    RIT128x96x4StringDraw(num, 0, 20, 15);
-//
-//    usnprintf(num, 30, "Raw Pulse: %d  ", (int) pulse);
-//    RIT128x96x4StringDraw(num, 0, 30, 15);
-//    
-//    usnprintf(num, 30, "Raw Batt: %d  ", (unsigned short) battery);
-//    RIT128x96x4StringDraw(num, 0, 40, 15);
-//
-//    
-//    usnprintf(num, 30, "aState: %d  ", aState);
-//    RIT128x96x4StringDraw(num, 0, 50, 15);
-//
-//    usnprintf(num, 30, "alarmAck: %d  ", global.alarmAcknowledge);
-//    RIT128x96x4StringDraw(num, 0, 60, 15);
-//    
-//    usnprintf(num, 30, "pwmEn: %d  ", pwmEnable);
-//    RIT128x96x4StringDraw(num, 0, 70, 15);
+    usnprintf(num, 30, "Cor temp: %d  ", (int) temp);
+    RIT128x96x4StringDraw(num, 0, 0, 15);
+
+    usnprintf(num, 30, "Cor Syst: %d  ", (int) sysPress);
+    RIT128x96x4StringDraw(num, 0, 10, 15);
+
+    usnprintf(num, 30, "Cor Dia: %d  ", (int) diaPress);
+    RIT128x96x4StringDraw(num, 0, 20, 15);
+
+    usnprintf(num, 30, "Cor Pulse: %d  ", (int) pulse);
+    RIT128x96x4StringDraw(num, 0, 30, 15);
+    
+    usnprintf(num, 30, "Cor Batt: %d  ", (unsigned short) battery);
+    RIT128x96x4StringDraw(num, 0, 40, 15);
+
+    
+    usnprintf(num, 30, "aState: %d  ", aState);
+    RIT128x96x4StringDraw(num, 0, 50, 15);
+
+    usnprintf(num, 30, "alarmAck: %d  ", global.alarmAcknowledge);
+    RIT128x96x4StringDraw(num, 0, 60, 15);
+    
+    usnprintf(num, 30, "pwmEn: %d  ", pwmEnable);
+    RIT128x96x4StringDraw(num, 0, 70, 15);
 #endif
 }

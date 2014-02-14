@@ -10,11 +10,14 @@
 #include "inc/hw_types.h"
 #include "CircularBuffer.h"
 #include "stddef.h"
+#include "inc/hw_memmap.h"
+#include "driverlib/gpio.h"
+#include "driverlib/sysctl.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 #define TEMP_RAW_INIT 80        // initial 80
-#define SYS_RAW_INIT 50         // initial 50
+#define SYS_RAW_INIT 80        // initial 50
 #define DIA_RAW_INIT 50         // initial 50
 #define PULSE_RAW_INIT 30       // initial 30
 
@@ -48,3 +51,6 @@ extern GlobalData global;
 
 // initializes the global variables for use by system
 void initializeGlobalData();
+
+// allows use of pin47 for debug, toggles the pin hi or lo alternatively
+void debugPin47();

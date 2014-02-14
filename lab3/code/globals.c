@@ -62,3 +62,14 @@ void initializeGlobalData() {
   global.select = false;
   global.scroll = 0;
 }
+
+// debug tool
+void debugPin47() {
+  SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);        // debug
+  GPIOPinTypeGPIOOutput(GPIO_PORTB_BASE, GPIO_PIN_2);
+  long a = GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_2);
+  if(0 == a) 
+  GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_2, 0xFF);
+  else 
+  GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_2, 0x00);
+}

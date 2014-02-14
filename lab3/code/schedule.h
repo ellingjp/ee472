@@ -14,11 +14,12 @@
 extern tBoolean computeActive;	
 extern tBoolean serialActive;
 
+
 /*
  * Must be called before runTasks()
  * Initializes schedule required data structures
  */
-void initialize();
+void initializeQueue();
 
 
 /* Run all the tasks in the queue, delay minor cycle */

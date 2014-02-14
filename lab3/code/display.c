@@ -31,14 +31,14 @@ typedef struct oledDisplayData {
   unsigned short *selection;
 } DisplayData;
 
-static DisplayData data;  // internal data
-TCB displayTask;          // task interface
-
 void displayRunFunction(void *dataptr);  // prototype for compiler
+
+static DisplayData data;  // internal data
+TCB displayTask = {&displayRunFunction, &data};          // task interface
 
 void initializeDisplayTask() {
   RIT128x96x4Init(1000000);
-
+  
   // Load data
   data.temperatureCorrected = &(global.temperatureCorrected);
   data.systolicPressCorrected = &(global.systolicPressCorrected);
@@ -63,14 +63,24 @@ void initializeDisplayTask() {
 void displayRunFunction(void *dataptr) {
   // only run on major cycle
   //  if (IS_MAJOR_CYCLE) {   // on major cycle
+  
+  static tBoolean onFirstRun = true;
+   
+  if (onFirstRun) {
+    initializeDisplayTask();
+    onFirstRun = false;
+  }
+  
   DisplayData *dData = (DisplayData *) dataptr;
 
   tBoolean selection = *(dData->select);
   int scroll = *(dData->scroll);
 
+#if !DEBUG
   char num[40];
-  char buf1[30];
+  //char buf1[30];
   char buf2[30];
+  
   if(0 == *(dData->mode))
   {
     if(false == selection)
@@ -85,7 +95,7 @@ void displayRunFunction(void *dataptr) {
       RIT128x96x4StringDraw("->", 0, 10*((scroll%4+1)), 15);
     }
     else
-    
+    {
       RIT128x96x4StringDraw("                                      ", 0, 0, 15);    
       if(0 == scroll%4)
         RIT128x96x4StringDraw("Blood Pressure:", 0, 0, 15);
@@ -100,21 +110,24 @@ void displayRunFunction(void *dataptr) {
 
 
       if(0 == scroll%4)
-        usnprintf(buf2,30, "Systolic: %d mm Hg ", (*(int*)cbGet(dData->systolicPressCorrected)));
+        usnprintf(buf2,30, "Systolic: %d mm Hg ", (int) *( (float*) cbGet(dData->systolicPressCorrected)));
       else if(1 == scroll%4)
-        usnprintf(buf2,30,"%d C ", (*(int*)cbGet(dData->temperatureCorrected)));
+        usnprintf(buf2,30,"%d C ", (int) *( (float*) cbGet(dData->temperatureCorrected)));
       else if(2 == scroll%4)
-        usnprintf(buf2,30, "%d BPM ", (*(int*)cbGet(dData->pulseRateCorrected)));
+        usnprintf(buf2,30, "%d BPM ", (int) *( (float*) cbGet(dData->pulseRateCorrected)));
       else if(3 == scroll%4)
-        usnprintf(buf2,30, "%d %%  ", (*(dData->batteryState))/2);
+        usnprintf(buf2,30, "%d %%  ", (int) *(dData->batteryState)/2);
       //else buf2 = "oops"; //just in case      
 
       RIT128x96x4StringDraw("                                      ", 0, 10, 15);
       RIT128x96x4StringDraw(buf2, 0, 10, 15);
-      if(1 == scroll%4)
-        usnprintf(buf2,30, "Diastolic: %d mm Hg        ", (*(int*)cbGet(dData->diastolicPressCorrected)));
-      //    else buf2 = "                                                             ";
-      RIT128x96x4StringDraw(buf2, 0, 20, 15);
+      if(0 == scroll%4)
+      {
+        usnprintf(buf2,30, "Diastolic: %d mm Hg        ", (int)*( (float*) cbGet(dData->diastolicPressCorrected)));
+      
+        RIT128x96x4StringDraw(buf2, 0, 20, 15);
+      }
+      else RIT128x96x4StringDraw("                                      ", 0, 20, 15);
       RIT128x96x4StringDraw("                                      ", 0, 30, 15);
       RIT128x96x4StringDraw("                                      ", 0, 40, 15);
       RIT128x96x4StringDraw("                                      ", 0, 50, 15);
@@ -122,29 +135,28 @@ void displayRunFunction(void *dataptr) {
 
     }
   }
-
   else//(1 == *(data->mode)
   {
-    usnprintf(num,40,"Temperature: %d C           ", (*(int*)cbGet(dData->temperatureCorrected)));
+    usnprintf(num,40,"Temperature: %d C           ", (int) *( (float*) cbGet(dData->temperatureCorrected)));
     RIT128x96x4StringDraw(num, 0, 0, 15);
 
     usnprintf(num,40, "Systolic Pressure:             ");
     RIT128x96x4StringDraw(num, 0, 10, 15);
 
-    usnprintf(num,40, "%d mm Hg                   ", (*(int*)cbGet(dData->systolicPressCorrected)));
+    usnprintf(num,40, "%d mm Hg                   ", (int) *( (float*) cbGet(dData->systolicPressCorrected)));
     RIT128x96x4StringDraw(num, 0, 20, 15);
 
     usnprintf(num,40, "Diastolic Pressure:            ");
     RIT128x96x4StringDraw(num, 0, 30, 15);
 
-    usnprintf(num,40, "%d mm Hg                      ", (*(int*)cbGet(dData->diastolicPressCorrected)));
+    usnprintf(num,40, "%d mm Hg                      ",(int) *( (float*) cbGet(dData->diastolicPressCorrected)));
     RIT128x96x4StringDraw(num, 0, 40, 15);
 
-    usnprintf(num,40, "Pulse rate: %d BPM              ", (*(int*)cbGet(dData->pulseRateCorrected)));
+    usnprintf(num,40, "Pulse rate: %d BPM              ",(int) *( (float*) cbGet(dData->pulseRateCorrected)));
     RIT128x96x4StringDraw(num, 0, 50, 15);
 
-    usnprintf(num,40, "Battery: %d %%                 ", *(dData->batteryState)/2);
+    usnprintf(num,40, "Battery: %d %%                 ",(int) *(dData->batteryState)/2);
     RIT128x96x4StringDraw(num,0, 60,15);
   }
-  //  }
+#endif
 }
