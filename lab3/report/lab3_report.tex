@@ -315,7 +315,7 @@ Additionally, the system must be implemented using the Stellaris
 EKI-LM3S8962 ARM Cortex-M3 microcomputer board, The software for the system 
 must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
-\subsubsection{Detailed Task Specifications (updates)}
+\subsubsection{Detailed Task Specifications (updateed)}\label{sec:detailedTaskSpec}
 
 \begin{itemize}
   \item New task: KeypadTask
@@ -678,12 +678,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     project.  Testing of the system prior to demonstration also verified that
     the system met the specifications listed in Section~\ref{sec:designSpec}.
 
-    During the demonstration, all tasks worked as designed and expected with the exception of
-
-    During the actual coding and implementation of the design, remarks were
-    made several times about the ease of execution during that phase of the
-    project. After the initial high level Design phase, very few changes were
-    made, or required, to the functional design or system architecture.
+    During the demonstration, all tasks worked as designed and expected with the exception of the serial communication task, serialTask. After initially performing as expected, the system would freeze up. When this happened, the system was unresponsive and did not produce any annuniation.
 
     Using an oscilloscope, the run times of each task were empirically
     determined. The results are given in Table~\ref{tab:taskRuntimes}.
@@ -707,11 +702,8 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     in the project report:}
     \emph{You don't find the stealth submarine. That's why they are so expensive; at that cost, you take great pains to never lose one.\\  A helium balloon always rises. It just rises upside-down. \\ If you really managed to lose the stealth submersible, you first have to tell the government, which will deny it has any stealth submersibles, then you have to comb the seven seas until your comb hits the sub.}
 
-    \subsection{Discussion of Results}
-    The ease of change in the code is the result of a large amount of time spent on
-    design. The design makes it easy to configure flash times, add new tasks, and
-    to reason about tasks independently of the whole system. The solid high-level
-    architectural design led to ease of implementation and change.
+    \subsection{Discussion of Results} Patrick
+
 
     In terms of performance, the run times of each task appear to correspond with
     the number of instructions required for each task. Given the speed of the CPU,
