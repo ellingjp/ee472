@@ -14,9 +14,6 @@
 #include "startup.h"
 #include "schedule.h"
 
-
-
-
 /*
  * Minor Cycle Handler
  */
@@ -43,10 +40,6 @@ SysTickEnable();	// enable systic counter
  */
 void startup() {
   initializeHWCounter();
-  
-  #if DEBUG
-  RIT128x96x4Init(1000000);
-  #endif
   
   // Initialize global data
   initializeGlobalData();   // from globals.h
