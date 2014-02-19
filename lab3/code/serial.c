@@ -74,17 +74,20 @@ void serialRunFunction(void *dataptr) {
   int pulse = (int) (*(float *)cbGet(sData->pulseRateCorrected));
   int batt = *(data.batteryState);
   
-  char buf[512];
-//  usnprintf(buf, 512,
-//          "\f1. Temperature:\t\t%d C\n\n\r"
-//          "2. Systolic pressure:\t%d mm Hg\n\n\r"
-//          "3. Diastolic pressure:\t%d mm Hg\n\n\r"
-//          "4. Pulse rate:\t\t%d BPM\n\n\r"
-//          "5. Battery:\t\t%d\n\n\r",
-//          temp, sys, dia, pulse, batt);
-  
-  // The cast removes a warning.  It is safe as long as buf contains
-  // plain ASCII (non extended)
+  char buf[40];
+  usnprintf(buf, 40, "\f1. Temperature:\t\t%d C\n\n\r", temp);
+  UARTSend( (unsigned char *) buf, strlen(buf));
+
+  usnprintf(buf, 40, "2. Systolic pressure:\t%d mm Hg\n\n\r", sys);
+  UARTSend( (unsigned char *) buf, strlen(buf));
+
+  usnprintf(buf, 40, "3. Diastolic pressure:\t%d mm Hg\n\n\r", dia);
+  UARTSend( (unsigned char *) buf, strlen(buf));
+
+  usnprintf(buf, 40, "4. Pulse rate:\t\t%d BPM\n\n\r", pulse);
+  UARTSend( (unsigned char *) buf, strlen(buf));
+
+  usnprintf(buf, 40, "5. Battery:\t\t%d\n\n\r", batt);
   UARTSend( (unsigned char *) buf, strlen(buf));
 
   serialActive = false;
