@@ -10,6 +10,8 @@ LimitSize=0
 ByteLimit=50
 [LMIFTDIDriver]
 LMI_ResetMode=0x00000000
+[DebugChecksum]
+Checksum=-321755321
 [InterruptLog]
 LogEnabled=0
 SumEnabled=0
@@ -34,6 +36,10 @@ UseAuto=0
 TypeViolation=1
 UnspecRange=1
 ActionState=1
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
 [Trace1]
 Enabled=0
 ShowSource=1
