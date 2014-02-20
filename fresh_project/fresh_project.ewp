@@ -29,8 +29,8 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>19</version>
-          <state>0</state>
+          <version>20</version>
+          <state>38</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -65,7 +65,7 @@
         </option>
         <option>
           <name>OGCoreOrChip</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>GRuntimeLibSelect</name>
@@ -87,7 +87,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>6.30.1.53141</state>
+          <state>6.40.3.54103</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -99,7 +99,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>default	None</state>
+          <state>LM3S8962	TexasInstruments LM3S8962</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -107,7 +107,7 @@
         </option>
         <option>
           <name>GEndianModeBE</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>OGBufferedTerminalOutput</name>
@@ -137,13 +137,13 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>19</version>
-          <state>0</state>
+          <version>20</version>
+          <state>38</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>19</version>
-          <state>0</state>
+          <version>20</version>
+          <state>38</state>
         </option>
         <option>
           <name>OGUseCmsis</name>
@@ -163,8 +163,13 @@
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
+          <name>CCOptimizationNoSizeConstraints</name>
+          <state>0</state>
+        </option>
+        <option>
           <name>CCDefines</name>
-          <state></state>
+          <state>ewarm</state>
+          <state>PART_LM3S8962</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -293,7 +298,7 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state></state>
+          <state>$PROJ_DIR$\required_files</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -305,7 +310,7 @@
         </option>
         <option>
           <name>IInterwork2</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>IProcessorMode2</name>
@@ -568,7 +573,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>c.srec</state>
+          <state>fresh_project.srec</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -605,7 +610,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>14</version>
+        <version>15</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -774,10 +779,6 @@
           <state>1</state>
         </option>
         <option>
-          <name>CrcAlgo</name>
-          <state>1</state>
-        </option>
-        <option>
           <name>CrcPoly</name>
           <state>0x11021</state>
         </option>
@@ -879,6 +880,16 @@
           <name>IlinkStackCallGraphFile</name>
           <state></state>
         </option>
+        <option>
+          <name>CrcAlgorithm</name>
+          <version>0</version>
+          <state>1</state>
+        </option>
+        <option>
+          <name>CrcUnitSize</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
       </data>
     </settings>
     <settings>
@@ -935,7 +946,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>19</version>
+          <version>20</version>
           <state>0</state>
         </option>
         <option>
@@ -1043,12 +1054,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>19</version>
+          <version>20</version>
           <state>0</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>19</version>
+          <version>20</version>
           <state>0</state>
         </option>
         <option>
@@ -1068,6 +1079,10 @@
         <version>28</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
+        <option>
+          <name>CCOptimizationNoSizeConstraints</name>
+          <state>0</state>
+        </option>
         <option>
           <name>CCDefines</name>
           <state>NDEBUG</state>
@@ -1511,7 +1526,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>14</version>
+        <version>15</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
@@ -1680,10 +1695,6 @@
           <state>1</state>
         </option>
         <option>
-          <name>CrcAlgo</name>
-          <state>1</state>
-        </option>
-        <option>
           <name>CrcPoly</name>
           <state>0x11021</state>
         </option>
@@ -1785,6 +1796,16 @@
           <name>IlinkStackCallGraphFile</name>
           <state></state>
         </option>
+        <option>
+          <name>CrcAlgorithm</name>
+          <version>0</version>
+          <state>1</state>
+        </option>
+        <option>
+          <name>CrcUnitSize</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
       </data>
     </settings>
     <settings>
@@ -1815,7 +1836,94 @@
     </settings>
   </configuration>
   <file>
-    <name>$PROJ_DIR$\main.c</name>
+    <name>$PROJ_DIR$\..\lab3\code\CircularBuffer.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\CircularBuffer.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\compute.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\compute.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\display.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\display.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\required_files\driverlib\driverlib-cm3.a</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\globals.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\globals.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\keyPad.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\keyPad.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\main.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\measure.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\measure.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\rit128x96x4.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\schedule.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\schedule.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\serial.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\serial.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\startup.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\startup.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\startup_ewarm.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\status.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\status.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\task.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\timebase.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\timings.txt</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\ustdlib.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\warning.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\warning.h</name>
   </file>
 </project>
 
