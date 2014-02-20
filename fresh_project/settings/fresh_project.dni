@@ -10,8 +10,6 @@ LimitSize=0
 ByteLimit=50
 [LMIFTDIDriver]
 LMI_ResetMode=0x00000000
-[Breakpoints]
-Count=0
 [InterruptLog]
 LogEnabled=0
 SumEnabled=0
@@ -25,8 +23,6 @@ SumEnabled=0
 GraphEnabled=0
 ShowTimeLog=1
 ShowTimeSum=1
-[Disassemble mode]
-mode=0
 [Breakpoints2]
 Count=0
 [Interrupts]
@@ -38,9 +34,13 @@ UseAuto=0
 TypeViolation=1
 UnspecRange=1
 ActionState=1
-[Aliases]
-Count=0
-SuppressDialog=0
 [Trace1]
 Enabled=0
 ShowSource=1
+[Disassemble mode]
+mode=0
+[Breakpoints]
+Count=0
+[Aliases]
+Count=0
+SuppressDialog=0
