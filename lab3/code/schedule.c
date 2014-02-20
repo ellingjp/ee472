@@ -21,10 +21,9 @@
 #include "keyPad.h"
 
 // Used for debug display
-#if DEBUG
 #include "drivers/rit128x96x4.h"
 #include "utils/ustdlib.h"
-#endif 
+
 
  
 unsigned int minor_cycle_ctr = 0;   // minor cycle counter

@@ -28,3 +28,7 @@
 *.gz
 *.tar
 *.zip
+
+# IAR Debug files #
+###################
+Debug
