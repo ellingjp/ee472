@@ -1,0 +1,6 @@
+these are the timings for each task, measured empirically on Tektronix TDS-320
+measure: 23.4 us
+Compute: 55.4us
+Display: 22.9ms
+Warning: 27.4 us
+Status: 5.6us
