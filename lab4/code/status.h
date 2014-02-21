@@ -9,7 +9,7 @@
  * functions
  */
 
-#include "task.h"  // for TCBs
+#include "tcb.h"  // for TCBs
 
 /* Initialize StatusData, must be done before running functions */
 void initializeStatusTask();

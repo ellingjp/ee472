@@ -11,7 +11,7 @@
  * should subsequently delete itself from the task queue.  
  */
 
-#include "task.h"  // for TCBs
+#include "tcb.h"  // for TCBs
 
 /* The status Task */
 extern TCB serialTask;

@@ -6,7 +6,6 @@
  * Implements serial.c
  */
 
-#include "task.h"
 #include "globals.h"
 #include "timebase.h"
 #include "serial.h"

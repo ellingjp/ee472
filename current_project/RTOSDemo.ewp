@@ -294,7 +294,7 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>$PROJ_DIR$\</state>
+          <state>$PROJ_DIR$</state>
           <state>$PROJ_DIR$\..\FreeRTOS\source\include</state>
           <state>C:\StellarisWare\</state>
           <state>C:\StellarisWare\inc</state>
@@ -929,7 +929,79 @@
   <group>
     <name>Application files</name>
     <file>
-      <name>$PROJ_DIR$\main.c</name>
+      <name>$PROJ_DIR$\..\lab4\code\CircularBuffer.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\CircularBuffer.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\compute.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\compute.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\display.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\display.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\globals.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\globals.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\keyPad.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\keyPad.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\measure.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\measure.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\schedule.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\schedule.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\serial.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\serial.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\startup.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\startup.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\status.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\status.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\tcb.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\timebase.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\warning.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\warning.h</name>
     </file>
   </group>
   <group>
@@ -965,7 +1037,7 @@
   <group>
     <name>System files</name>
     <file>
-      <name>$PROJ_DIR$\startup_ewarm.c</name>
+      <name>$PROJ_DIR$\..\lab4\code\startup_ewarm.c</name>
     </file>
   </group>
 </project>

@@ -6,7 +6,7 @@
  * Implements schedule.h
  */
 
-#include "task.h"
+#include "tcb.h"
 #include "schedule.h"
 #include "timebase.h"
 #include "globals.h"

@@ -8,7 +8,6 @@
  * Uses port PA4 for interrupt input for pulse rate
  */
 
-#include "task.h"
 #include "CircularBuffer.h"
 #include "globals.h"
 #include "timebase.h"

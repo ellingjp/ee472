@@ -6,7 +6,6 @@
  * Implements compute.c
  */
 
-#include "task.h"
 #include "CircularBuffer.h"
 #include "compute.h"
 #include "globals.h"

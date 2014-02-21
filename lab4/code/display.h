@@ -7,7 +7,7 @@
  * initializeDisplayData() should be called before running displayTask()
  */
 
-#include "task.h"
+#include "tcb.h"
 
 /* Initialize DisplayData, must be done before running displayTask() */
 void initializeDisplayTask();

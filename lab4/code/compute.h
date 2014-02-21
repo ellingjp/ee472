@@ -7,7 +7,7 @@
  * initializeComputeData() should be called before running computeTask()
  */
 
-#include "task.h"
+#include "tcb.h"
 
 /* Points to the TCB for compute */
 extern TCB computeTask;

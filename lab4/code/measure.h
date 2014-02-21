@@ -7,7 +7,7 @@
  * initializeMeasureData() should be called before running measureTask()
  */
 
-#include "task.h"
+#include "tcb.h"
 
 /* Points to the TCB for measure */
 extern TCB measureTask;

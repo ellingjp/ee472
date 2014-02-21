@@ -7,7 +7,7 @@
  * initializeWarningData() should be called before running warningTask()
  */
  
-#include "task.h"
+#include "tcb.h"
  
 #define WARN_LOW 0.95 //warn at 5% below min range value
 #define WARN_HIGH 1.05 //warn at 5% above max range value

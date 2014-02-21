@@ -7,7 +7,6 @@
  */
 
 #include "globals.h"
-#include "task.h"
 #include "timebase.h"
 #include "display.h"
 #include "inc/hw_types.h"
