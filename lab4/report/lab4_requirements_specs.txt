@@ -33,8 +33,6 @@ Measure:
 --------------------------------------------------
 + Only measure user selected measurements (see keypad task)
 + Utilize on-chip thermometer for raw temp reading
-+ Use a raw systolic blood pressure range of 90 - 180
-+ Use a raw diastolic blood pressure range of 40 - 90
 
 EKG Capture:
 --------------------------------------------------
@@ -66,12 +64,11 @@ KeyPad:
 OLEDDisplay:
 -------------------------------------------------- 
 + Add EKG data to display (in addition to previous displayed data)
-+ Potentially adjust Annunciation layout
 
 Warn/Alarm:
 --------------------------------------------------
 + light green LED (steady) during normal state
-+ potentially update/reset alarm state to use lab2 criteria
++ Reset alarm state criteria to original lab2 specs
 
 Serial:
 --------------------------------------------------
