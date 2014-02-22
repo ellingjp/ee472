@@ -1,0 +1,81 @@
+Lab 4 Requirements and Specs (project 3)
+Updates to the previous lab3 specifications
+
+Overview of additions:
+--------------------------------------------------
++ Incorporation of a real Time OS
+	+ Update startup script to run RTOS
+	+ Implement a priority-based scheduler
++ New Feature: Incorporate a Measurement selection
++ New Feature: incorporate support for EKG sensor
++ Update existing tasks to utilize new features and changes to specs
+
+System changes (broken down by task)
+--------------------------------------------------
+
+Startup:
+--------------------------------------------------
++ Runs once at startup before all other tasks. not part of task queue
++ configure & activate time base
++ Configure & initialize HW systems
+	+ pulse
+	+ temperature
+	+ EKG
++ Create baseline task queue
++ Enable interrupts
+	+ Pulse
+	+ HW Timer
+	+ EKG
++ Start the system
++ Self-exits
+
+Measure:
+--------------------------------------------------
++ Only measure user selected measurements (see keypad task)
++ Utilize on-chip thermometer for raw temp reading
++ Use a raw systolic blood pressure range of 90 - 180
++ Use a raw diastolic blood pressure range of 40 - 90
+
+EKG Capture:
+--------------------------------------------------
++ Scheduled on demand
++ takes analog input 0-3V, sinusoid @ 35Hz - 3.75kHz
++ collect 256 samples at evenly spaced intervals
++ collect samples at rate of 2-3x max frequency
++ convert input to digital
++ store converted digital result into measurement buffer
++ add EKG Processing task to queue
+
+EKG Processing
+-------------------------------------------------
++ Runs after scheudled by EKG capture task
++ perform FFT on measured EKG data to obtain frequency
++ Store computed result into 16-value circular buffer
++ Indicate new computed result is available
+
+KeyPad:
+--------------------------------------------------
++ Implement new measurement selection feature:
+	+ depending on selection, set measurementSelection variable to:
+		0 = Scan All
+		1 = Measure Temperature
+		2 = Measure Blood Pressure
+		3 = Measure Pulse Rate
+		4 = measure EKG
+
+OLEDDisplay:
+-------------------------------------------------- 
++ Add EKG data to display (in addition to previous displayed data)
++ Potentially adjust Annunciation layout
+
+Warn/Alarm:
+--------------------------------------------------
++ light green LED (steady) during normal state
++ potentially update/reset alarm state to use lab2 criteria
+
+Serial:
+--------------------------------------------------
++ Update to always run in 'Scan All' mode (plus previous behavior)
++ Delete self after run UNLESS 'Scan All' mode is selected
+
+
