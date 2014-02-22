@@ -17,6 +17,7 @@ Startup:
 --------------------------------------------------
 + Runs once at startup before all other tasks. not part of task queue
 + configure & activate time base
+	+ change timebase to run off timer, NOT Systick
 + Configure & initialize HW systems
 	+ pulse
 	+ temperature
