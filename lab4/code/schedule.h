@@ -13,6 +13,7 @@
 // globally setable variables
 extern tBoolean computeActive;	
 extern tBoolean serialActive;
+extern tBoolean ekgProcessActive;
 
 
 /*
