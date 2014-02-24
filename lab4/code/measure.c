@@ -179,15 +179,27 @@ void measureRunFunction(void *dataptr) {
   
   // only run on major cycle
   if (IS_MAJOR_CYCLE) {
-    setTemp(mData->temperatureRaw);
-    setBloodPress(mData->systolicPressRaw, mData->diastolicPressRaw);
-
+	if(measureSelect == 0 || measureSelect == 1)
+	{
+		setTemp(mData->temperatureRaw);
+    }
+	if(measureSelect == 0 || measureSelect == 2)
+	{
+		setBloodPress(mData->systolicPressRaw, mData->diastolicPressRaw);
+	}
+	if(measureSelect == 0 || measureSelect == 3)
+	{
       int prev = *(int*) cbGet(mData->pulseRateRaw);
       
       // Only save if +- 15%
       if (rate < prev*0.85 || rate > prev*1.15) {
         cbAdd(mData->pulseRateRaw, (void *)&rate);
       }
+	}
+	if(measureSelect == 0 || measureSelect == 4)
+	{
+		//EKG stuff
+	}
     computeActive = true;   // run the compute task
      
 #if DEBUG
