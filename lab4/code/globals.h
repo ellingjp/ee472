@@ -43,7 +43,7 @@ typedef struct global_data {
   CircularBuffer systolicPressCorrected;
   CircularBuffer diastolicPressCorrected;
   CircularBuffer pulseRateCorrected;
-	CircularBuffer ekgFreqeuencyResult;
+  CircularBuffer ekgFrequencyResult;
 
   unsigned short batteryState;
   unsigned short mode;
