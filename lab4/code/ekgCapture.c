@@ -15,11 +15,12 @@
 #include "globals.h"
 #include "ekgCapture.h"
 
-#define SAMPLE_PERIOD (1 / 9375)	// # seconds between taking samples to get a god measure of < 3750 Hz
+#define SAMPLE_PERIOD (1 / 9375)	// # seconds between taking samples to get a good measure of < 3750 Hz
+#define EKG_TIMER TIMER_A	// the timer used for EKG sample collection
 #define EKG_SEQ 0	// The sequence number assigned to the ekg sensor
 #define EKG_CH ADC_CTL_CH0	// the EKG analog input channel
 
-static int sampleNum;
+static int sampleNum; // counter for data collection
 static tBoolean firstRun = true;
 
 // ekgCapture data structure. Internal to the task
@@ -33,25 +34,39 @@ static EKGCaptureData data; 	// the interal data
 TCB ekgCaptureTask = {&ekgCaptureRunFunction, &data}; // task interface
 
 
+// reads the ADC output FIFO to the current ekgRaw element. After taking enough sample measurements, doesn't do anything, signals collection is complete.
+void ADCIntHandler() {
+	ADCIntClear(ADC_BASE, EKG_SEQ);
+	if (sampleNum < NUM_EKG_SAMPLES) {
+	long samps = ADCSequenceDataGet(ADC_BASE, EKG_SEQ, (ekgRawData + sampleNum));
+	sampleNum = sampleNum + samps;	// increase by however many you got
+	} else {
+		ekgComplete = true;	// Done taking samples, let the task know
+	}
+}
+
+/* sets up task specific variables, etc
+ */
 void initializeEKGTask() {
 	data.ekgRawData = &(global.ekgRawData);
 	sampleNum = 0;
 
 	// TODO enable read from GPIO pin (move this and below to startup?)
 	
+	// configure ADC sequence
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC);
 	SysCtlADCSpeedSet(SYSCTL_ADCSPEED_125KSPS);
 	ADCSequenceDisable(ADC_BASE, EKG_SEQ);
-	ADCSequenceConfigure(
+	ADCSequenceConfigure(	// configure when we want to run
 			ADC_BASE, 
 			EKG_SEQ, 
-			ADC_TRIGGER_PROCESSOR, 
-			EKG_PRIORITY); // TODO use ALWAYS trigger and do control in run function?
-	ADCSequenceStepConfigure(
+			ADC_TRIGGER_TIMER, 
+			EKG_PRIORITY); 
+	ADCSequenceStepConfigure(	// input ch, interrupt en, end seq
 			ADC_BASE, 
 			EKG_SEQ, 
 			0, 
-			EKG_CH | ADC_CTL_IE | ADC_CTL_END);	// input ch, interrupt en, end seq
+			EKG_CH | ADC_CTL_IE | ADC_CTL_END);	
 	ADCSequenceEnable(ADC_BASE, EKG_SEQ);
 	// enable ADC peripheral clock
 	// set ADC sample rate
@@ -59,18 +74,12 @@ void initializeEKGTask() {
 	// set the ekg ADC settings for: processor trigger and priority 0 (highest)
 	// configure step setup:
 	// for ekg, pick an analog channel, then interrupt enable, and end bit
-	// TODO create an ADC interrupt handler to copy the ADC value to the next element of the ekg raw array
-}
-
-// reads the ADC output FIFO to the current ekgRaw element. Does update the
-// index
-void ADCIntHandler() {
-	ADCIntClear(ADC_BASE, EKG_SEQ);
 	
-	long samps = ADCSequenceDataGet(ADC_BASE, EKG_SEQ, (ekgRawData + sampleNum));
-	sampleNum = sampleNum + samps;	// increase by however many you got
-	if (sampleNum > NUM_EKG_SAMPLES)
-		ekgComplete = true;
+	// configure timerA for periodic timing 
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
+	TimerConfigure(TIMER0_BASE, TIMER_CFG_16_BIT_PAIR | TIMER_CFG_A_PERIODIC );
+	TimerControlTrigger(TIMER0_BASE, TIMER_A, true);
+	TimerLoadSet(TIMER0_BASE, TIMER_A, SysCtlClockGet() * SAMPLE_PERIOD);
 }
 
 /*
@@ -84,23 +93,15 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 	}
 
 	ADCIntEnable(ADC_BASE, EKG_SEQ);
-	// TODO setup timer
-	while (!ekgComplete) {
-		//delay for SAMPLE_PERIOD
-		ADCProcessorTrigger(ADC_BASE, EKG_SEQ);
+	TimerEnable(TIMER0_BASE, EKG_TIMER);
 
-		while(!ADCIntStatus(ADC_BASE, EKG_SEQ, false)) {	//wait until converted
-		}
-	// TODO chose EITHER to do conversion & capture in an interrupt handler or in the function call.	
-		ADCIntClear(ADC_BASE, EKG_SEQ);
-		
-		long samps = ADCSequenceDataGet(ADC_BASE, EKG_SEQ, (ekgRawData + sampleNum));
-		sampleNum = sampleNum + samps;	// increase by however many you got
-		if (sampleNum > NUM_EKG_SAMPLES)
-			ekgComplete = true;
+	while (!ekgComplete) {	// ADC is capturing signal measurements
 	}
 
-	ekgProcessActive = true;
+	TimerDisable(TIMER0_BASE, EKG_TIMER);
+	ADCIntDisable(ADC_BASE, EKG_SEQ); 
+
+	ekgProcessActive = true;	// we want to process our measurement
 }
 
 /* pseudo code:
