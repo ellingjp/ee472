@@ -20,6 +20,10 @@ static float temperatureCorrectedArr[8];
 static float systolicPressCorrectedArr[8];
 static float diastolicPressCorrectedArr[8];
 static float pulseRateCorrectedArr[8];
+static int ekgFrequencyResultArr[16];
+
+static int ekgRaw[NUM_EKG_SAMPLES] = 0;	// initialize all the elements to 0
+static int ekgTemp[NUM_EKG_SAMPLES] = 0;
 
 void initializeGlobalData() {
   // Wrap the arrays
@@ -32,6 +36,7 @@ void initializeGlobalData() {
   global.systolicPressCorrected = cbWrap(systolicPressCorrectedArr, sizeof(float), 8);
   global.diastolicPressCorrected = cbWrap(diastolicPressCorrectedArr, sizeof(float), 8);
   global.pulseRateCorrected = cbWrap(pulseRateCorrectedArr, sizeof(float), 8);
+	global.ekgFrequencyResult = cbWrap(ekgFrequencyResultArr, sizeof(int), 16);
 
   int tr = TEMP_RAW_INIT;
   int sr = SYS_RAW_INIT;
@@ -42,6 +47,7 @@ void initializeGlobalData() {
   float sc = SYS_CORR_INIT;
   float dc = DIA_CORR_INIT;
   float pc = PULSE_CORR_INIT;
+	int fr = EKG_FREQ_RLT;
 
   // Add initial values
   cbAdd(&(global.temperatureRaw), &tr);
@@ -53,6 +59,7 @@ void initializeGlobalData() {
   cbAdd(&(global.systolicPressCorrected), &sc);
   cbAdd(&(global.diastolicPressCorrected), &dc);
   cbAdd(&(global.pulseRateCorrected), &pc);
+	cbAdd(&(global.ekgFrequencyResult), &fr);
 
   // Set normal variables
   global.batteryState = 200;

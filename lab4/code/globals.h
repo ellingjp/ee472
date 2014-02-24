@@ -25,19 +25,25 @@
 #define SYS_CORR_INIT 0.0
 #define DIA_CORR_INIT 0.0
 #define PULSE_CORR_INIT 0.0
+#define EKG_FREQ_RLT 0
 
 #define BATT_INIT 200
+
+#define NUM_EKG_SAMPLES 256
 
 typedef struct global_data {
   CircularBuffer temperatureRaw;
   CircularBuffer systolicPressRaw;
   CircularBuffer diastolicPressRaw;
   CircularBuffer pulseRateRaw;
+	unsigned int ekgRaw;
+	unsigned int ekgTemp;
 
   CircularBuffer temperatureCorrected;
   CircularBuffer systolicPressCorrected;
   CircularBuffer diastolicPressCorrected;
   CircularBuffer pulseRateCorrected;
+	CircularBuffer ekgFreqeuencyResult;
 
   unsigned short batteryState;
   unsigned short mode;

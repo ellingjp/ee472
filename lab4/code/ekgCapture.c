@@ -11,12 +11,10 @@
 #include "driverlib/hw_memmap.h"
 #include "driverlib/adc.h"	// for ADC use
 
-#include "timebase.h"
 #include "schedule.h"
 #include "globals.h"
 #include "ekgCapture.h"
 
-#define NUM_SAMPLES 256
 #define SAMPLE_PERIOD (1 / 9375)	// # seconds between taking samples to get a god measure of < 3750 Hz
 #define EKG_SEQ 0	// The sequence number assigned to the ekg sensor
 #define EKG_CH ADC_CTL_CH0	// the EKG analog input channel
@@ -26,13 +24,13 @@ static tBoolean firstRun = true;
 
 // ekgCapture data structure. Internal to the task
 typedef struct ekgCaptureData {
- unsigned int[NUM_SAMPLES] *ekgRawData;	// ADC output is 32-bit
-}ekgCaptureData
+ unsigned int[NUM_EKG_SAMPLES] *ekgRawData;	// ADC output is 32-bit
+}EKGCaptureData
 
 void ekgCaptureRunFunction(void *ekgCaptureData);
 
-static ComputeData data; 	// the interal data
-TCB ekgCaptureTask = {&ekgRawData, &data}; // task interface
+static EKGCaptureData data; 	// the interal data
+TCB ekgCaptureTask = {&ekgCaptureRunFunction, &data}; // task interface
 
 
 void initializeEKGTask() {
@@ -71,12 +69,12 @@ void ADCIntHandler() {
 	
 	long samps = ADCSequenceDataGet(ADC_BASE, EKG_SEQ, (ekgRawData + sampleNum));
 	sampleNum = sampleNum + samps;	// increase by however many you got
-	if (sampleNum > NUM_SAMPLES)
+	if (sampleNum > NUM_EKG_SAMPLES)
 		ekgComplete = true;
 }
 
 /*
- * captures a sequence of samples (given by NUM_SAMPLES) via the ADC and stores
+ * captures a sequence of samples (given by NUM_EKG_SAMPLES) via the ADC and stores
  * the results into a buffer
  */
 void ekgCaptureRunFunction(void *ekgCaptureData) {
@@ -98,7 +96,7 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 		
 		long samps = ADCSequenceDataGet(ADC_BASE, EKG_SEQ, (ekgRawData + sampleNum));
 		sampleNum = sampleNum + samps;	// increase by however many you got
-		if (sampleNum > NUM_SAMPLES)
+		if (sampleNum > NUM_EKG_SAMPLES)
 			ekgComplete = true;
 	}
 
