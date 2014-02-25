@@ -11,10 +11,12 @@
 #include "inc/hw_memmap.h"
 #include "driverlib/adc.h"	// for ADC use
 #include "driverlib/timer.h"	// for hw timer use
+#include "driverlib/interrupt.h"
 
 #include "schedule.h"
 #include "globals.h"
 #include "ekgCapture.h"
+#include "timebase.h"
 
 // Used for debug display
 #if DEBUG
@@ -34,10 +36,11 @@ static tBoolean ekgComplete = false;
 
 // ekgCapture data structure. Internal to the task
 typedef struct ekgCaptureData {
- unsigned int (*ekgRawData)[NUM_EKG_SAMPLES];	// ADC output is 32-bit
+ unsigned long (*ekgRawDataAddr);	// ADC output is 32-bit
 }EKGCaptureData;
 
 void ekgCaptureRunFunction(void *ekgCaptureData);
+void ADCIntHandler();
 
 static EKGCaptureData data; 	// the interal data
 TCB ekgCaptureTask = {&ekgCaptureRunFunction, &data}; // task interface
@@ -45,10 +48,16 @@ TCB ekgCaptureTask = {&ekgCaptureRunFunction, &data}; // task interface
 
 // reads the ADC output FIFO to the current ekgRaw element. After taking enough
 // sample measurements, doesn't do anything, signals collection is complete.
-void ADCIntHandler() {
-	ADCIntClear(ADC_BASE, EKG_SEQ);
+void ADC0IntHandler() {
+
+#if DEBUG
+	char num[30];
+    usnprintf(num, 30, "interrupt handled ");
+    RIT128x96x4StringDraw(num, 0, 20, 15);
+
+#endif
 	if (sampleNum < NUM_EKG_SAMPLES) {
-	long samps = ADCSequenceDataGet(ADC_BASE, EKG_SEQ, (data.ekgRawData + sampleNum));
+	long samps = ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, (data.ekgRawDataAddr + sampleNum));
 	sampleNum = sampleNum + samps;	// increase by however many you got
 	} else {
 		ekgComplete = true;	// Done taking samples, let the task know
@@ -59,26 +68,42 @@ void ADCIntHandler() {
 /* sets up task specific variables, etc
  */
 void initializeEKGTask() {
-	data.ekgRawData = &(global.ekgRaw);
+
+#if DEBUG
+	char num[30];
+	RIT128x96x4Init(1000000);
+    usnprintf(num, 30, "Raw temp: b  ");
+    RIT128x96x4StringDraw(num, 0, 0, 15);
+
+#endif
+
+	data.ekgRawDataAddr = (unsigned long*) &(global.ekgRaw);
 	sampleNum = 0;
 
 	// TODO enable read from GPIO pin (move this and below to startup?)
 	
 	// configure ADC sequence
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC);
+//	SysCtlClockSet(SYSCTL_SYSDIV_10 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN |
+ //                  SYSCTL_XTAL_16MHZ);
+
+  SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
+    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_7);
+
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
 	SysCtlADCSpeedSet(SYSCTL_ADCSPEED_125KSPS);
-	ADCSequenceDisable(ADC_BASE, EKG_SEQ);
+	ADCSequenceDisable(ADC0_BASE, EKG_SEQ);
 	ADCSequenceConfigure(	// configure when we want to run
-			ADC_BASE, 
+			ADC0_BASE, 
 			EKG_SEQ, 
-			ADC_TRIGGER_TIMER, 
+			ADC_TRIGGER_PROCESSOR, 
 			EKG_PRIORITY); 
 	ADCSequenceStepConfigure(	// input ch, interrupt en, end seq
-			ADC_BASE, 
+			ADC0_BASE, 
 			EKG_SEQ, 
 			0,	// we're only using the first step
 			EKG_CH | ADC_CTL_IE | ADC_CTL_END);	
-	ADCSequenceEnable(ADC_BASE, EKG_SEQ);
+//	IntEnable(ADC0_BASE);
+	ADCSequenceEnable(ADC0_BASE, EKG_SEQ);
 	// enable ADC peripheral clock
 	// set ADC sample rate
 	// disable ADC (to safely change the ADC settings)
@@ -90,7 +115,7 @@ void initializeEKGTask() {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
 	TimerConfigure(TIMER0_BASE, TIMER_CFG_16_BIT_PAIR | TIMER_CFG_A_PERIODIC );
 	TimerControlTrigger(TIMER0_BASE, TIMER_A, true);
-	TimerLoadSet(TIMER0_BASE, TIMER_A, SysCtlClockGet() * SAMPLE_PERIOD);
+	TimerLoadSet(TIMER0_BASE, TIMER_A, SysCtlClockGet() * MINOR_CYCLE);
 }
 
 /*
@@ -103,23 +128,30 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 		initializeEKGTask();
 	}
 
-	ADCIntEnable(ADC_BASE, EKG_SEQ);
+	ADCIntEnable(ADC0_BASE, EKG_SEQ);
 	TimerEnable(TIMER0_BASE, EKG_TIMER);
 
-	while (!ekgComplete) {	// ADC is capturing signal measurements
-	}
-
-	TimerDisable(TIMER0_BASE, EKG_TIMER);
-	ADCIntDisable(ADC_BASE, EKG_SEQ); 
-
-	ekgProcessActive = true;	// we want to process our measurement
-
+	while (!ADCIntStatus(ADC0_BASE, ADC_CTL_CH0, false)){ //!ekgComplete) {	// ADC is capturing signal measurements
+		ADCProcessorTrigger(ADC0_BASE, EKG_SEQ);
 #if DEBUG
-	char num[30];	
-    usnprintf(num, 30, "Raw temp: %d  ", ekgComplete);
+	char num[30];
+    usnprintf(num, 30, "Raw temp: %d ", TimerValueGet(TIMER0_BASE, EKG_TIMER));
     RIT128x96x4StringDraw(num, 0, 0, 15);
 
 #endif
+	}
+
+#if DEBUG
+	char num[30];
+    usnprintf(num, 30, "finished ADC get");
+    RIT128x96x4StringDraw(num, 0, 10, 15);
+
+#endif
+	TimerDisable(TIMER0_BASE, EKG_TIMER);
+	ADCIntDisable(ADC0_BASE, EKG_SEQ); 
+
+	ekgProcessActive = true;	// we want to process our measurement
+
 }
 
 /* pseudo code:

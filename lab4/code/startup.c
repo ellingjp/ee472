@@ -46,6 +46,7 @@ void startup() {
 
   computeActive = false;	// neither serial or compute task runs at start up
   serialActive = false;
+	ekgProcessActive = false;
 
   initializeQueue(); // start up task queue with basic tasks
 }
