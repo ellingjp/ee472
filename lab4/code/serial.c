@@ -89,7 +89,7 @@ void serialRunFunction(void *dataptr) {
   usnprintf(buf, 40, "5. Battery:\t\t%d\n\n\r", batt);
   UARTSend( (unsigned char *) buf, strlen(buf));
 
-  serialActive = false;
+  vTaskSuspend(NULL);   // suspend self
 }
 
 void UARTSend(const unsigned char *pucBuffer, unsigned long ulCount) {
