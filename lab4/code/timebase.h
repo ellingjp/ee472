@@ -14,3 +14,6 @@
 #define IS_MAJOR_CYCLE (minor_cycle_ctr % MAJOR_CYCLE == 0)
 
 extern unsigned int minor_cycle_ctr;    // counts number of minor cycles
+
+void initializeTimebase(void);
+void TimerAIntHandler(void);
