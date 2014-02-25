@@ -212,6 +212,8 @@ xQueueHandle xOLEDQueue;
 
 /*-----------------------------------------------------------*/
 
+xTaskHandle computeHandle;
+xTaskHandle serialHandle;
 
 /*************************************************************************
  * Please ensure to read http://www.freertos.org/portlm3sx965.html
@@ -229,13 +231,15 @@ int main( void )
     /* Start the tasks */
     RIT128x96x4Init(10000000);
     xTaskCreate(measure, "measure task", 100,NULL, 2,NULL);
-    xTaskCreate(compute, "compute task", 100,NULL, 3,NULL);
+    xTaskCreate(compute, "compute task", 100,NULL, 3, &computeHandle);
     xTaskCreate(display, "display task", 100,NULL, 5,NULL);
     xTaskCreate(keyPad, "keyPad task", 100,NULL, 4,NULL);
     xTaskCreate(warning, "warning task", 100,NULL, 5,NULL);
-    xTaskCreate(serial, "serial task", 100,NULL, 5,NULL);
+    xTaskCreate(serial, "serial task", 100,NULL, 5,&serialHandle);
     xTaskCreate(status, "status task", 100,NULL, 1,NULL);
 
+    vTaskSuspend(computeHandle);
+    vTaskSuspend(serialHandle);
     /* Start the scheduler. */
     vTaskStartScheduler();
 
