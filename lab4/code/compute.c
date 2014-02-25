@@ -65,36 +65,34 @@ void computeRunFunction(void *computeData) {
     onFirstRun = false;
   }
 
-  if (IS_MAJOR_CYCLE) {
-    ComputeData *cData = (ComputeData *) computeData;
+  ComputeData *cData = (ComputeData *) computeData;
 
-    float temp = 5 + 0.75 * (*(int*)cbGet(cData->temperatureRaw));
-    float systolic = 9 + 2 * (*(int*)cbGet(cData->systolicPressRaw));
-    float diastolic = 6 + 1.5 * (*(int*)cbGet(cData->diastolicPressRaw));
-    float pulseRate = 8 + 3 * (*(int*)cbGet(cData->pulseRateRaw));
+  float temp = 5 + 0.75 * (*(int*)cbGet(cData->temperatureRaw));
+  float systolic = 9 + 2 * (*(int*)cbGet(cData->systolicPressRaw));
+  float diastolic = 6 + 1.5 * (*(int*)cbGet(cData->diastolicPressRaw));
+  float pulseRate = 8 + 3 * (*(int*)cbGet(cData->pulseRateRaw));
 
-    cbAdd(cData->temperatureCorrected, &temp);
-    cbAdd(cData->systolicPressCorrected, &systolic);
-    cbAdd(cData->diastolicPressCorrected, &diastolic);
-    cbAdd(cData->pulseRateCorrected, &pulseRate);
-    
-    computeActive = false;  // remove self from task queue
+  cbAdd(cData->temperatureCorrected, &temp);
+  cbAdd(cData->systolicPressCorrected, &systolic);
+  cbAdd(cData->diastolicPressCorrected, &diastolic);
+  cbAdd(cData->pulseRateCorrected, &pulseRate);
+  
+  computeActive = false;  // remove self from task queue
 
 #if DEBUG
-    char num[30];
-    usnprintf(num, 30, "Corrected temp: %d", (unsigned int) temp);
-    RIT128x96x4StringDraw(num, 0, 50, 15);
+  char num[30];
+  usnprintf(num, 30, "Corrected temp: %d", (unsigned int) temp);
+  RIT128x96x4StringDraw(num, 0, 50, 15);
 
-    usnprintf(num, 30, "Corrected Syst: %d", (unsigned int) systolic);
-    RIT128x96x4StringDraw(num, 0, 60, 15);
+  usnprintf(num, 30, "Corrected Syst: %d", (unsigned int) systolic);
+  RIT128x96x4StringDraw(num, 0, 60, 15);
 
-    usnprintf(num, 30, "Corrected Dia: %d", (unsigned int) diastolic);
-    RIT128x96x4StringDraw(num, 0, 70, 15);
+  usnprintf(num, 30, "Corrected Dia: %d", (unsigned int) diastolic);
+  RIT128x96x4StringDraw(num, 0, 70, 15);
 
-    usnprintf(num, 30, "Corrected Pulse: %d", (unsigned int) pulseRate);
-    RIT128x96x4StringDraw(num, 0, 80, 15);
+  usnprintf(num, 30, "Corrected Pulse: %d", (unsigned int) pulseRate);
+  RIT128x96x4StringDraw(num, 0, 80, 15);
 #endif
-  }
 }
 
 

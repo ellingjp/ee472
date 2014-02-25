@@ -60,9 +60,6 @@ void initializeDisplayTask() {
 
 
 void displayRunFunction(void *dataptr) {
-  // only run on major cycle
-  //  if (IS_MAJOR_CYCLE) {   // on major cycle
-  
   static tBoolean onFirstRun = true;
    
   if (onFirstRun) {
