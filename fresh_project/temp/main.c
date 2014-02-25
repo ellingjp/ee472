@@ -7,6 +7,12 @@
 #include "ekgCapture.h"
 #include "schedule.h"
 
+// Used for debug display
+#if DEBUG
+	#include "drivers/rit128x96x4.h"
+	#include "utils/ustdlib.h"
+#endif 
+
 extern tBoolean computeActive;
 extern tBoolean serialActive;
 extern tBoolean ekgProcessActive;
@@ -26,4 +32,9 @@ void main () {
   GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_DIR_MODE_OUT);
       
         ekgCaptureTask.runTaskFunction(ekgCaptureTask.taskDataPtr);
+        #if DEBUG
+	char num[30];
+        usnprintf(num, 30, "done");
+    RIT128x96x4StringDraw(num, 0, 60, 15);
+#endif
 }

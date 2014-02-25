@@ -29,7 +29,7 @@
 
 #define BATT_INIT 200
 
-#define NUM_EKG_SAMPLES 256
+#define NUM_EKG_SAMPLES 6
 
 typedef struct global_data {
   CircularBuffer temperatureRaw;
