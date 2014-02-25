@@ -61,7 +61,8 @@ extern void vPortSVCHandler(void);
 extern void vT2InterruptHandler( void );
 extern void vT3InterruptHandler( void );
 extern void vEMAC_ISR( void );
-extern void Timer0IntHandler( void );
+//extern void Timer0IntHandler( void ); not sure where this is from
+extern void TimerAIntHandler( void ); // timebase.h
 
 //*****************************************************************************
 //
@@ -132,7 +133,7 @@ __root const uVectorEntry __vector_table[] @ ".intvec" =
     IntDefaultHandler,                      // ADC Sequence 2
     IntDefaultHandler,                      // ADC Sequence 3
     IntDefaultHandler,                      // Watchdog timer
-    IntDefaultHandler,                       // Timer 0 subtimer A
+    TimerAIntHandler,                       // Timer 0 subtimer A
     IntDefaultHandler,                      // Timer 0 subtimer B
     IntDefaultHandler,                      // Timer 1 subtimer A
     IntDefaultHandler,                      // Timer 1 subtimer B
