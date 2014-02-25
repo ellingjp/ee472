@@ -986,13 +986,13 @@
       <name>$PROJ_DIR$\..\lab4\code\startup.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\lab4\code\status.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\lab4\code\status.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\lab4\code\tcb.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\timebase.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\lab4\code\timebase.h</name>
@@ -1011,6 +1011,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\StellarisWare\boards\ek-lm3s8962\drivers\rit128x96x4.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\StellarisWare\utils\ustdlib.c</name>
     </file>
   </group>
   <group>

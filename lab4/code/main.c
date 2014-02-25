@@ -118,6 +118,10 @@ and the TCP/IP stack together cannot be accommodated with the 32K size limit. */
 // #include "lcd_message.h"
 // #include "bitmap.h"
 
+/* Tasks */
+#include "tcb.h"
+#include "startup.h"
+#include "measure.h"
 
 /*-----------------------------------------------------------*/
 
@@ -209,11 +213,14 @@ int main( void )
 {
     prvSetupHardware();
 
+    /* Startup task */
+    startup();
+    
     /* Start the tasks */
     RIT128x96x4Init(10000000);
     xTaskCreate(vTask1, "Measure Task", 100,NULL, 1,NULL);
     xTaskCreate(vTask2, "Compute Task", 100,NULL, 2,NULL);
-    xTaskCreate(vTask3, "Status Task", 100,NULL, 3,NULL);
+    //xTaskCreate(vTask3, "Status Task", 100,NULL, 3,NULL);
 
     /* Start the scheduler. */
     vTaskStartScheduler();
@@ -234,9 +241,8 @@ void vTask1(void *vParameters)
   char buf[50];
   while(1)
   {
-      sprintf(buf, "Task1 loop # %d", num_runs++);
-      RIT128x96x4StringDraw(buf, 0, 0, 15);
-      vTaskDelay(1000);
+      measureTask.runTaskFunction(measureTask.taskDataPtr);
+      vTaskDelay(2000);
   }
 }
 
