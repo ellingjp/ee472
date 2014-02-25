@@ -31,13 +31,13 @@
 #define EKG_CH ADC_CTL_CH0	// the EKG analog input channel
 #define EKG_PRIORITY 0	// the ekg sequence capture priority
 
-static int sampleNum; // counter for data collection
+static long sampleNum; // counter for data collection
 static tBoolean firstRun = true;
-static tBoolean ekgComplete = false;
+static tBoolean ekgComplete;
 
 // ekgCapture data structure. Internal to the task
 typedef struct ekgCaptureData {
- unsigned long (*ekgRawDataAddr);	// ADC output is 32-bit
+ unsigned int (*ekgRawDataAddr);	// ADC output is 32-bit
 }EKGCaptureData;
 
 void ekgCaptureRunFunction(void *ekgCaptureData);
@@ -52,15 +52,22 @@ TCB ekgCaptureTask = {&ekgCaptureRunFunction, &data}; // task interface
 void ADC0IntHandler() {
 #if DEBUG
 	char num[30];
-    usnprintf(num, 30, "interrupt handled ");
+    usnprintf(num, 30, "ints handled, %d ", sampleNum);
     RIT128x96x4StringDraw(num, 0, 20, 15);
 
 #endif
-	ADCIntClear(ADC0_BASE, EKG_SEQ);
+	ADCIntClear(ADC0_BASE, EKG_SEQ);	// clear the interrupt
 	if (sampleNum < NUM_EKG_SAMPLES) {
-	long samps = ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, (data.ekgRawDataAddr + sampleNum));
+	long samps = ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, (unsigned long*)(data.ekgRawDataAddr + sampleNum));
 	sampleNum = sampleNum + samps;	// increase by however many you got
+		ADCProcessorTrigger(ADC0_BASE, EKG_SEQ);
 	} else {
+		
+#if DEBUG
+    usnprintf(num, 30, "total ints %d ", sampleNum);
+    RIT128x96x4StringDraw(num, 0, 40, 15);
+
+#endif
 		ekgComplete = true;	// Done taking samples, let the task know
 		sampleNum = 0;
 	}
@@ -69,17 +76,12 @@ void ADC0IntHandler() {
 /* sets up task specific variables, etc
  */
 void initializeEKGTask() {
-
 #if DEBUG
-	char num[30];
 	RIT128x96x4Init(1000000);
-    usnprintf(num, 30, "Raw temp: b  ");
-    RIT128x96x4StringDraw(num, 0, 0, 15);
-
 #endif
-
-	data.ekgRawDataAddr = (unsigned long*) &(global.ekgRaw);
+	data.ekgRawDataAddr =  &(global.ekgRaw);
 	sampleNum = 0;
+	ekgComplete = false;
 
 	// TODO enable read from GPIO pin (move this and below to startup?)
 	
@@ -131,20 +133,19 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 
 	ADCIntEnable(ADC0_BASE, EKG_SEQ);
 	TimerEnable(TIMER0_BASE, EKG_TIMER);
-
-	while (!ADCIntStatus(ADC0_BASE, ADC_CTL_CH0, false)){ //!ekgComplete) {	// ADC is capturing signal measurements
-		ADCProcessorTrigger(ADC0_BASE, EKG_SEQ);
-#if DEBUG
-	char num[30];
-    usnprintf(num, 30, "Raw temp: %d ", TimerValueGet(TIMER0_BASE, EKG_TIMER));
-    RIT128x96x4StringDraw(num, 0, 0, 15);
-
-#endif
+ADCProcessorTrigger(ADC0_BASE, EKG_SEQ);
+	while (!ekgComplete) {	// ADC is capturing signal measurements
+//#if DEBUG
+//	char num[30];
+//    usnprintf(num, 30, " times waited: %d ", sampleNum);
+//    RIT128x96x4StringDraw(num, 0, 0, 15);
+//
+//#endif
 	}
 
 #if DEBUG
 	char num[30];
-    usnprintf(num, 30, "finished ADC get");
+    usnprintf(num, 30, "finished ADC get, %d", sampleNum);
     RIT128x96x4StringDraw(num, 0, 10, 15);
 
 #endif

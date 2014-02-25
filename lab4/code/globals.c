@@ -22,7 +22,7 @@ static float diastolicPressCorrectedArr[8];
 static float pulseRateCorrectedArr[8];
 static int ekgFrequencyResultArr[16];
 
-static int ekgRaw[NUM_EKG_SAMPLES] = {0};	// initialize all the elements to 0
+static int ekgRaw[NUM_EKG_SAMPLES];	// initialize all the elements to 0
 static int ekgTemp[NUM_EKG_SAMPLES] = {0};
 
 void initializeGlobalData() {
