@@ -50,29 +50,27 @@ TCB ekgCaptureTask = {&ekgCaptureRunFunction, &data}; // task interface
 // reads the ADC output FIFO to the current ekgRaw element. After taking enough
 // sample measurements, doesn't do anything, signals collection is complete.
 void ADC0IntHandler() {
-
-
 	if (sampleNum < NUM_EKG_SAMPLES) {
-          #if DEBUG
-	char num[30];
-    usnprintf(num, 30, "ints handled, %u ", sampleNum);
-    RIT128x96x4StringDraw(num, 0, 20, 15);
-#endif
-	long samps = ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, (unsigned long*)(data.ekgRawDataAddr + sampleNum));
-	sampleNum = sampleNum + samps;	// increase by however many you got
-                       
-	} else {
-		
+		long samps = ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, (unsigned long*)(data.ekgRawDataAddr + sampleNum));
+		sampleNum = sampleNum + samps;	// increase by however many you got
+
 #if DEBUG
-          char num[30];
-    usnprintf(num, 30, "total ints %u ", sampleNum);
-    RIT128x96x4StringDraw(num, 0, 40, 15);
+		char num[30];
+		usnprintf(num, 30, "ints handled, %d", sampleNum);
+		RIT128x96x4StringDraw(num, 0, 20, 15);
+#endif
+	} else {
+
+#if DEBUG
+		char num[30];
+		usnprintf(num, 30, "total ints %d", sampleNum);
+		RIT128x96x4StringDraw(num, 0, 30, 15);
 
 #endif
 		ekgComplete = true;	// Done taking samples, let the task know
-		sampleNum = 0;
+//		sampleNum = 0;
 	}
-                        	ADCIntClear(ADC0_BASE, EKG_SEQ);	// clear the interrupt
+	ADCIntClear(ADC0_BASE, EKG_SEQ);	// clear the interrupt
 }
 
 /* sets up task specific variables, etc
@@ -82,14 +80,12 @@ void initializeEKGTask() {
 	RIT128x96x4Init(1000000);
 #endif
 	data.ekgRawDataAddr =  &(global.ekgRaw);
-	sampleNum = 0;
-	ekgComplete = false;
+        sampleNum = 0;
+        ekgComplete = false;
 
 	// TODO enable read from GPIO pin (move this and below to startup?)
 	
 	// configure ADC sequence
-//	SysCtlClockSet(SYSCTL_SYSDIV_10 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN |
- //                  SYSCTL_XTAL_16MHZ);
 
   SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
     GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_7);
@@ -100,7 +96,7 @@ void initializeEKGTask() {
 	ADCSequenceConfigure(	// configure when we want to run
 			ADC0_BASE, 
 			EKG_SEQ, 
-			ADC_TRIGGER_PROCESSOR, 
+			ADC_TRIGGER_TIMER, 
 			EKG_PRIORITY); 
 	ADCSequenceStepConfigure(	// input ch, interrupt en, end seq
 			ADC0_BASE, 
@@ -118,9 +114,17 @@ void initializeEKGTask() {
 	
 	// configure timerA for periodic timing 
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
-	TimerConfigure(TIMER0_BASE, TIMER_CFG_16_BIT_PAIR | TIMER_CFG_A_PERIODIC );
+	TimerDisable(TIMER0_BASE, TIMER_A);
+	TimerConfigure(TIMER0_BASE, TIMER_CFG_16_BIT_PAIR | TIMER_CFG_A_PERIODIC);
 	TimerControlTrigger(TIMER0_BASE, TIMER_A, true);
 	TimerLoadSet(TIMER0_BASE, TIMER_A, SysCtlClockGet() * MINOR_CYCLE);
+#if DEBUG
+	char num[30];
+      long a =  TimerLoadGet(TIMER0_BASE, TIMER_A);
+        usnprintf(num, 30, "timer: %d", a);
+    RIT128x96x4StringDraw(num, 0, 50, 15);
+
+#endif
 }
 
 /*
@@ -135,28 +139,27 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 
 	ADCIntEnable(ADC0_BASE, EKG_SEQ);
 	TimerEnable(TIMER0_BASE, EKG_TIMER);
-ADCProcessorTrigger(ADC0_BASE, EKG_SEQ);
+//ADCProcessorTrigger(ADC0_BASE, EKG_SEQ);
 	while (!ekgComplete) {	// ADC is capturing signal measurements
-           ADCProcessorTrigger(ADC0_BASE, EKG_SEQ);
+//           ADCProcessorTrigger(ADC0_BASE, EKG_SEQ);
 //#if DEBUG
 //	char num[30];
-//    usnprintf(num, 30, " times waited: %d ", sampleNum);
-//    RIT128x96x4StringDraw(num, 0, 0, 15);
+//    usnprintf(num, 30, "running %d", sampleNum);
+//    RIT128x96x4StringDraw(num, 0, 40, 15);
 //
 //#endif
 	}
 
+	TimerDisable(TIMER0_BASE, EKG_TIMER);
+	ADCIntDisable(ADC0_BASE, EKG_SEQ); 
+
+	ekgProcessActive = true;	// we want to process our measurement
 #if DEBUG
 	char num[30];
     usnprintf(num, 30, "finished ADC get, %d", sampleNum);
     RIT128x96x4StringDraw(num, 0, 10, 15);
 
 #endif
-	TimerDisable(TIMER0_BASE, EKG_TIMER);
-	ADCIntDisable(ADC0_BASE, EKG_SEQ); 
-
-	ekgProcessActive = true;	// we want to process our measurement
-
 }
 
 /* pseudo code:
