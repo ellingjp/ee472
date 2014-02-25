@@ -7,13 +7,15 @@
  * is responsible for running tasks on a specified
  * schedule.
  */
+#include "FreeRTOS.h"
+#include "task.h"
 
 #include "inc\hw_types.h"
 
 // globally setable variables
-extern tBoolean computeActive;	
-extern tBoolean serialActive;
-extern tBoolean ekgProcessActive;
+extern xTaskHandle computeHandle;	
+extern xTaskHandle serialHandle;
+extern xTaskHandle ekgProcessHandle;
 
 
 /*
