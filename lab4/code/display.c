@@ -51,11 +51,6 @@ void initializeDisplayTask() {
   data.scroll = &(global.scroll);
   data.alarmAcknowledge = &(global.alarmAcknowledge);
   data.select = &(global.select);
-
-
-  // Load TCB
-  displayTask.runTaskFunction = &displayRunFunction;
-  displayTask.taskDataPtr = &data;
 }
 
 
