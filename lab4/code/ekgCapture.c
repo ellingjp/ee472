@@ -7,26 +7,35 @@
  * buffer.
  */
 
-#include "driverlib/hw_types.h"
-#include "driverlib/hw_memmap.h"
+#include "inc/hw_types.h"
+#include "inc/hw_memmap.h"
 #include "driverlib/adc.h"	// for ADC use
+#include "driverlib/timer.h"	// for hw timer use
 
 #include "schedule.h"
 #include "globals.h"
 #include "ekgCapture.h"
 
+// Used for debug display
+#if DEBUG
+	#include "drivers/rit128x96x4.h"
+	#include "utils/ustdlib.h"
+#endif 
+
 #define SAMPLE_PERIOD (1 / 9375)	// # seconds between taking samples to get a good measure of < 3750 Hz
 #define EKG_TIMER TIMER_A	// the timer used for EKG sample collection
 #define EKG_SEQ 0	// The sequence number assigned to the ekg sensor
 #define EKG_CH ADC_CTL_CH0	// the EKG analog input channel
+#define EKG_PRIORITY 0	// the ekg sequence capture priority
 
 static int sampleNum; // counter for data collection
 static tBoolean firstRun = true;
+static tBoolean ekgComplete = false;
 
 // ekgCapture data structure. Internal to the task
 typedef struct ekgCaptureData {
- unsigned int[NUM_EKG_SAMPLES] *ekgRawData;	// ADC output is 32-bit
-}EKGCaptureData
+ unsigned int (*ekgRawData)[NUM_EKG_SAMPLES];	// ADC output is 32-bit
+}EKGCaptureData;
 
 void ekgCaptureRunFunction(void *ekgCaptureData);
 
@@ -34,21 +43,23 @@ static EKGCaptureData data; 	// the interal data
 TCB ekgCaptureTask = {&ekgCaptureRunFunction, &data}; // task interface
 
 
-// reads the ADC output FIFO to the current ekgRaw element. After taking enough sample measurements, doesn't do anything, signals collection is complete.
+// reads the ADC output FIFO to the current ekgRaw element. After taking enough
+// sample measurements, doesn't do anything, signals collection is complete.
 void ADCIntHandler() {
 	ADCIntClear(ADC_BASE, EKG_SEQ);
 	if (sampleNum < NUM_EKG_SAMPLES) {
-	long samps = ADCSequenceDataGet(ADC_BASE, EKG_SEQ, (ekgRawData + sampleNum));
+	long samps = ADCSequenceDataGet(ADC_BASE, EKG_SEQ, (data.ekgRawData + sampleNum));
 	sampleNum = sampleNum + samps;	// increase by however many you got
 	} else {
 		ekgComplete = true;	// Done taking samples, let the task know
+		sampleNum = 0;
 	}
 }
 
 /* sets up task specific variables, etc
  */
 void initializeEKGTask() {
-	data.ekgRawData = &(global.ekgRawData);
+	data.ekgRawData = &(global.ekgRaw);
 	sampleNum = 0;
 
 	// TODO enable read from GPIO pin (move this and below to startup?)
@@ -65,7 +76,7 @@ void initializeEKGTask() {
 	ADCSequenceStepConfigure(	// input ch, interrupt en, end seq
 			ADC_BASE, 
 			EKG_SEQ, 
-			0, 
+			0,	// we're only using the first step
 			EKG_CH | ADC_CTL_IE | ADC_CTL_END);	
 	ADCSequenceEnable(ADC_BASE, EKG_SEQ);
 	// enable ADC peripheral clock
@@ -87,7 +98,7 @@ void initializeEKGTask() {
  * the results into a buffer
  */
 void ekgCaptureRunFunction(void *ekgCaptureData) {
-	if firstRun {
+	if (firstRun) {
 		firstRun = false;
 		initializeEKGTask();
 	}
@@ -102,6 +113,13 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 	ADCIntDisable(ADC_BASE, EKG_SEQ); 
 
 	ekgProcessActive = true;	// we want to process our measurement
+
+#if DEBUG
+	char num[30];	
+    usnprintf(num, 30, "Raw temp: %d  ", ekgComplete);
+    RIT128x96x4StringDraw(num, 0, 0, 15);
+
+#endif
 }
 
 /* pseudo code:
