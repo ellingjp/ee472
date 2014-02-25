@@ -63,6 +63,7 @@ extern void vT3InterruptHandler( void );
 extern void vEMAC_ISR( void );
 //extern void Timer0IntHandler( void ); not sure where this is from
 extern void TimerAIntHandler( void ); // timebase.h
+extern void ADC0IntHandler(void);	// ADC0 -- for EKG sensor
 
 //*****************************************************************************
 //
@@ -128,7 +129,7 @@ __root const uVectorEntry __vector_table[] @ ".intvec" =
     IntDefaultHandler,                      // PWM Generator 1
     IntDefaultHandler,                      // PWM Generator 2
     IntDefaultHandler,                      // Quadrature Encoder
-    IntDefaultHandler,                      // ADC Sequence 0
+    ADC0IntHandler,                      // ADC Sequence 0
     IntDefaultHandler,                      // ADC Sequence 1
     IntDefaultHandler,                      // ADC Sequence 2
     IntDefaultHandler,                      // ADC Sequence 3

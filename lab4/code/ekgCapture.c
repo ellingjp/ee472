@@ -31,7 +31,7 @@
 #define EKG_CH ADC_CTL_CH0	// the EKG analog input channel
 #define EKG_PRIORITY 0	// the ekg sequence capture priority
 
-static long sampleNum; // counter for data collection
+static unsigned long sampleNum; // counter for data collection
 static tBoolean firstRun = true;
 static tBoolean ekgComplete;
 
@@ -50,27 +50,29 @@ TCB ekgCaptureTask = {&ekgCaptureRunFunction, &data}; // task interface
 // reads the ADC output FIFO to the current ekgRaw element. After taking enough
 // sample measurements, doesn't do anything, signals collection is complete.
 void ADC0IntHandler() {
-#if DEBUG
-	char num[30];
-    usnprintf(num, 30, "ints handled, %d ", sampleNum);
-    RIT128x96x4StringDraw(num, 0, 20, 15);
 
-#endif
-	ADCIntClear(ADC0_BASE, EKG_SEQ);	// clear the interrupt
+
 	if (sampleNum < NUM_EKG_SAMPLES) {
+          #if DEBUG
+	char num[30];
+    usnprintf(num, 30, "ints handled, %u ", sampleNum);
+    RIT128x96x4StringDraw(num, 0, 20, 15);
+#endif
 	long samps = ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, (unsigned long*)(data.ekgRawDataAddr + sampleNum));
 	sampleNum = sampleNum + samps;	// increase by however many you got
-		ADCProcessorTrigger(ADC0_BASE, EKG_SEQ);
+                       
 	} else {
 		
 #if DEBUG
-    usnprintf(num, 30, "total ints %d ", sampleNum);
+          char num[30];
+    usnprintf(num, 30, "total ints %u ", sampleNum);
     RIT128x96x4StringDraw(num, 0, 40, 15);
 
 #endif
 		ekgComplete = true;	// Done taking samples, let the task know
 		sampleNum = 0;
 	}
+                        	ADCIntClear(ADC0_BASE, EKG_SEQ);	// clear the interrupt
 }
 
 /* sets up task specific variables, etc
@@ -105,7 +107,7 @@ void initializeEKGTask() {
 			EKG_SEQ, 
 			0,	// we're only using the first step
 			EKG_CH | ADC_CTL_IE | ADC_CTL_END);	
-	IntEnable(INT_ADC0);
+	IntEnable(INT_ADC0SS0);
 	ADCSequenceEnable(ADC0_BASE, EKG_SEQ);
 	// enable ADC peripheral clock
 	// set ADC sample rate
@@ -135,6 +137,7 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 	TimerEnable(TIMER0_BASE, EKG_TIMER);
 ADCProcessorTrigger(ADC0_BASE, EKG_SEQ);
 	while (!ekgComplete) {	// ADC is capturing signal measurements
+           ADCProcessorTrigger(ADC0_BASE, EKG_SEQ);
 //#if DEBUG
 //	char num[30];
 //    usnprintf(num, 30, " times waited: %d ", sampleNum);

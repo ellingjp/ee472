@@ -21,8 +21,6 @@ void main () {
 	startup();
           SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);        // bank C
 
-
-
   // configure the pin C5 for 4mA output
   GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_5, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
   GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_DIR_MODE_OUT);
