@@ -22,24 +22,13 @@ void SysTickIntHandler (void) {
 //  runSchedule = true;
 }
 
-/* 
- * configure the hw interrupt for minor cycle
- */
-void initializeHWCounter() {
-SysTickPeriodSet(SysCtlClockGet() * MINOR_CYCLE / 1000);  // set timer period
-
-// enable interrupts (master)
-IntMasterEnable();	// this may be redundant, consider moving
-SysTickIntEnable(); 	// enable systick interrupt
-SysTickEnable();	// enable systic counter
-}
-
 
 /*
  * Initializes hw counter ans system state variables
  */
 void startup() {
-  initializeHWCounter();
+  IntMasterEnable();
+  initializeTimebase();
   
   // Initialize global data
   initializeGlobalData();   // from globals.h
