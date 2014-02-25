@@ -20,8 +20,4 @@ extern tBoolean ekgProcessActive;
  * Must be called before runTasks()
  * Initializes schedule required data structures
  */
-void initializeQueue();
-
-
-/* Run all the tasks in the queue, delay minor cycle */
-void runTasks();
+//void initializeQueue();
