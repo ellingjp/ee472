@@ -118,10 +118,21 @@ and the TCP/IP stack together cannot be accommodated with the 32K size limit. */
 // #include "lcd_message.h"
 // #include "bitmap.h"
 
+
+#include "timebase.h"
+#include "schedule.h"
+
 /* Tasks */
 #include "tcb.h"
 #include "startup.h"
 #include "measure.h"
+#include "compute.h"
+#include "display.h"
+#include "warning.h"
+#include "keypad.h"
+#include "serial.h"
+#include "status.h"
+#include "keyPad.h"
 
 /*-----------------------------------------------------------*/
 
@@ -183,15 +194,14 @@ static void prvSetupHardware( void );
 void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed portCHAR *pcTaskName );
 void vApplicationTickHook( void );
 
-/*
-  three dummy tasks of different priorities that simply run, announce 
-  themselves, then sleep
-*/
-
-void vTask1(void *vParameters);
-void vTask2(void *vParameters);
-void vTask3(void *vParameters);
-
+/* The tasks */
+void measure(void *vParameters);
+void compute(void *vParameters);
+void display(void *vParameters);
+void keyPad(void *vParameters);
+void warning(void *vParameters);
+void serial(void *vParameters);
+void status(void *vParameters);
 
 /*-----------------------------------------------------------*/
 
@@ -218,9 +228,13 @@ int main( void )
     
     /* Start the tasks */
     RIT128x96x4Init(10000000);
-    xTaskCreate(vTask1, "Measure Task", 100,NULL, 1,NULL);
-    xTaskCreate(vTask2, "Compute Task", 100,NULL, 2,NULL);
-    //xTaskCreate(vTask3, "Status Task", 100,NULL, 3,NULL);
+    xTaskCreate(measure, "measure task", 100,NULL, 2,NULL);
+    xTaskCreate(compute, "compute task", 100,NULL, 3,NULL);
+    xTaskCreate(display, "display task", 100,NULL, 5,NULL);
+    xTaskCreate(keyPad, "keyPad task", 100,NULL, 4,NULL);
+    xTaskCreate(warning, "warning task", 100,NULL, 5,NULL);
+    xTaskCreate(serial, "serial task", 100,NULL, 5,NULL);
+    xTaskCreate(status, "status task", 100,NULL, 1,NULL);
 
     /* Start the scheduler. */
     vTaskStartScheduler();
@@ -234,41 +248,66 @@ int main( void )
   three dummy tasks
 */
 
-void vTask1(void *vParameters)
+void measure(void *vParameters)
 {
-  static unsigned int num_runs = 0;
-  
-  char buf[50];
   while(1)
   {
       measureTask.runTaskFunction(measureTask.taskDataPtr);
-      vTaskDelay(2000);
+      vTaskDelay(MINOR_CYCLE);
   }
 }
 
-void vTask2(void *vParameters)
+void compute(void *vParameters)
 {
-  static unsigned int num_runs = 0;
-  
-  char buf[50];
   while(1)
   {
-      sprintf(buf, "Task2 loop # %d", num_runs++);
-      RIT128x96x4StringDraw(buf, 0, 10, 15);
-      vTaskDelay(2000);
+      computeTask.runTaskFunction(computeTask.taskDataPtr);
+      vTaskDelay(MINOR_CYCLE);
   }
 }
 
-void vTask3(void *vParameters)
+void keyPad(void *vParameters)
 {
-  static unsigned int num_runs = 0;
-  
-  char buf[50];
   while(1)
   {
-      sprintf(buf, "Task3 loop # %d", num_runs++);
-      RIT128x96x4StringDraw(buf, 0, 20, 15);
-      vTaskDelay(3000);
+      keyPadTask.runTaskFunction(keyPadTask.taskDataPtr);
+      vTaskDelay(MINOR_CYCLE);
+  }
+}
+
+void display(void *vParameters)
+{
+  while(1)
+  {
+      displayTask.runTaskFunction(displayTask.taskDataPtr);
+      vTaskDelay(MINOR_CYCLE);
+  }
+}
+
+void warning(void *vParameters)
+{
+  while(1)
+  {
+      warningTask.runTaskFunction(warningTask.taskDataPtr);
+      vTaskDelay(MINOR_CYCLE);
+  }
+}
+
+void serial(void *vParameters)
+{
+  while(1)
+  {
+      serialTask.runTaskFunction(serialTask.taskDataPtr);
+      vTaskDelay(MINOR_CYCLE);
+  }
+}
+
+void status(void *vParameters)
+{
+  while(1)
+  {
+      statusTask.runTaskFunction(statusTask.taskDataPtr);
+      vTaskDelay(MINOR_CYCLE);
   }
 }
 
