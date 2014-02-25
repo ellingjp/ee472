@@ -77,7 +77,7 @@ void computeRunFunction(void *computeData) {
   cbAdd(cData->diastolicPressCorrected, &diastolic);
   cbAdd(cData->pulseRateCorrected, &pulseRate);
   
-  computeActive = false;  // remove self from task queue
+  vTaskSuspend(NULL);  // suspend self
 
 #if DEBUG
   char num[30];
