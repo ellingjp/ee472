@@ -161,6 +161,7 @@ void PulseRateISR(void) {
 
 void measureRunFunction(void *dataptr) {
   static tBoolean onFirstRun = true;
+  static int pulse_start_time = 0;
   static int rate;
   MeasureData *mData = (MeasureData *) dataptr;
 
@@ -168,37 +169,41 @@ void measureRunFunction(void *dataptr) {
     initializeMeasureTask();
     rate = *(int*) cbGet(mData->pulseRateRaw);
     onFirstRun = false;
+    pulse_start_time = minor_cycle_ctr;
   }
   
   // capture pulse rate
-  if (IS_PULSE_CYCLE) {
+  if (timeHasPassed(pulse_start_time, PULSE_CYCLE)) {
     // Divide by two so raw pulse rate matches frequency
     rate = pulseRate/2;
     pulseRate = 0;
+    
+    // log current time
+    pulse_start_time = minor_cycle_ctr;
   }
   
 //	if(measureSelect == 0 || measureSelect == 1)
-//	{
-//		setTemp(mData->temperatureRaw);
-//    }
+	{
+		setTemp(mData->temperatureRaw);
+    }
 //	if(measureSelect == 0 || measureSelect == 2)
-//	{
-//		setBloodPress(mData->systolicPressRaw, mData->diastolicPressRaw);
-//	}
+	{
+		setBloodPress(mData->systolicPressRaw, mData->diastolicPressRaw);
+	}
 //	if(measureSelect == 0 || measureSelect == 3)
-//	{
-//      int prev = *(int*) cbGet(mData->pulseRateRaw);
-//      
-//      // Only save if +- 15%
-//      if (rate < prev*0.85 || rate > prev*1.15) {
-//        cbAdd(mData->pulseRateRaw, (void *)&rate);
-//      }
-//	}
+	{
+      int prev = *(int*) cbGet(mData->pulseRateRaw);
+      
+      // Only save if +- 15%
+      if (rate < prev*0.85 || rate > prev*1.15) {
+        cbAdd(mData->pulseRateRaw, (void *)&rate);
+      }
+	}
 //	if(measureSelect == 0 || measureSelect == 4)
-//	{
-//		//EKG stuff
-//	}
-//    computeActive = true;   // run the compute task
+	{
+		//EKG stuff
+	}
+    computeActive = true;   // run the compute task
      
 #if DEBUG
     char num[30];

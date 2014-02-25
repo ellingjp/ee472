@@ -35,6 +35,10 @@ void initializeTimebase() {
 
 }
 
+tBoolean timeHasPassed(int start_time, int length) {
+  return (minor_cycle_ctr - start_time > length);
+}
+
 void TimerAIntHandler(void) {
   minor_cycle_ctr++;
   
