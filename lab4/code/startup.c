@@ -33,9 +33,9 @@ void startup() {
   // Initialize global data
   initializeGlobalData();   // from globals.h
 
-  computeActive = false;	// neither serial or compute task runs at start up
-  serialActive = false;
-  ekgProcessActive = false;
+  //computeActive = false;	// neither serial or compute task runs at start up
+  //serialActive = false;
+  //ekgProcessActive = false;
 
 //  initializeQueue(); // start up task queue with basic tasks
 }
