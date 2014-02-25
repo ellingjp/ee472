@@ -284,9 +284,9 @@ void warningRunFunction(void *dataptr) {
 
   // activate the remote terminal task if in ANY warn or alarm state
   if (NONE == wState && OFF == aState)
-    serialActive = false;
+    vTaskSuspend(serialHandle);
   else
-    serialActive = true;
+    vTaskResume(serialHandle);
 
   // battery state indicator
   if (bState == LOW) {
