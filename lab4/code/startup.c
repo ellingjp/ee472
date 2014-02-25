@@ -19,7 +19,7 @@
  */
 void SysTickIntHandler (void) {
   minor_cycle_ctr = minor_cycle_ctr + 1;
-  runSchedule = true;
+//  runSchedule = true;
 }
 
 /* 
@@ -46,8 +46,8 @@ void startup() {
 
   computeActive = false;	// neither serial or compute task runs at start up
   serialActive = false;
-	ekgProcessActive = false;
+  ekgProcessActive = false;
 
-  initializeQueue(); // start up task queue with basic tasks
+//  initializeQueue(); // start up task queue with basic tasks
 }
 
