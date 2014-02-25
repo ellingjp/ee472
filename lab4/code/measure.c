@@ -203,7 +203,7 @@ void measureRunFunction(void *dataptr) {
 	{
 		//EKG stuff
 	}
-    computeActive = true;   // run the compute task
+    vTaskResume(computeHandle);   // run the compute task
      
 #if DEBUG
     char num[30];
