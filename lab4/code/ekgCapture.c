@@ -12,6 +12,7 @@
 #include "driverlib/adc.h"	// for ADC use
 #include "driverlib/timer.h"	// for hw timer use
 #include "driverlib/interrupt.h"
+#include "inc/hw_ints.h"
 
 #include "schedule.h"
 #include "globals.h"
@@ -49,13 +50,13 @@ TCB ekgCaptureTask = {&ekgCaptureRunFunction, &data}; // task interface
 // reads the ADC output FIFO to the current ekgRaw element. After taking enough
 // sample measurements, doesn't do anything, signals collection is complete.
 void ADC0IntHandler() {
-
 #if DEBUG
 	char num[30];
     usnprintf(num, 30, "interrupt handled ");
     RIT128x96x4StringDraw(num, 0, 20, 15);
 
 #endif
+	ADCIntClear(ADC0_BASE, EKG_SEQ);
 	if (sampleNum < NUM_EKG_SAMPLES) {
 	long samps = ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, (data.ekgRawDataAddr + sampleNum));
 	sampleNum = sampleNum + samps;	// increase by however many you got
@@ -102,7 +103,7 @@ void initializeEKGTask() {
 			EKG_SEQ, 
 			0,	// we're only using the first step
 			EKG_CH | ADC_CTL_IE | ADC_CTL_END);	
-//	IntEnable(ADC0_BASE);
+	IntEnable(INT_ADC0);
 	ADCSequenceEnable(ADC0_BASE, EKG_SEQ);
 	// enable ADC peripheral clock
 	// set ADC sample rate
