@@ -25,6 +25,7 @@ typedef struct serialData {
   CircularBuffer *systolicPressCorrected;
   CircularBuffer *diastolicPressCorrected;
   CircularBuffer *pulseRateCorrected;
+  CircularBuffer *ekgFrequencyResult;
   unsigned short *batteryState;
 } SerialData;
 
@@ -42,7 +43,7 @@ void initializeSerialTask() {
   data.diastolicPressCorrected = &(global.diastolicPressCorrected);
   data.pulseRateCorrected = &(global.pulseRateCorrected);
   data.batteryState = &(global.batteryState);
-
+  data.ekgFrequencyResult = &(global.ekgFrequencyResult);
   // UART Stuff
   // Enable the peripherals used by this example.
   SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);

@@ -104,7 +104,7 @@ void keyPadRunFunction(void *keyPadData){
 			else if(RIGHT_SW)
 			{
 				*(kdata->select) = true;
-				*(kdata->measurementSelection) = (scroll %5) + 1;
+				*(kdata->measurementSelection) = (*(kdata->scroll) %5) + 1;
 			}
 				
             else if(LEFT_SW)

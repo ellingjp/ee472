@@ -21,6 +21,7 @@
 #include "driverlib/interrupt.h"
 #include "inc/hw_ints.h"
 #include "driverlib/debug.h"
+#include "driverlib/adc.h"
 
 // Used for debug display
 #if DEBUG
@@ -56,11 +57,11 @@ void initializeMeasureTask() {
   data.pulseRateRaw = &(global.pulseRateRaw);
   data.measureSelect = &(global.measurementSelection);
   
-  
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC1);
   
 	//setup for temperature sensor
-	ADCSequenceConfigure(ADC0_BASE, 1, ADC_TRIGGER_PROCESSOR, 0);
-	ADCSequenceStepConfigure(ADC0_BASE, 1, 0, ADC_CTL_TS | ADC_CTL_END | ADC_CTL_CH);
+	ADCSequenceConfigure(ADC1_BASE, 1, ADC_TRIGGER_PROCESSOR, 0);
+	ADCSequenceStepConfigure(ADC1_BASE, 1, 0, ADC_CTL_TS);
 
 
 
@@ -91,21 +92,21 @@ void initializeMeasureTask() {
 
 void setTemp(CircularBuffer *tbuf) {
 
-
+  int temp;
 	//
 	// Trigger the sample sequence.
 	//
-	ADCProcessorTrigger(ADC0_BASE, 1);
+	//ADCProcessorTrigger(ADC1_BASE, 1);
 	//
 	// Wait until the sample sequence has completed.
-	//
-	while(!ADCIntStatus(ADC0_BASE, 1, false))
-	{
-	}
+//	//
+	//while(!ADCIntStatus(ADC1_BASE, 1, false))
+	//{
+	//}
 	//
 	// Read the value from the ADC.
 	//
-	ADCSequenceDataGet(ADC0_BASE, 1, &temp);
+	//ADCSequenceDataGet(ADC1_BASE, 1, &temp);
 
 	
   cbAdd(tbuf, &temp);
@@ -185,7 +186,7 @@ void measureRunFunction(void *dataptr) {
   }
   
   // only run on major cycle
-
+  short measureSelect = *(mData->measureSelect);
 	if(measureSelect == 0 || measureSelect == 1)
 	{
 		setTemp(mData->temperatureRaw);
@@ -205,11 +206,11 @@ void measureRunFunction(void *dataptr) {
 	}
 	if(measureSelect == 0 || measureSelect == 4)
 	{
-		vTaskResume(ekgProcessHandle);
+//		vTaskResume(ekgProcessHandle);
 	}
 	else
 	{
-		vTaskSuspend(ekgProcessHandle);
+//		vTaskSuspend(ekgProcessHandle);
 	}
     vTaskResume(computeHandle);  // run the compute task
      
