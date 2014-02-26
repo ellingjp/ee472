@@ -185,7 +185,7 @@ void measureRunFunction(void *dataptr) {
   }
   
   // only run on major cycle
-  if (IS_MAJOR_CYCLE) {
+
 	if(measureSelect == 0 || measureSelect == 1)
 	{
 		setTemp(mData->temperatureRaw);
@@ -236,5 +236,4 @@ void measureRunFunction(void *dataptr) {
     usnprintf(num, 30, "Raw Batt: %d  ", batt);
     RIT128x96x4StringDraw(num, 0, 40, 15);
 #endif
-  }
 }
