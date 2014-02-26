@@ -71,6 +71,7 @@ void serialRunFunction(void *dataptr) {
   int sys = (int) *((float *)cbGet(sData->systolicPressCorrected));
   int dia = (int) *((float *)cbGet(sData->diastolicPressCorrected));
   int pulse = (int) (*(float *)cbGet(sData->pulseRateCorrected));
+  int EKG = (int) *((float *)cbGet(sData->ekgFrequencyResult));
   int batt = *(data.batteryState);
   
   char buf[40];
@@ -85,7 +86,10 @@ void serialRunFunction(void *dataptr) {
 
   usnprintf(buf, 40, "4. Pulse rate:\t\t%d BPM\n\n\r", pulse);
   UARTSend( (unsigned char *) buf, strlen(buf));
-
+  
+  usnprintf(buf, 40, "4. EKG:\t\t%d Hz\n\n\r", EKG);
+  UARTSend( (unsigned char *) buf, strlen(buf));
+  
   usnprintf(buf, 40, "5. Battery:\t\t%d\n\n\r", batt);
   UARTSend( (unsigned char *) buf, strlen(buf));
 
