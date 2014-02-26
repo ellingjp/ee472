@@ -67,7 +67,7 @@ void computeRunFunction(void *computeData) {
 
   ComputeData *cData = (ComputeData *) computeData;
 
-  float temp = 5 + 0.75 * (*(int*)cbGet(cData->temperatureRaw));
+  float temp = (5 + 0.75 * (*(int*)cbGet(cData->temperatureRaw)))/10;
   float systolic = 9 + 2 * (*(int*)cbGet(cData->systolicPressRaw));
   float diastolic = 6 + 1.5 * (*(int*)cbGet(cData->diastolicPressRaw));
   float pulseRate = 8 + 3 * (*(int*)cbGet(cData->pulseRateRaw));

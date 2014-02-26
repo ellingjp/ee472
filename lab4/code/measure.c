@@ -57,12 +57,13 @@ void initializeMeasureTask() {
   data.pulseRateRaw = &(global.pulseRateRaw);
   data.measureSelect = &(global.measurementSelection);
   
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC1);
-  
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
+    SysCtlADCSpeedSet(SYSCTL_ADCSPEED_250KSPS);
 	//setup for temperature sensor
-	ADCSequenceConfigure(ADC1_BASE, 1, ADC_TRIGGER_PROCESSOR, 0);
-	ADCSequenceStepConfigure(ADC1_BASE, 1, 0, ADC_CTL_TS);
-
+        ADCSequenceDisable(ADC0_BASE, 1);
+	ADCSequenceConfigure(ADC0_BASE, 1, ADC_TRIGGER_PROCESSOR, 1);
+	ADCSequenceStepConfigure(ADC0_BASE, 1, 0, ADC_CTL_IE | ADC_CTL_END | ADC_CTL_TS);
+        ADCSequenceEnable(ADC0_BASE, 1);
 
 
   /* Interrupt setup
@@ -96,17 +97,17 @@ void setTemp(CircularBuffer *tbuf) {
 	//
 	// Trigger the sample sequence.
 	//
-	//ADCProcessorTrigger(ADC1_BASE, 1);
+	ADCProcessorTrigger(ADC0_BASE, 1);
 	//
 	// Wait until the sample sequence has completed.
 //	//
-	//while(!ADCIntStatus(ADC1_BASE, 1, false))
-	//{
-	//}
+	while(!ADCIntStatus(ADC0_BASE, 1, false))
+	{
+	}
 	//
 	// Read the value from the ADC.
 	//
-	//ADCSequenceDataGet(ADC1_BASE, 1, &temp);
+	ADCSequenceDataGet(ADC0_BASE, 1, &temp);
 
 	
   cbAdd(tbuf, &temp);
