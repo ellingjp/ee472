@@ -8,6 +8,8 @@
  * Uses port PA4 for interrupt input for pulse rate
  */
 
+#define DEBUG_MEASURE 0
+
 #include "CircularBuffer.h"
 #include "globals.h"
 #include "timebase.h"
@@ -24,7 +26,7 @@
 #include "driverlib/adc.h"
 
 // Used for debug display
-#if DEBUG
+#if DEBUG_MEASURE
 #include "drivers/rit128x96x4.h"
 #include "utils/ustdlib.h"
 #endif 
@@ -65,7 +67,6 @@ void initializeMeasureTask() {
 	ADCSequenceStepConfigure(ADC0_BASE, 1, 0, ADC_CTL_IE | ADC_CTL_END | ADC_CTL_TS);
         ADCSequenceEnable(ADC0_BASE, 1);
 
-
   /* Interrupt setup
    * Note: using statically registered interrupts, because they're faster
    *       this means we aren't using the dynamic GPIOPortIntRegister() function,
@@ -92,7 +93,6 @@ void initializeMeasureTask() {
 }
 
 void setTemp(CircularBuffer *tbuf) {
-
   int temp;
 	//
 	// Trigger the sample sequence.
@@ -111,7 +111,6 @@ void setTemp(CircularBuffer *tbuf) {
 
 	
   cbAdd(tbuf, &temp);
-
 }
 
 void setBloodPress(CircularBuffer *spbuf, CircularBuffer *dpbuf) {
@@ -215,7 +214,7 @@ void measureRunFunction(void *dataptr) {
 	}
     vTaskResume(computeHandle);  // run the compute task
      
-#if DEBUG
+#if DEBUG_MEASURE
     char num[30];
     int temp = *(int *)cbGet(mData->temperatureRaw);
     int sys = *(int *)cbGet(mData->systolicPressRaw);
@@ -223,19 +222,22 @@ void measureRunFunction(void *dataptr) {
     int pulse = *(int *)cbGet(mData->pulseRateRaw);
     int batt = global.batteryState;
 
-    usnprintf(num, 30, "Raw temp: %d  ", temp);
+    usnprintf(num, 30, "<-- MEASURE DEBUG -->");
     RIT128x96x4StringDraw(num, 0, 0, 15);
-
-    usnprintf(num, 30, "Raw Syst: %d  ", sys);
+    
+    usnprintf(num, 30, "Raw temp: %d  ", temp);
     RIT128x96x4StringDraw(num, 0, 10, 15);
 
-    usnprintf(num, 30, "Raw Dia: %d  ", dia);
+    usnprintf(num, 30, "Raw Syst: %d  ", sys);
     RIT128x96x4StringDraw(num, 0, 20, 15);
 
-    usnprintf(num, 30, "Raw Pulse: %d  ", pulse);
+    usnprintf(num, 30, "Raw Dia: %d  ", dia);
     RIT128x96x4StringDraw(num, 0, 30, 15);
+
+    usnprintf(num, 30, "Raw Pulse: %d  ", pulse);
+    RIT128x96x4StringDraw(num, 0, 40, 15);
     
     usnprintf(num, 30, "Raw Batt: %d  ", batt);
-    RIT128x96x4StringDraw(num, 0, 40, 15);
+    RIT128x96x4StringDraw(num, 0, 50, 15);
 #endif
 }

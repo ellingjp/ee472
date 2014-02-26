@@ -14,8 +14,6 @@
 #include "driverlib/gpio.h"
 #include "driverlib/sysctl.h"
 
-#define DEBUG 1
-
 #define TEMP_RAW_INIT 80        // initial 80
 #define SYS_RAW_INIT 80        // initial 50
 #define DIA_RAW_INIT 50         // initial 50
