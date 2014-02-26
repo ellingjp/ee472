@@ -986,6 +986,9 @@
       <name>$PROJ_DIR$\..\lab4\code\startup.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\lab4\code\status.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\lab4\code\status.h</name>
     </file>
     <file>
