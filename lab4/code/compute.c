@@ -6,6 +6,8 @@
  * Implements compute.c
  */
 
+#define DEBUG_COMPUTE 0
+
 #include "CircularBuffer.h"
 #include "compute.h"
 #include "globals.h"
@@ -13,7 +15,7 @@
 #include "schedule.h"
 
 // Used for debug display
-#if DEBUG
+#if DEBUG_COMPUTE
 #include "drivers/rit128x96x4.h"
 #include "utils/ustdlib.h"
 #endif 
@@ -79,19 +81,23 @@ void computeRunFunction(void *computeData) {
   
   vTaskSuspend(NULL);  // suspend self
 
-#if DEBUG
+#if DEBUG_COMPUTE
   char num[30];
+  
+  usnprintf(num, 30, "<-- COMPUTE DEBUG -->");
+  RIT128x96x4StringDraw(num, 0, 0, 15);
+  
   usnprintf(num, 30, "Corrected temp: %d", (unsigned int) temp);
-  RIT128x96x4StringDraw(num, 0, 50, 15);
+  RIT128x96x4StringDraw(num, 0, 10, 15);
 
   usnprintf(num, 30, "Corrected Syst: %d", (unsigned int) systolic);
-  RIT128x96x4StringDraw(num, 0, 60, 15);
+  RIT128x96x4StringDraw(num, 0, 20, 15);
 
   usnprintf(num, 30, "Corrected Dia: %d", (unsigned int) diastolic);
-  RIT128x96x4StringDraw(num, 0, 70, 15);
+  RIT128x96x4StringDraw(num, 0, 30, 15);
 
   usnprintf(num, 30, "Corrected Pulse: %d", (unsigned int) pulseRate);
-  RIT128x96x4StringDraw(num, 0, 80, 15);
+  RIT128x96x4StringDraw(num, 0, 40, 15);
 #endif
 }
 

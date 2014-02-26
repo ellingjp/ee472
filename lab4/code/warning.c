@@ -6,12 +6,13 @@
  * Implements warning.h
  */
 
+#define DEBUG_WARNING 0
+
 #include "globals.h"
 #include "timebase.h"
 #include "warning.h"
 #include "schedule.h"
 #include "inc/hw_types.h"
-#include "drivers/rit128x96x4.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -21,7 +22,7 @@
 #include "driverlib/pwm.h"
 #include "driverlib/sysctl.h"
 
-#if DEBUG
+#if DEBUG_WARNING
 #include "drivers/rit128x96x4.h"
 #include "utils/ustdlib.h"
 #endif
@@ -316,33 +317,35 @@ void warningRunFunction(void *dataptr) {
     //GPIOPinWrite(GPIO_PORTC_BASE, LED_YELLOW, 0X00);  // for debug, kills led
   }
   
-#if DEBUG
+#if DEBUG_WARNING
     char num[30];
 
-
-    usnprintf(num, 30, "Cor temp: %d  ", (int) temp);
+    usnprintf(num, 30, "<-- WARNING DEBUG -->");
     RIT128x96x4StringDraw(num, 0, 0, 15);
 
-    usnprintf(num, 30, "Cor Syst: %d  ", (int) sysPress);
+    usnprintf(num, 30, "Cor temp: %d  ", (int) temp);
     RIT128x96x4StringDraw(num, 0, 10, 15);
 
-    usnprintf(num, 30, "Cor Dia: %d  ", (int) diaPress);
+    usnprintf(num, 30, "Cor Syst: %d  ", (int) sysPress);
     RIT128x96x4StringDraw(num, 0, 20, 15);
 
-    usnprintf(num, 30, "Cor Pulse: %d  ", (int) pulse);
+    usnprintf(num, 30, "Cor Dia: %d  ", (int) diaPress);
     RIT128x96x4StringDraw(num, 0, 30, 15);
+
+    usnprintf(num, 30, "Cor Pulse: %d  ", (int) pulse);
+    RIT128x96x4StringDraw(num, 0, 40, 15);
     
     usnprintf(num, 30, "Cor Batt: %d  ", (unsigned short) battery);
-    RIT128x96x4StringDraw(num, 0, 40, 15);
+    RIT128x96x4StringDraw(num, 0, 50, 15);
 
     
     usnprintf(num, 30, "aState: %d  ", aState);
-    RIT128x96x4StringDraw(num, 0, 50, 15);
+    RIT128x96x4StringDraw(num, 0, 60, 15);
 
     usnprintf(num, 30, "alarmAck: %d  ", global.alarmAcknowledge);
-    RIT128x96x4StringDraw(num, 0, 60, 15);
+    RIT128x96x4StringDraw(num, 0, 70, 15);
     
     usnprintf(num, 30, "pwmEn: %d  ", pwmEnable);
-    RIT128x96x4StringDraw(num, 0, 70, 15);
+    RIT128x96x4StringDraw(num, 0, 80, 15);
 #endif
 }

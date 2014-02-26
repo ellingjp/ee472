@@ -8,6 +8,8 @@
  * Uses port PA4 for interrupt input for pulse rate
  */
 
+#define DEBUG_MEASURE 0
+
 #include "CircularBuffer.h"
 #include "globals.h"
 #include "timebase.h"
@@ -24,7 +26,7 @@
 #include "driverlib/adc.h"
 
 // Used for debug display
-#if DEBUG
+#if DEBUG_MEASURE
 #include "drivers/rit128x96x4.h"
 #include "utils/ustdlib.h"
 #endif 
@@ -57,11 +59,11 @@ void initializeMeasureTask() {
   data.pulseRateRaw = &(global.pulseRateRaw);
   data.measureSelect = &(global.measurementSelection);
   
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC1);
-  
-	//setup for temperature sensor
-	ADCSequenceConfigure(ADC1_BASE, 1, ADC_TRIGGER_PROCESSOR, 0);
-	ADCSequenceStepConfigure(ADC1_BASE, 1, 0, ADC_CTL_TS);
+//    SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC1);
+//  
+//	//setup for temperature sensor
+//	ADCSequenceConfigure(ADC1_BASE, 1, ADC_TRIGGER_PROCESSOR, 0);
+//	ADCSequenceStepConfigure(ADC1_BASE, 1, 0, ADC_CTL_TS);
 
 
 
@@ -92,24 +94,24 @@ void initializeMeasureTask() {
 
 void setTemp(CircularBuffer *tbuf) {
 
-  int temp;
-	//
-	// Trigger the sample sequence.
-	//
-	//ADCProcessorTrigger(ADC1_BASE, 1);
-	//
-	// Wait until the sample sequence has completed.
+//  int temp;
 //	//
-	//while(!ADCIntStatus(ADC1_BASE, 1, false))
-	//{
-	//}
-	//
-	// Read the value from the ADC.
-	//
-	//ADCSequenceDataGet(ADC1_BASE, 1, &temp);
-
-	
-  cbAdd(tbuf, &temp);
+//	// Trigger the sample sequence.
+//	//
+//	//ADCProcessorTrigger(ADC1_BASE, 1);
+//	//
+//	// Wait until the sample sequence has completed.
+////	//
+//	//while(!ADCIntStatus(ADC1_BASE, 1, false))
+//	//{
+//	//}
+//	//
+//	// Read the value from the ADC.
+//	//
+//	//ADCSequenceDataGet(ADC1_BASE, 1, &temp);
+//
+//	
+//  cbAdd(tbuf, &temp);
 
 }
 
@@ -214,7 +216,7 @@ void measureRunFunction(void *dataptr) {
 	}
     vTaskResume(computeHandle);  // run the compute task
      
-#if DEBUG
+#if DEBUG_MEASURE
     char num[30];
     int temp = *(int *)cbGet(mData->temperatureRaw);
     int sys = *(int *)cbGet(mData->systolicPressRaw);
@@ -222,19 +224,22 @@ void measureRunFunction(void *dataptr) {
     int pulse = *(int *)cbGet(mData->pulseRateRaw);
     int batt = global.batteryState;
 
-    usnprintf(num, 30, "Raw temp: %d  ", temp);
+    usnprintf(num, 30, "<-- MEASURE DEBUG -->");
     RIT128x96x4StringDraw(num, 0, 0, 15);
-
-    usnprintf(num, 30, "Raw Syst: %d  ", sys);
+    
+    usnprintf(num, 30, "Raw temp: %d  ", temp);
     RIT128x96x4StringDraw(num, 0, 10, 15);
 
-    usnprintf(num, 30, "Raw Dia: %d  ", dia);
+    usnprintf(num, 30, "Raw Syst: %d  ", sys);
     RIT128x96x4StringDraw(num, 0, 20, 15);
 
-    usnprintf(num, 30, "Raw Pulse: %d  ", pulse);
+    usnprintf(num, 30, "Raw Dia: %d  ", dia);
     RIT128x96x4StringDraw(num, 0, 30, 15);
+
+    usnprintf(num, 30, "Raw Pulse: %d  ", pulse);
+    RIT128x96x4StringDraw(num, 0, 40, 15);
     
     usnprintf(num, 30, "Raw Batt: %d  ", batt);
-    RIT128x96x4StringDraw(num, 0, 40, 15);
+    RIT128x96x4StringDraw(num, 0, 50, 15);
 #endif
 }
