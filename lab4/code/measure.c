@@ -23,10 +23,10 @@
 #include "driverlib/debug.h"
 
 // Used for debug display
-//#if DEBUG
+#if DEBUG
 #include "drivers/rit128x96x4.h"
-#include "ustdlib.h"
-//#endif 
+#include "utils/ustdlib.h"
+#endif 
 
 // prototype for compiler
 void measureRunFunction(void *dataptr);  
@@ -38,7 +38,7 @@ typedef struct measureData {
   CircularBuffer *systolicPressRaw;
   CircularBuffer *diastolicPressRaw;
   CircularBuffer *pulseRateRaw;
-  unsigned short measureSelect;
+  unsigned short *measureSelect;
 } MeasureData;
 
 static int pulseRate = 0;
@@ -168,7 +168,6 @@ void PulseRateISR(void) {
 
 void measureRunFunction(void *dataptr) {
   static tBoolean onFirstRun = true;
-  static int pulse_start_time = 0;
   static int rate;
   MeasureData *mData = (MeasureData *) dataptr;
 
@@ -176,28 +175,26 @@ void measureRunFunction(void *dataptr) {
     initializeMeasureTask();
     rate = *(int*) cbGet(mData->pulseRateRaw);
     onFirstRun = false;
-    pulse_start_time = minor_cycle_ctr;
   }
   
   // capture pulse rate
-  if (timeHasPassed(pulse_start_time, PULSE_CYCLE)) {
+  if (IS_PULSE_CYCLE) {
     // Divide by two so raw pulse rate matches frequency
     rate = pulseRate/2;
     pulseRate = 0;
-    
-    // log current time
-    pulse_start_time = minor_cycle_ctr;
   }
   
-//	if(measureSelect == 0 || measureSelect == 1)
+  // only run on major cycle
+  if (IS_MAJOR_CYCLE) {
+	if(measureSelect == 0 || measureSelect == 1)
 	{
 		setTemp(mData->temperatureRaw);
     }
-//	if(measureSelect == 0 || measureSelect == 2)
+	if(measureSelect == 0 || measureSelect == 2)
 	{
 		setBloodPress(mData->systolicPressRaw, mData->diastolicPressRaw);
 	}
-//	if(measureSelect == 0 || measureSelect == 3)
+	if(measureSelect == 0 || measureSelect == 3)
 	{
       int prev = *(int*) cbGet(mData->pulseRateRaw);
       
@@ -206,7 +203,7 @@ void measureRunFunction(void *dataptr) {
         cbAdd(mData->pulseRateRaw, (void *)&rate);
       }
 	}
-//	if(measureSelect == 0 || measureSelect == 4)
+	if(measureSelect == 0 || measureSelect == 4)
 	{
 		EKGCaptureActive = true;
 	}
@@ -214,7 +211,7 @@ void measureRunFunction(void *dataptr) {
 	{
 		EKGCaptureActive = false;
 	}
-    vTaskResume(computeHandle);   // run the compute task
+    computeActive = true;   // run the compute task
      
 #if DEBUG
     char num[30];
@@ -239,4 +236,5 @@ void measureRunFunction(void *dataptr) {
     usnprintf(num, 30, "Raw Batt: %d  ", batt);
     RIT128x96x4StringDraw(num, 0, 40, 15);
 #endif
+  }
 }
