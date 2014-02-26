@@ -21,6 +21,7 @@ typedef struct oledDisplayData {
   CircularBuffer *systolicPressCorrected;
   CircularBuffer *diastolicPressCorrected;
   CircularBuffer *pulseRateCorrected;
+  CircularBuffer *ekgFrequencyResult;
   unsigned short *batteryState;
   unsigned short *mode;
   unsigned short *measurementSelection;
@@ -44,7 +45,7 @@ void initializeDisplayTask() {
   data.diastolicPressCorrected = &(global.diastolicPressCorrected);
   data.pulseRateCorrected = &(global.pulseRateCorrected);
   data.batteryState = &(global.batteryState);
-
+  data.ekgFrequencyResult = &(global.ekgFrequencyResult);
 
   data.mode = &(global.mode);
   data.measurementSelection = &(global.measurementSelection);  
@@ -80,33 +81,38 @@ void displayRunFunction(void *dataptr) {
       RIT128x96x4StringDraw("  Blood Pressure                      ", 0, 10, 15);
       RIT128x96x4StringDraw("  Temperature                         ", 0, 20, 15);
       RIT128x96x4StringDraw("  Pulse Rate                          ", 0, 30, 15);
-      RIT128x96x4StringDraw("  Battery                             ", 0, 40, 15);
-      RIT128x96x4StringDraw("                                      ", 0, 50, 15);
+      RIT128x96x4StringDraw("  EKG                                 ", 0, 40, 15);
+      RIT128x96x4StringDraw("  Battery                             ", 0, 50, 15);
       RIT128x96x4StringDraw("                                      ", 0, 60, 15);
-      RIT128x96x4StringDraw("->", 0, 10*((scroll%4+1)), 15);
+      RIT128x96x4StringDraw("->", 0, 10*((scroll%5+1)), 15);
     }
     else
     {
       RIT128x96x4StringDraw("                                      ", 0, 0, 15);    
-      if(0 == scroll%4)
+      if(0 == scroll%5)
         RIT128x96x4StringDraw("Blood Pressure:", 0, 0, 15);
-      else if(1 == scroll%4)
+      else if(1 == scroll%5)
         RIT128x96x4StringDraw("Temperature:", 0, 0, 15);
-      else if(2 == scroll%4)
+      else if(2 == scroll%5)
         RIT128x96x4StringDraw("Pulse Rate:", 0, 0, 15);
-      else if(3 == scroll%4)
+      else if(3 == scroll%5)
+        RIT128x96x4StringDraw("EKG:", 0, 0, 15);
+	  else if(4 == scroll%5)
         RIT128x96x4StringDraw("Battery:", 0, 0, 15);
+		
       else RIT128x96x4StringDraw("oops", 0, 0, 15);//just in case
 
 
 
-      if(0 == scroll%4)
+      if(0 == scroll%5)
         usnprintf(buf2,30, "Systolic: %d mm Hg ", (int) *( (float*) cbGet(dData->systolicPressCorrected)));
-      else if(1 == scroll%4)
+      else if(1 == scroll%5)
         usnprintf(buf2,30,"%d C ", (int) *( (float*) cbGet(dData->temperatureCorrected)));
-      else if(2 == scroll%4)
+      else if(2 == scroll%5)
         usnprintf(buf2,30, "%d BPM ", (int) *( (float*) cbGet(dData->pulseRateCorrected)));
-      else if(3 == scroll%4)
+	  else if(3 == scroll%5)
+        usnprintf(buf2,30, "%d Hz ", (int) *( (float*) cbGet(dData->ekgFrequencyResult)));
+      else if(4 == scroll%5)
         usnprintf(buf2,30, "%d %%  ", (int) *(dData->batteryState)/2);
       //else buf2 = "oops"; //just in case      
 
@@ -123,6 +129,7 @@ void displayRunFunction(void *dataptr) {
       RIT128x96x4StringDraw("                                      ", 0, 40, 15);
       RIT128x96x4StringDraw("                                      ", 0, 50, 15);
       RIT128x96x4StringDraw("                                      ", 0, 60, 15);
+	  RIT128x96x4StringDraw("                                      ", 0, 70, 15);
 
     }
   }
@@ -145,9 +152,12 @@ void displayRunFunction(void *dataptr) {
 
     usnprintf(num,40, "Pulse rate: %d BPM              ",(int) *( (float*) cbGet(dData->pulseRateCorrected)));
     RIT128x96x4StringDraw(num, 0, 50, 15);
+	
+	usnprintf(num,40, "EKG: %d Hz                      ",(int) *( (float*) cbGet(dData->ekgFrequencyResult)));
+    RIT128x96x4StringDraw(num, 0, 60, 15);
 
     usnprintf(num,40, "Battery: %d %%                 ",(int) *(dData->batteryState)/2);
-    RIT128x96x4StringDraw(num,0, 60,15);
+    RIT128x96x4StringDraw(num,0, 70,15);
   }
 #endif
 }

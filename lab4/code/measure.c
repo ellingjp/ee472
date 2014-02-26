@@ -38,6 +38,7 @@ typedef struct measureData {
   CircularBuffer *systolicPressRaw;
   CircularBuffer *diastolicPressRaw;
   CircularBuffer *pulseRateRaw;
+  unsigned short measureSelect;
 } MeasureData;
 
 static int pulseRate = 0;
@@ -53,6 +54,14 @@ void initializeMeasureTask() {
   data.systolicPressRaw = &(global.systolicPressRaw);
   data.diastolicPressRaw = &(global.diastolicPressRaw);
   data.pulseRateRaw = &(global.pulseRateRaw);
+  data.measureSelect = &(global.measurementSelection);
+  
+  
+  
+	//setup for temperature sensor
+	ADCSequenceConfigure(ADC0_BASE, 1, ADC_TRIGGER_PROCESSOR, 0);
+	ADCSequenceStepConfigure(ADC0_BASE, 1, 0, ADC_CTL_TS | ADC_CTL_END | ADC_CTL_CH);
+
 
 
   /* Interrupt setup
@@ -81,28 +90,26 @@ void initializeMeasureTask() {
 }
 
 void setTemp(CircularBuffer *tbuf) {
-  static unsigned int i = 0;
-  static tBoolean goingUp = true;
 
-  int temp = *(int *)cbGet(tbuf);
 
-  if (temp > 50)
-    goingUp = false;
-  else if (temp < 15)
-    goingUp = true;
+	//
+	// Trigger the sample sequence.
+	//
+	ADCProcessorTrigger(ADC0_BASE, 1);
+	//
+	// Wait until the sample sequence has completed.
+	//
+	while(!ADCIntStatus(ADC0_BASE, 1, false))
+	{
+	}
+	//
+	// Read the value from the ADC.
+	//
+	ADCSequenceDataGet(ADC0_BASE, 1, &temp);
 
-  if (goingUp) {
-    if (i%2==0) temp+=2;
-    else temp--;
-  }
-  else {
-    if (i%2==0) temp-=2;
-    else temp++;
-  }
-
+	
   cbAdd(tbuf, &temp);
 
-  i++;
 }
 
 void setBloodPress(CircularBuffer *spbuf, CircularBuffer *dpbuf) {
@@ -201,7 +208,11 @@ void measureRunFunction(void *dataptr) {
 	}
 //	if(measureSelect == 0 || measureSelect == 4)
 	{
-		//EKG stuff
+		EKGCaptureActive = true;
+	}
+	else
+	{
+		EKGCaptureActive = false;
 	}
     vTaskResume(computeHandle);   // run the compute task
      
