@@ -205,13 +205,13 @@ void measureRunFunction(void *dataptr) {
 	}
 	if(measureSelect == 0 || measureSelect == 4)
 	{
-		EKGCaptureActive = true;
+		vTaskResume(ekgProcessHandle);
 	}
 	else
 	{
-		EKGCaptureActive = false;
+		vTaskSuspend(ekgProcessHandle);
 	}
-    computeActive = true;   // run the compute task
+    vTaskResume(computeHandle);  // run the compute task
      
 #if DEBUG
     char num[30];
