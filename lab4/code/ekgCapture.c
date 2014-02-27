@@ -7,6 +7,8 @@
  * buffer.
  */
 
+#define DEBUG 1	// ekg task debug
+
 #include "inc/hw_types.h"
 #include "inc/hw_memmap.h"
 #include "driverlib/adc.h"	// for ADC use
@@ -67,7 +69,6 @@ void ADC0IntHandler() {
 		char num[30];
 		usnprintf(num, 30, "total ints %d", sampleNum);
 		RIT128x96x4StringDraw(num, 0, 0, 15);
-
 #endif
 		ekgComplete = true;	// Done taking samples, let the task know
 	}
@@ -84,12 +85,12 @@ void initializeEKGTask() {
         sampleNum = 0;
         ekgComplete = false;
 
-	// TODO enable read from GPIO pin (move this and below to startup?)
 		
-	// configure ADC sequence
+	// enable read from GPIO pin (move this and below to startup?)
   SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
     GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_7);
 
+	// configure ADC sequence
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
 	SysCtlADCSpeedSet(SYSCTL_ADCSPEED_500KSPS);
 	ADCSequenceDisable(ADC0_BASE, EKG_SEQ);
