@@ -27,7 +27,6 @@
 #include "utils/ustdlib.h"
 #endif 
 
-#define SAMPLE_FREQ  10000 //9375	// # sample frequency to get a good measure of < 3750 Hz
 #define EKG_TIMER TIMER_A	// the timer used for EKG sample collection
 #define EKG_SEQ 0	// The sequence number assigned to the ekg sensor
 #define EKG_CH ADC_CTL_CH0	// EKG analog input channel (ch0: pinE7, others: pinE4-6?)

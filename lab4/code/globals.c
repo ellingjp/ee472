@@ -23,7 +23,7 @@ static float pulseRateCorrectedArr[8];
 static int ekgFrequencyResultArr[16];
 
 static signed int ekgRaw[NUM_EKG_SAMPLES];	// initialize all the elements to 0
-static signed int ekgTemp[NUM_EKG_SAMPLES] = {0};
+static signed int ekgTemp[NUM_EKG_SAMPLES];
 
 void initializeGlobalData() {
   // Wrap the arrays
@@ -31,6 +31,7 @@ void initializeGlobalData() {
   global.systolicPressRaw = cbWrap(systolicPressRawArr, sizeof(int), 8);
   global.diastolicPressRaw = cbWrap(diastolicPressRawArr, sizeof(int), 8);
   global.pulseRateRaw = cbWrap(pulseRateRawArr, sizeof(int), 8);
+
 
   global.temperatureCorrected = cbWrap(temperatureCorrectedArr, sizeof(float), 8);
   global.systolicPressCorrected = cbWrap(systolicPressCorrectedArr, sizeof(float), 8);
