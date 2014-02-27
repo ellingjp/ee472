@@ -93,14 +93,14 @@ void initializeMeasureTask() {
 }
 
 void setTemp(CircularBuffer *tbuf) {
-  int temp;
+  int temp = 0;
 	//
 	// Trigger the sample sequence.
 	//
 	ADCProcessorTrigger(ADC0_BASE, 1);
 	//
 	// Wait until the sample sequence has completed.
-//	//
+	//
 	while(!ADCIntStatus(ADC0_BASE, 1, false))
 	{
 	}
