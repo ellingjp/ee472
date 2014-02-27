@@ -85,6 +85,7 @@ void displayRunFunction(void *dataptr) {
       RIT128x96x4StringDraw("  EKG                                 ", 0, 40, 15);
       RIT128x96x4StringDraw("  Battery                             ", 0, 50, 15);
       RIT128x96x4StringDraw("                                      ", 0, 60, 15);
+	  RIT128x96x4StringDraw("                                      ", 0, 70, 15);
       RIT128x96x4StringDraw("->", 0, 10*((scroll%5+1)), 15);
     }
     else
@@ -119,7 +120,7 @@ void displayRunFunction(void *dataptr) {
 
       RIT128x96x4StringDraw("                                      ", 0, 10, 15);
       RIT128x96x4StringDraw(buf2, 0, 10, 15);
-      if(0 == scroll%4)
+      if(0 == scroll%5)
       {
         usnprintf(buf2,30, "Diastolic: %d mm Hg        ", (int)*( (float*) cbGet(dData->diastolicPressCorrected)));
       
