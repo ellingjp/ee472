@@ -8,8 +8,8 @@
 
 #include "hw_types.h"
 
-#define MINOR_CYCLE 50      // minor cycle, in milliseconds
-#define MAJOR_CYCLE 20      // major cycle, in number of minor cycles
+#define MINOR_CYCLE 250      // minor cycle, in milliseconds
+#define MAJOR_CYCLE 4      // major cycle, in number of minor cycles
 #define PULSE_CYCLE 8       // pulse rate measurement time, in number of 
                             // minor cycles
 #define IS_PULSE_CYCLE (minor_cycle_ctr % (MAJOR_CYCLE * PULSE_CYCLE) == 0)

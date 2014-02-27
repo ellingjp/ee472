@@ -91,7 +91,7 @@ void serialRunFunction(void *dataptr) {
   usnprintf(buf, 40, "5. EKG:\t\t\t%d Hz\n\n\r", EKG);
   UARTSend( (unsigned char *) buf, strlen(buf));
   
-  usnprintf(buf, 40, "6. Battery:\t\t%d\n\n\r", batt);
+  usnprintf(buf, 40, "6. Battery:\t\t%d%%\n\n\r", batt/2);
   UARTSend( (unsigned char *) buf, strlen(buf));
 
   vTaskSuspend(NULL);   // suspend self
