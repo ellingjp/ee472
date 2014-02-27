@@ -61,14 +61,14 @@ void ADC0IntHandler() {
 //#if DEBUG
 //		char num[30];
 //		usnprintf(num, 30, "ints handled, %d", sampleNum);
-//		RIT128x96x4StringDraw(num, 0, 0, 15);
+//		RIT128x96x4StringDraw(num, 0, 20, 15);
 //#endif
 	} else {
 
 #if DEBUG
 		char num[30];
 		usnprintf(num, 30, "total ints %d", sampleNum);
-		RIT128x96x4StringDraw(num, 0, 0, 15);
+		RIT128x96x4StringDraw(num, 0, 10, 15);
 #endif
 		ekgComplete = true;	// Done taking samples, let the task know
 	}
@@ -80,6 +80,7 @@ void ADC0IntHandler() {
 void initializeEKGTask() {
 #if DEBUG
 	RIT128x96x4Init(1000000);
+	RIT128x96x4StringDraw("* EKGCapture Debug *", 0, 0, 15);
 #endif
 	data.ekgRawDataAddr =  &(global.ekgRaw);
         sampleNum = 0;
@@ -90,7 +91,7 @@ void initializeEKGTask() {
   SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
     GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_7);
 
-	// configure ADC sequence
+	// configure ADC sequence (See defines for whichadc/seq combo used)
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
 	SysCtlADCSpeedSet(SYSCTL_ADCSPEED_500KSPS);
 	ADCSequenceDisable(ADC0_BASE, EKG_SEQ);
@@ -117,7 +118,7 @@ void initializeEKGTask() {
 	char num[30];
       int a =  TimerLoadGet(TIMER0_BASE, TIMER_A);
         usnprintf(num, 30, "timer: %u c %d", a, sampleNum);
-    RIT128x96x4StringDraw(num, 0, 10, 15);
+    RIT128x96x4StringDraw(num, 0, 20, 15);
 
 #endif
 }
@@ -149,7 +150,7 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 #if DEBUG
 	char num[30];
     usnprintf(num, 30, "end ADC get: %d samples", sampleNum);
-    RIT128x96x4StringDraw(num, 0, 20, 15);
+    RIT128x96x4StringDraw(num, 0, 30, 15);
 
 #endif
 
@@ -159,5 +160,5 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 	int b = global.ekgRaw[1];
 	int c = (int) *(data.ekgRawDataAddr);
 	usnprintf(num, 30, "%d, %d, %d", a, b, c);
-	RIT128x96x4StringDraw(num, 3, 30, 15);
+	RIT128x96x4StringDraw(num, 3, 40, 15);
 }
