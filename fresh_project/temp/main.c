@@ -5,7 +5,8 @@
 #include "startup.h"
 #include "driverlib/sysctl.h"
 #include "ekgCapture.h"
-#include "schedule.h"
+#include "ekgProcess.h"
+//#include "schedule.h"
 
 // Used for debug display
 #if DEBUG
@@ -20,24 +21,32 @@ extern tBoolean ekgProcessActive;
 tBoolean ekgProcessActive;
 
 void main () {
- // SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | 
- //                SYSCTL_XTAL_8MHZ);
-  
-  // NOTE: actual clock speed is pll / 2/ div = 400M / 2/ 10
-  SysCtlClockSet(SYSCTL_SYSDIV_10 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_8MHZ); 
-    tBoolean ekgProcessActive = false;
-  
-	startup();
-          SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);        // bank C
+	// SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | 
+	//                SYSCTL_XTAL_8MHZ);
 
-  // configure the pin C5 for 4mA output
-  GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_5, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
-  GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_DIR_MODE_OUT);
-      
-        ekgCaptureTask.runTaskFunction(ekgCaptureTask.taskDataPtr);
-        #if DEBUG
+	// NOTE: actual clock speed is pll / 2/ div = 400M / 2/ 10
+	SysCtlClockSet(SYSCTL_SYSDIV_10 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_8MHZ); 
+	tBoolean ekgProcessActive = false;
+
+	startup();
+
+	// configure the pin C5 for 4mA output
+//	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);        // bank C
+//	GPIOPadConfigSet(GPIO_PORTC_BASE,GPIO_PIN_5, GPIO_STRENGTH_4MA, GPIO_PIN_TYPE_STD);
+//	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_5, GPIO_DIR_MODE_OUT);
+
+	ekgCaptureTask.runTaskFunction(ekgCaptureTask.taskDataPtr);
+
+#if DEBUG
 	char num[30];
-        usnprintf(num, 30, "done");
-    RIT128x96x4StringDraw(num, 0, 60, 15);
+	usnprintf(num, 30, "begin ekgProcess");
+	RIT128x96x4StringDraw(num, 0, 80, 15);
+#endif
+
+	ekgProcessTask.runTaskFunction(ekgProcessTask.taskDataPtr);
+	
+#if DEBUG
+	usnprintf(num, 30, "done");
+	RIT128x96x4StringDraw(num, 0, 80, 15);
 #endif
 }
