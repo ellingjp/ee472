@@ -83,7 +83,7 @@ void ekgProcessRunFunction(void *ekgProcessData) {
 	}
         
         
-	signed int max_index = optfft( global.ekgRaw, global.ekgTemp);
+	signed int max_index = optfft( data.ekgRawData, data.ekgImgData);
 	//post processing
 	int freq = (10000) * max_index / 8;
 

@@ -57,27 +57,27 @@ TCB ekgCaptureTask = {&ekgCaptureRunFunction, &data}; // task interface
 
 // reads the ADC output FIFO to the current ekgRaw element. After taking enough
 // sample measurements, doesn't do anything, signals collection is complete.
-//void ADC0IntHandler() {
-//	if (sampleNum < NUM_EKG_SAMPLES) {
-//		sampleNum++;
-//                unsigned long t[8];
-//		ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, &t[0]);//(data.ekgRawDataAddr + sampleNum));
-//                data.ekgRawDataAddr[sampleNum - 1] = (signed int) t[0];
-//                
-//#if DEBUG_EKG
-//		usnprintf(num, 30, "ints handled, %d", sampleNum);
-//		RIT128x96x4StringDraw(num, 0, 20, 15);
-//#endif
-//	} else {
-//#if DEBUG_EKG
-//		usnprintf(num, 30, "total ints %d/%d", sampleNum, NUM_EKG_SAMPLES);
-//		RIT128x96x4StringDraw(num, 0, 30, 15);
-//#endif
-//
-//		ekgComplete = true;	// Done taking samples, let the task know
-//	}
-//	ADCIntClear(ADC0_BASE, EKG_SEQ);	// clear the interrupt
-//}
+void ADC0IntHandler() {
+	if (sampleNum < NUM_EKG_SAMPLES) {
+		sampleNum++;
+                unsigned long t[8];
+		ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, &t[0]);//(data.ekgRawDataAddr + sampleNum));
+                data.ekgRawDataAddr[sampleNum - 1] = (signed int) t[0];
+                
+#if DEBUG_EKG
+		usnprintf(num, 30, "ints handled, %d", sampleNum);
+		RIT128x96x4StringDraw(num, 0, 20, 15);
+#endif
+	} else {
+#if DEBUG_EKG
+		usnprintf(num, 30, "total ints %d/%d", sampleNum, NUM_EKG_SAMPLES);
+		RIT128x96x4StringDraw(num, 0, 30, 15);
+#endif
+
+		ekgComplete = true;	// Done taking samples, let the task know
+	}
+	ADCIntClear(ADC0_BASE, EKG_SEQ);	// clear the interrupt
+}
 
 /* 
  * sets up task specific variables, etc
@@ -110,7 +110,7 @@ void initializeEKGTask() {
 			EKG_SEQ, 
 			0,	// we're only using the first step
 			EKG_CH | ADC_CTL_IE | ADC_CTL_END);	
-//	IntEnable(INT_ADC0SS0);
+	IntEnable(INT_ADC0SS0);
 	ADCSequenceEnable(ADC0_BASE, EKG_SEQ);
 
 	// configure timer0 (uses both 16-bit timers) for periodic timing 
@@ -143,40 +143,14 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 	ekgComplete = false;	// reset the adc counters
 	sampleNum = 0;
 
-//	ADCIntEnable(ADC0_BASE, EKG_SEQ);
+	ADCIntEnable(ADC0_BASE, EKG_SEQ);
 	TimerEnable(TIMER0_BASE, EKG_TIMER);
-	unsigned long t[8];
-	while(!ekgComplete) {
-ADCProcessorTrigger(ADC0_BASE, EKG_SEQ);
-char num[30];
-		while (!ADCIntStatus(ADC0_BASE, EKG_SEQ, false)) {	// ADC is capturing signal measurements
-		}
-		// INSERTED
 
-		if (sampleNum < NUM_EKG_SAMPLES) {
-			sampleNum++;
-			ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, &t[0]);//(data.ekgRawDataAddr + sampleNum));
-			data.ekgRawDataAddr[sampleNum - 1] = (signed int) t[0];
-
-#if DEBUG_EKG
-			usnprintf(num, 30, "ints handled, %d", sampleNum);
-			RIT128x96x4StringDraw(num, 0, 20, 15);
-#endif
-		} else {
-#if DEBUG_EKG
-			usnprintf(num, 30, "total ints %d/%d", sampleNum, NUM_EKG_SAMPLES);
-			RIT128x96x4StringDraw(num, 0, 30, 15);
-#endif
-
-			ekgComplete = true;	// Done taking samples, let the task know
-		}
-		ADCIntClear(ADC0_BASE, EKG_SEQ);	// clear the interrupt
+	while (!ekgComplete) {	// ADC is capturing signal measurements
 	}
-	// ENDINSERT
-
 
 	TimerDisable(TIMER0_BASE, EKG_TIMER);
-//	ADCIntDisable(ADC0_BASE, EKG_SEQ); 
+	ADCIntDisable(ADC0_BASE, EKG_SEQ); 
 
 	ekgProcessActive = true;	// we want to process our measurement
 
