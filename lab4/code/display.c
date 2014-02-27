@@ -14,7 +14,7 @@
 #include "utils/ustdlib.h"
 #include <stdlib.h>
 
-#define DISPLAY_OFF 1
+#define DISPLAY_OFF 0
 
 // Internal data structure
 typedef struct oledDisplayData {
@@ -69,7 +69,7 @@ void displayRunFunction(void *dataptr) {
   tBoolean selection = *(dData->select);
   int scroll = *(dData->scroll);
 
-#ifndef DISPLAY_OFF
+#if !DISPLAY_OFF
   char num[40];
   //char buf1[30];
   char buf2[30];
