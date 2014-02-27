@@ -257,7 +257,7 @@ void measure(void *vParameters)
   while(1)
   {
       measureTask.runTaskFunction(measureTask.taskDataPtr);
-      vTaskDelay(MINOR_CYCLE);
+      vTaskDelay(MINOR_CYCLE * MAJOR_CYCLE);
   }
 }
 
