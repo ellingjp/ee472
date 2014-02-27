@@ -22,8 +22,8 @@ static float diastolicPressCorrectedArr[8];
 static float pulseRateCorrectedArr[8];
 static int ekgFrequencyResultArr[16];
 
-static unsigned long ekgRaw[NUM_EKG_SAMPLES];	// initialize all the elements to 0
-static unsigned long ekgTemp[NUM_EKG_SAMPLES] = {0};
+static signed int ekgRaw[NUM_EKG_SAMPLES];	// initialize all the elements to 0
+static signed int ekgTemp[NUM_EKG_SAMPLES] = {0};
 
 void initializeGlobalData() {
   // Wrap the arrays

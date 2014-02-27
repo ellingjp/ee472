@@ -81,9 +81,8 @@ void ekgProcessRunFunction(void *ekgProcessData) {
 		RIT128x96x4StringDraw(num, 0, 20, 15);
 #endif
 	}
-
-
-
+        
+        
 	signed int max_index = optfft( data.ekgRawData, data.ekgImgData);
 	//post processing
 	int freq = (10000) * max_index / 8;
