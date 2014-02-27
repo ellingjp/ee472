@@ -40,7 +40,7 @@ extern tBoolean ekgProcessActive;
 
 // ekgCapture data structure. Internal to the task
 typedef struct ekgCaptureData {
- unsigned int (*ekgRawDataAddr)[NUM_EKG_SAMPLES];	// ADC output array address
+ unsigned long *ekgRawDataAddr;	// ADC output array address
 }EKGCaptureData;
 
 void ekgCaptureRunFunction(void *ekgCaptureData);
@@ -55,14 +55,14 @@ TCB ekgCaptureTask = {&ekgCaptureRunFunction, &data}; // task interface
 void ADC0IntHandler() {
 	if (sampleNum < NUM_EKG_SAMPLES) {
 		++sampleNum;
-		long samps = ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, (unsigned long*)(data.ekgRawDataAddr + sampleNum));
+		long samps = ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, (data.ekgRawDataAddr + sampleNum));
 //		sampleNum = sampleNum + samps;	// increase by however many you got
 
-//#if DEBUG
-//		char num[30];
-//		usnprintf(num, 30, "ints handled, %d", sampleNum);
-//		RIT128x96x4StringDraw(num, 0, 20, 15);
-//#endif
+#if DEBUG
+		char num[30];
+		usnprintf(num, 30, "ints handled, %d", sampleNum);
+		RIT128x96x4StringDraw(num, 0, 20, 15);
+#endif
 	} else {
 
 #if DEBUG
@@ -82,7 +82,7 @@ void initializeEKGTask() {
 	RIT128x96x4Init(1000000);
 	RIT128x96x4StringDraw("* EKGCapture Debug *", 0, 0, 15);
 #endif
-	data.ekgRawDataAddr =  &(global.ekgRaw);
+	data.ekgRawDataAddr =  global.ekgRaw;
         sampleNum = 0;
         ekgComplete = false;
 
@@ -113,12 +113,12 @@ void initializeEKGTask() {
 	TimerDisable(TIMER0_BASE, TIMER_BOTH);
 	TimerConfigure(TIMER0_BASE, TIMER_CFG_32_BIT_PER );//TIMER_CFG_16_BIT_PAIR | TIMER_CFG_A_PERIODIC); //
 	TimerControlTrigger(TIMER0_BASE, TIMER_A, true);
-	TimerLoadSet(TIMER0_BASE, TIMER_A, (SysCtlClockGet() / 10));//SAMPLE_PERIOD));
+	TimerLoadSet(TIMER0_BASE, TIMER_A, (SysCtlClockGet() / SAMPLE_PERIOD));
 #if DEBUG
 	char num[30];
       int a =  TimerLoadGet(TIMER0_BASE, TIMER_A);
-        usnprintf(num, 30, "timer: %u c %d", a, sampleNum);
-    RIT128x96x4StringDraw(num, 0, 20, 15);
+        usnprintf(num, 30, "timer: %u c %d", a, NUM_EKG_SAMPLES);
+    RIT128x96x4StringDraw(num, 0, 10, 15);
 
 #endif
 }
@@ -141,6 +141,13 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 	TimerEnable(TIMER0_BASE, EKG_TIMER);
 
 	while (!ekgComplete) {	// ADC is capturing signal measurements
+//#if DEBUG
+//	char num[30];
+//      int a =  TimerLoadGet(TIMER0_BASE, TIMER_A);
+//        usnprintf(num, 30, "%d", sampleNum);
+//    RIT128x96x4StringDraw(num, 0, 60, 15);
+//
+//#endif
 	}
 
 	TimerDisable(TIMER0_BASE, EKG_TIMER);
@@ -157,7 +164,7 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 		// let's check our values
 
 	int a = global.ekgRaw[0];
-	int b = global.ekgRaw[1];
+	int b = global.ekgRaw[50];
 	int c = (int) *(data.ekgRawDataAddr);
 	usnprintf(num, 30, "%d, %d, %d", a, b, c);
 	RIT128x96x4StringDraw(num, 3, 40, 15);

@@ -27,15 +27,15 @@
 
 #define BATT_INIT 200
 
-#define NUM_EKG_SAMPLES 6
+#define NUM_EKG_SAMPLES 256
 
 typedef struct global_data {
   CircularBuffer temperatureRaw;
   CircularBuffer systolicPressRaw;
   CircularBuffer diastolicPressRaw;
   CircularBuffer pulseRateRaw;
-	unsigned int ekgRaw[NUM_EKG_SAMPLES];
-	unsigned int ekgTemp[NUM_EKG_SAMPLES];
+	unsigned long ekgRaw[NUM_EKG_SAMPLES];
+	unsigned long ekgTemp[NUM_EKG_SAMPLES];
 
   CircularBuffer temperatureCorrected;
   CircularBuffer systolicPressCorrected;
