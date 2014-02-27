@@ -54,7 +54,8 @@ void initializeEKGProcess() {
  * Reads in the EKG samples and performs a fast Fourier transform (FFT) on the
  * data to extract the primary frequency of the signal
  */
-void ekgProcessRunFunction(void *ekgProcessData) {
+void ekgProcessRunFunction(void *ekgData) {
+  EKGProcessData data = * (EKGProcessData *) ekgData;
 	if (firstRun) {
 		firstRun = false;
 		initializeEKGProcess();
@@ -83,15 +84,15 @@ void ekgProcessRunFunction(void *ekgProcessData) {
 	}
         
         
-	signed int max_index = optfft( data.ekgRawData, data.ekgImgData);
+	signed int max_index = optfft( data.ekgRawData, data.ekgImgData );
 	//post processing
-	int freq = (10000) * max_index / 8;
+	int freq = (SAMPLE_FREQ) * max_index / 8;
 
 #if DEBUG_PROC
 	usnprintf(num, 30, ": %d  ", max_index);
 	RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
-//	cbAdd(data.ekgFreqResult, (void*) &freq);
+	cbAdd(data.ekgFreqResult, (void*) &freq);
 
 	ekgProcessActive = false;
 }
