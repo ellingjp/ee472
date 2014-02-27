@@ -34,8 +34,8 @@ typedef struct global_data {
   CircularBuffer systolicPressRaw;
   CircularBuffer diastolicPressRaw;
   CircularBuffer pulseRateRaw;
-	unsigned int ekgRaw;
-	unsigned int ekgTemp;
+	unsigned int ekgRaw[NUM_EKG_SAMPLES];
+	unsigned int ekgTemp[NUM_EKG_SAMPLES];
 
   CircularBuffer temperatureCorrected;
   CircularBuffer systolicPressCorrected;

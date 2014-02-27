@@ -15,7 +15,7 @@
 #include "inc/hw_ints.h"
 
 #include "schedule.h"
-#include "globals.h"
+#include "globals.h"// RESET TO GLOBALS.H AFTER TESTING
 #include "ekgCapture.h"
 #include "timebase.h"
 
