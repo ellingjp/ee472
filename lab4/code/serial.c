@@ -88,7 +88,7 @@ void serialRunFunction(void *dataptr) {
   usnprintf(buf, 40, "4. Pulse rate:\t\t%d BPM\n\n\r", pulse);
   UARTSend( (unsigned char *) buf, strlen(buf));
   
-  usnprintf(buf, 40, "5. EKG:\t\t%d Hz\n\n\r", EKG);
+  usnprintf(buf, 40, "5. EKG:\t\t\t%d Hz\n\n\r", EKG);
   UARTSend( (unsigned char *) buf, strlen(buf));
   
   usnprintf(buf, 40, "6. Battery:\t\t%d\n\n\r", batt);

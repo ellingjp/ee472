@@ -7,6 +7,7 @@
  */
 
 #define DEBUG_WARNING 0
+#define ALARM_OFF 1
 
 #include "globals.h"
 #include "timebase.h"
@@ -214,6 +215,7 @@ void warningRunFunction(void *dataptr) {
   switch (aState) {
     case ON:
       
+#if !ALARM_OFF
       if (0 == (minor_cycle_ctr % ALARM_CYCLE_RATE)) { // toggle between on/off
         if (pwmEnable) 
           PWMGenEnable(PWM0_BASE, PWM_GEN_0);
@@ -221,6 +223,7 @@ void warningRunFunction(void *dataptr) {
           PWMGenDisable(PWM0_BASE, PWM_GEN_0);
         pwmEnable = !pwmEnable;
       }
+#endif
       break;
     case ASLEEP:
       PWMGenDisable(PWM0_BASE, PWM_GEN_0);
