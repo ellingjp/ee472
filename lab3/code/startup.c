@@ -18,20 +18,20 @@
  * Minor Cycle Handler
  */
 void SysTickIntHandler (void) {
-  minor_cycle_ctr = minor_cycle_ctr + 1;
-  runSchedule = true;
+//  minor_cycle_ctr = minor_cycle_ctr + 1;
+//  runSchedule = true;
 }
 
 /* 
  * configure the hw interrupt for minor cycle
  */
 void initializeHWCounter() {
-SysTickPeriodSet(SysCtlClockGet() * MINOR_CYCLE / 1000);  // set timer period
-
-// enable interrupts (master)
-IntMasterEnable();	// this may be redundant, consider moving
-SysTickIntEnable(); 	// enable systick interrupt
-SysTickEnable();	// enable systic counter
+//SysTickPeriodSet(SysCtlClockGet() * MINOR_CYCLE / 1000);  // set timer period
+//
+//// enable interrupts (master)
+//IntMasterEnable();	// this may be redundant, consider moving
+//SysTickIntEnable(); 	// enable systick interrupt
+//SysTickEnable();	// enable systic counter
 }
 
 
@@ -39,14 +39,14 @@ SysTickEnable();	// enable systic counter
  * Initializes hw counter ans system state variables
  */
 void startup() {
-  initializeHWCounter();
+ // initializeHWCounter();
   
   // Initialize global data
   initializeGlobalData();   // from globals.h
 
-  computeActive = false;	// neither serial or compute task runs at start up
-  serialActive = false;
+//  computeActive = false;	// neither serial or compute task runs at start up
+//  serialActive = false;
 
-  initializeQueue(); // start up task queue with basic tasks
+//  initializeQueue(); // start up task queue with basic tasks
 }
 

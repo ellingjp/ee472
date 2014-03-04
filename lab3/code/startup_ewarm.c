@@ -47,6 +47,7 @@ static void IntDefaultHandler(void);
 //*****************************************************************************
 extern void PulseRateISR(void);
 extern void SysTickIntHandler(void);
+//extern void ADC0IntHandler(void);
 
 //*****************************************************************************
 //

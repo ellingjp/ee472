@@ -299,6 +299,8 @@
         <option>
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\required_files</state>
+          <state>$PROJ_DIR$\..\lab3\code</state>
+          <state>$PROJ_DIR$\..\lab4\code</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1836,7 +1838,97 @@
     </settings>
   </configuration>
   <file>
+    <name>$PROJ_DIR$\..\lab3\code\CircularBuffer.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\CircularBuffer.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\compute.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\compute.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\display.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\display.h</name>
+  </file>
+  <file>
     <name>$PROJ_DIR$\required_files\driverlib\driverlib-cm3.a</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab4\code\ekgCapture.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab4\code\ekgCapture.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab4\code\ekgProcess.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab4\code\ekgProcess.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab4\code\globals.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab4\code\globals.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\keyPad.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\keyPad.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\temp\main.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\measure.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\measure.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab4\code\optfft.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\rit128x96x4.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\schedule.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\startup.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\startup.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\startup_ewarm.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\status.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\status.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\task.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\timebase.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\ustdlib.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\warning.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab3\code\warning.h</name>
   </file>
 </project>
 
