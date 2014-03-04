@@ -40,6 +40,7 @@ static unsigned long sampleNum; // counter for data collection
 static tBoolean firstRun = true;
 static tBoolean ekgComplete;
 extern tBoolean ekgProcessActive;
+static unsigned long t[8];
 
 // ekgCapture data structure. Internal to the task
 typedef struct ekgCaptureData {
@@ -59,7 +60,7 @@ TCB ekgCaptureTask = {&ekgCaptureRunFunction, &data}; // task interface
 void ADC0IntHandler() {
 	if (sampleNum < NUM_EKG_SAMPLES) {
 		sampleNum++;
-                unsigned long t[8];
+                
 		ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, &t[0]);//(data.ekgRawDataAddr + sampleNum));
                 data.ekgRawDataAddr[sampleNum - 1] = (signed int) t[0];
                 
@@ -121,7 +122,7 @@ void initializeEKGTask() {
 
 #if DEBUG_EKG
 	long timeLoad =  TimerLoadGet(TIMER0_BASE, TIMER_A);
-	float secs = (timeLoad) / SysCtlClockGet();
+	int secs = (int) ((float) timeLoad / SysCtlClockGet());
 	usnprintf(num, 30, "timer: %d s %d c", secs, timeLoad);
 	RIT128x96x4StringDraw(num, 0, 10, 15);
 

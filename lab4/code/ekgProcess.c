@@ -65,7 +65,7 @@ void ekgProcessRunFunction(void *ekgData) {
 	}
 	
 	// reset Imaginary array
-	memset(data->ekgRawData, 0, sizeof(signed int) * NUM_EKG_SAMPLES);
+	memset(data->ekgImgData, 0, sizeof(signed int) * NUM_EKG_SAMPLES);
 
 	// need to bit shift >> 4 (divide 16) then subtract 32
 	int i = 0;
@@ -75,12 +75,12 @@ void ekgProcessRunFunction(void *ekgData) {
 		usnprintf(num, 30, "%d \n", data->ekgRawData[i]);
 		RIT128x96x4StringDraw(num, 0, 10, 15);
 #endif
-		int d = (data->ekgRawData[i] >> 4) - 31;
+		int d = (int)((float) (data->ekgRawData)[i] / 16 - 32) ;//((data->ekgRawData)[i] >> 4) - 31;
 		data->ekgRawData[i] = d;
 #if DEBUG_PROC
 		if (data->ekgRawData[i] > data->ekgRawData[t])
 			t = i;
-		usnprintf(num, 30, "%d : %d ", data->ekgRawData[i], data->ekgRawData[t]);
+		usnprintf(num, 30, "%d : %d \n", data->ekgRawData[i], data->ekgRawData[t]);
 		RIT128x96x4StringDraw(num, 0, 20, 15);
 #endif
 	}
@@ -91,7 +91,7 @@ void ekgProcessRunFunction(void *ekgData) {
 	int freq = (SAMPLE_FREQ) * max_index / 8;
 
 #if DEBUG_PROC
-	usnprintf(num, 30, ": %d  ", freq);
+	usnprintf(num, 30, "%d : %d  ", max_index, freq);
 	RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
 //	cbAdd(data->ekgFreqResult, (void*) &freq);
