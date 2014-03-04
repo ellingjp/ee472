@@ -55,44 +55,46 @@ void initializeEKGProcess() {
  * data to extract the primary frequency of the signal
  */
 void ekgProcessRunFunction(void *ekgData) {
-  EKGProcessData data = * (EKGProcessData *) ekgData;
+	//  TODO What we've got here is a failure to communicate addresses. 
+	//  For some reason, the pointer passed in is not being properly 
+	//  dereferenced. 
+  EKGProcessData *data = (EKGProcessData *) ekgData;
 	if (firstRun) {
 		firstRun = false;
 		initializeEKGProcess();
 	}
-	// reset img array
-	int i = 0;
-	for (i = 0; i < NUM_EKG_SAMPLES; i++){
-	data.ekgImgData[i] = 0;
-	}
+	
+	// reset Imaginary array
+	memset(data->ekgRawData, 0, sizeof(signed int) * NUM_EKG_SAMPLES);
+
 	// need to bit shift >> 4 (divide 16) then subtract 32
-	i = 0;
+	int i = 0;
 	int t = 0;	// debug
 	for (i = 0; i < NUM_EKG_SAMPLES; i++) {
 #if DEBUG_PROC
-		usnprintf(num, 30, "%d \n", data.ekgRawData[i]);
+		usnprintf(num, 30, "%d \n", data->ekgRawData[i]);
 		RIT128x96x4StringDraw(num, 0, 10, 15);
 #endif
-                int d = (data.ekgRawData[i] >> 4) - 31;
-		data.ekgRawData[i] = d;
+		int d = (data->ekgRawData[i] >> 4) - 31;
+		data->ekgRawData[i] = d;
 #if DEBUG_PROC
-		if ((int)data.ekgRawData[i] > (int)data.ekgRawData[t])
+		if (data->ekgRawData[i] > data->ekgRawData[t])
 			t = i;
-		usnprintf(num, 30, "%d : %d ", data.ekgRawData[i], data.ekgRawData[t]);
+		usnprintf(num, 30, "%d : %d ", data->ekgRawData[i], data->ekgRawData[t]);
 		RIT128x96x4StringDraw(num, 0, 20, 15);
 #endif
 	}
         
         
-	signed int max_index = optfft( data.ekgRawData, data.ekgImgData );
+	signed int max_index = optfft( data->ekgRawData, data->ekgImgData );
 	//post processing
 	int freq = (SAMPLE_FREQ) * max_index / 8;
 
 #if DEBUG_PROC
-	usnprintf(num, 30, ": %d  ", max_index);
+	usnprintf(num, 30, ": %d  ", freq);
 	RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
-	cbAdd(data.ekgFreqResult, (void*) &freq);
+//	cbAdd(data->ekgFreqResult, (void*) &freq);
 
 	ekgProcessActive = false;
 }

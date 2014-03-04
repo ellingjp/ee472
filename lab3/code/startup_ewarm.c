@@ -47,7 +47,7 @@ static void IntDefaultHandler(void);
 //*****************************************************************************
 extern void PulseRateISR(void);
 extern void SysTickIntHandler(void);
-//extern void ADC0IntHandler(void);
+extern void ADC0IntHandler(void);
 
 //*****************************************************************************
 //
@@ -116,7 +116,7 @@ __root const uVectorEntry __vector_table[] @ ".intvec" =
     IntDefaultHandler,                      // PWM Generator 1
     IntDefaultHandler,                      // PWM Generator 2
     IntDefaultHandler,                      // Quadrature Encoder 0
-    IntDefaultHandler,                      // ADC Sequence 0
+    ADC0IntHandler,                      // ADC Sequence 0
     IntDefaultHandler,                      // ADC Sequence 1
     IntDefaultHandler,                      // ADC Sequence 2
     IntDefaultHandler,                      // ADC Sequence 3

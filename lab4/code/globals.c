@@ -55,7 +55,9 @@ void initializeGlobalData() {
   cbAdd(&(global.systolicPressRaw), &sr);
   cbAdd(&(global.diastolicPressRaw), &dr);
   cbAdd(&(global.pulseRateRaw), &pr);
-
+  memset(ekgRaw, 0, sizeof(signed int) * NUM_EKG_SAMPLES);      //initialize the arrays
+  memset(ekgTemp, 0, sizeof(signed int) * NUM_EKG_SAMPLES);
+  
   cbAdd(&(global.temperatureCorrected), &tc);
   cbAdd(&(global.systolicPressCorrected), &sc);
   cbAdd(&(global.diastolicPressCorrected), &dc);
