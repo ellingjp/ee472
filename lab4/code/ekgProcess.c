@@ -55,38 +55,35 @@ void initializeEKGProcess() {
  * data to extract the primary frequency of the signal
  */
 void ekgProcessRunFunction(void *ekgData) {
-	//  TODO What we've got here is a failure to communicate addresses. 
-	//  For some reason, the pointer passed in is not being properly 
-	//  dereferenced. 
-  EKGProcessData *data = (EKGProcessData *) ekgData;
+	EKGProcessData *eData = (EKGProcessData *) ekgData;
 	if (firstRun) {
 		firstRun = false;
 		initializeEKGProcess();
 	}
-	
+
 	// reset Imaginary array
-	memset(data->ekgImgData, 0, sizeof(signed int) * NUM_EKG_SAMPLES);
+	memset(eData->ekgImgData, 0, sizeof(signed int) * NUM_EKG_SAMPLES);
 
 	// need to bit shift >> 4 (divide 16) then subtract 32
 	int i = 0;
 	int t = 0;	// debug
 	for (i = 0; i < NUM_EKG_SAMPLES; i++) {
 #if DEBUG_PROC
-		usnprintf(num, 30, "%d \n", data->ekgRawData[i]);
+		usnprintf(num, 30, "%d \n", eData->ekgRawData[i]);
 		RIT128x96x4StringDraw(num, 0, 10, 15);
 #endif
-		int d = (int)((float) (data->ekgRawData)[i] / 16 - 32) ;//((data->ekgRawData)[i] >> 4) - 31;
-		data->ekgRawData[i] = d;
+		int d = (int)((float) (eData->ekgRawData)[i] / 16 - 32) ;//((eData->ekgRawData)[i] >> 4) - 31;
+		eData->ekgRawData[i] = d;
 #if DEBUG_PROC
-		if (data->ekgRawData[i] > data->ekgRawData[t])
+		if (eData->ekgRawData[i] > eData->ekgRawData[t])
 			t = i;
-		usnprintf(num, 30, "%d : %d \n", data->ekgRawData[i], data->ekgRawData[t]);
+		usnprintf(num, 30, "%d : %d \n", eData->ekgRawData[i], eData->ekgRawData[t]);
 		RIT128x96x4StringDraw(num, 0, 20, 15);
 #endif
 	}
-        
-        
-	signed int max_index = optfft( data->ekgRawData, data->ekgImgData );
+
+
+	signed int max_index = optfft( eData->ekgRawData, eData->ekgImgData );
 	//post processing
 	int freq = (SAMPLE_FREQ) * max_index / 8;
 
@@ -94,7 +91,7 @@ void ekgProcessRunFunction(void *ekgData) {
 	usnprintf(num, 30, "%d : %d  ", max_index, freq);
 	RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
-//	cbAdd(data->ekgFreqResult, (void*) &freq);
+	//	cbAdd(eData->ekgFreqResult, &freq);
 
 	ekgProcessActive = false;
 }

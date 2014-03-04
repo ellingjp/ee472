@@ -11,7 +11,7 @@ ByteLimit=50
 [LMIFTDIDriver]
 LMI_ResetMode=0x00000000
 [DebugChecksum]
-Checksum=1943735635
+Checksum=-1668811735
 [InterruptLog]
 LogEnabled=0
 SumEnabled=0
@@ -46,20 +46,11 @@ StopOnThrow=_ 0
 ShowArgs=0
 [Disassembly]
 MixedMode=1
-[CallStackLog]
-Enabled=0
-[DriverProfiling]
-Enabled=0
-Mode=0
-Graph=0
-Symbiont=0
-Exclusions=
 [Disassemble mode]
 mode=0
 [Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\lab4\code\ekgProcess.c}.68.13" 1 0 0 0 "" 0 ""
-Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\lab4\code\ekgProcess.c}.91.17" 1 0 0 0 "" 0 ""
-Count=2
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\lab4\code\ekgProcess.c}.95.2" 1 0 0 0 "" 0 ""
+Count=1
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -73,3 +64,11 @@ A1=_ "C:\Program Files (x86)\StellarisWare\driverlib\sysctl.c" "C:\StellarisWare
 A2=_ "C:\Program Files (x86)\StellarisWare\driverlib\systick.c" "C:\StellarisWare\driverlib\systick.c"
 Count=3
 SuppressDialog=1
+[CallStackLog]
+Enabled=0
+[DriverProfiling]
+Enabled=0
+Mode=0
+Graph=0
+Symbiont=0
+Exclusions=
