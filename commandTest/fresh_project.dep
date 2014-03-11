@@ -2,73 +2,83 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>2794434602</fileChecksum>
+  <fileChecksum>552416022</fileChecksum>
   <configuration>
     <name>Debug</name>
     <outputs>
+      <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
+      <file>$PROJ_DIR$\required_files\driverlib\driverlib-cm3.a</file>
+      <file>$PROJ_DIR$\Debug\Obj\globals.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\optfft.o</file>
       <file>$PROJ_DIR$\..\lab4\code\&lt;invalid loc&gt;</file>
-      <file>$PROJ_DIR$\required_files\driverlib\driverlib-cm3.a</file>
-      <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
-      <file>$PROJ_DIR$\required_files\driverlib\uart.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\globals.pbi</file>
       <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\ekgProcess.o</file>
-      <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
       <file>$PROJ_DIR$\Debug\Obj\ekgCapture.pbi</file>
+      <file>$PROJ_DIR$\required_files\driverlib\uart.h</file>
       <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
+      <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\ekgProcess.o</file>
       <file>$PROJ_DIR$\..\lab4\code\ekgProcess.c</file>
       <file>$PROJ_DIR$\..\lab4\code\ekgProcess.h</file>
-      <file>$PROJ_DIR$\..\lab4\code\globals.c</file>
-      <file>$PROJ_DIR$\..\lab4\code\globals.h</file>
-      <file>$PROJ_DIR$\..\lab3\code\keyPad.c</file>
-      <file>$PROJ_DIR$\..\lab3\code\keyPad.h</file>
-      <file>$PROJ_DIR$\temp\main.c</file>
-      <file>$PROJ_DIR$\..\lab3\code\measure.c</file>
-      <file>$PROJ_DIR$\..\lab3\code\measure.h</file>
-      <file>$PROJ_DIR$\..\lab4\code\optfft.c</file>
-      <file>$PROJ_DIR$\..\lab3\code\rit128x96x4.c</file>
-      <file>$PROJ_DIR$\..\lab3\code\schedule.h</file>
-      <file>$PROJ_DIR$\..\lab3\code\startup.c</file>
-      <file>$PROJ_DIR$\..\lab3\code\startup.h</file>
-      <file>$PROJ_DIR$\..\lab3\code\startup_ewarm.c</file>
-      <file>$PROJ_DIR$\..\lab3\code\status.c</file>
-      <file>$PROJ_DIR$\..\lab3\code\status.h</file>
-      <file>$PROJ_DIR$\..\lab3\code\task.h</file>
-      <file>$PROJ_DIR$\..\lab3\code\timebase.h</file>
-      <file>$PROJ_DIR$\..\lab3\code\ustdlib.c</file>
-      <file>$PROJ_DIR$\..\lab3\code\warning.c</file>
-      <file>$PROJ_DIR$\..\lab3\code\warning.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\serial.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+      <file>$PROJ_DIR$\required_files\driverlib\gpio.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\CircularBuffer.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\compute.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\CircularBuffer.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\schedule.o</file>
+      <file>$PROJ_DIR$\..\lab3\code\compute.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\display.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\display.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\ekgCapture.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\ekgCapture.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\main.c</file>
       <file>$PROJ_DIR$\Debug\Obj\startup_ewarm.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\compute.o</file>
-      <file>$TOOLKIT_DIR$\inc\c\DLib_Product_string.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\globals.o</file>
       <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
+      <file>$TOOLKIT_DIR$\inc\c\stdio.h</file>
       <file>$PROJ_DIR$\Debug\Obj\rit128x96x4.o</file>
       <file>$PROJ_DIR$\Debug\Obj\optfft.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\globals.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\ekgProcess.pbi</file>
-      <file>$TOOLKIT_DIR$\inc\c\stdio.h</file>
-      <file>$PROJ_DIR$\..\lab3\code\main.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\measure.pbi</file>
-      <file>$TOOLKIT_DIR$\lib\rt7M_tl.a</file>
       <file>$PROJ_DIR$\required_files\driverlib\interrupt.h</file>
-      <file>$PROJ_DIR$\required_files\inc\hw_sysctl.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\ekgProcess.pbi</file>
+      <file>$TOOLKIT_DIR$\lib\rt7M_tl.a</file>
+      <file>$PROJ_DIR$\Debug\Obj\measure.pbi</file>
       <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
-      <file>$PROJ_DIR$\Debug\Obj\serial.pbi</file>
+      <file>$PROJ_DIR$\required_files\inc\hw_sysctl.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\serial.o</file>
+      <file>$TOOLKIT_DIR$\inc\c\DLib_Product_string.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\status.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\startup.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\task.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\rit128x96x4.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\warning.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\compute.o</file>
+      <file>$PROJ_DIR$\..\lab4\code\globals.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\globals.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\startup.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\status.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\warning.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\timebase.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\ustdlib.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\measure.c</file>
+      <file>$PROJ_DIR$\temp\main.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+      <file>$PROJ_DIR$\..\lab3\code\schedule.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\measure.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\keyPad.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\optfft.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\startup_ewarm.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\keyPad.h</file>
       <file>$PROJ_DIR$\required_files\driverlib\ssi.h</file>
       <file>$PROJ_DIR$\required_files\driverlib\adc.h</file>
-      <file>$PROJ_DIR$\required_files\inc\hw_ssi.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\serial.pbi</file>
       <file>$TOOLKIT_DIR$\lib\shb_l.a</file>
       <file>$PROJ_DIR$\..\lab4\code\schedule.c</file>
+      <file>$PROJ_DIR$\required_files\inc\hw_ssi.h</file>
       <file>$PROJ_DIR$\Debug\Obj\CircularBuffer.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\display.pbi</file>
-      <file>$PROJ_DIR$\..\lab3\code\serial.c</file>
       <file>$PROJ_DIR$\..\lab4\code\optfft.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\keyPad.pbi</file>
-      <file>$PROJ_DIR$\..\lab3\code\serial.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\serial.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\display.pbi</file>
       <file>$PROJ_DIR$\..\lab4\code\startup_ewarm.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\serial.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\keyPad.pbi</file>
       <file>$TOOLKIT_DIR$\inc\c\xencoding_limits.h</file>
       <file>$TOOLKIT_DIR$\inc\c\DLib_Threads.h</file>
       <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
@@ -83,435 +93,89 @@
       <file>$TOOLKIT_DIR$\inc\c\stdarg.h</file>
       <file>$PROJ_DIR$\..\lab3\code\schedule.c</file>
       <file>$TOOLKIT_DIR$\inc\c\string.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\timebase.h</file>
       <file>$PROJ_DIR$\required_files\driverlib\timer.h</file>
       <file>$PROJ_DIR$\required_files\inc\hw_ints.h</file>
+      <file>$TOOLKIT_DIR$\config\linker\TexasInstruments\LM3S8962.icf</file>
       <file>$PROJ_DIR$\Debug\Obj\ekgCapture.o</file>
       <file>$PROJ_DIR$\Debug\Obj\status.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\ustdlib.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\warning.pbi</file>
-      <file>$TOOLKIT_DIR$\config\linker\TexasInstruments\LM3S8962.icf</file>
       <file>$TOOLKIT_DIR$\lib\m7M_tl.a</file>
-      <file>$PROJ_DIR$\..\lab4\code\timebase.h</file>
-      <file>$PROJ_DIR$\required_files\drivers\rit128x96x4.h</file>
       <file>$PROJ_DIR$\required_files\driverlib\systick.h</file>
+      <file>$PROJ_DIR$\required_files\drivers\rit128x96x4.h</file>
       <file>$PROJ_DIR$\required_files\driverlib\sysctl.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\schedule.pbi</file>
       <file>$TOOLKIT_DIR$\inc\c\stdlib.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\startup.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\schedule.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\display.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\startup.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\ustdlib.o</file>
       <file>$PROJ_DIR$\required_files\driverlib\pin_map.h</file>
       <file>$PROJ_DIR$\Debug\Obj\warning.o</file>
       <file>$PROJ_DIR$\required_files\driverlib\debug.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\keyPad.o</file>
       <file>$PROJ_DIR$\Debug\Obj\rit128x96x4.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\startup_ewarm.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\keyPad.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\ustdlib.o</file>
       <file>$PROJ_DIR$\Debug\Exe\c.out</file>
+      <file>$PROJ_DIR$\required_files\utils\ustdlib.h</file>
       <file>$PROJ_DIR$\required_files\driverlib\pwm.h</file>
       <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\compute.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\status.o</file>
-      <file>$PROJ_DIR$\required_files\utils\ustdlib.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\compute.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\measure.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\CircularBuffer.o</file>
       <file>$PROJ_DIR$\Debug\Obj\startup.o</file>
-      <file>$PROJ_DIR$\required_files\driverlib\gpio.h</file>
-      <file>$PROJ_DIR$\..\lab3\code\CircularBuffer.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\schedule.o</file>
-      <file>$PROJ_DIR$\..\lab3\code\CircularBuffer.c</file>
-      <file>$PROJ_DIR$\..\lab3\code\compute.c</file>
-      <file>$PROJ_DIR$\..\lab3\code\compute.h</file>
-      <file>$PROJ_DIR$\..\lab3\code\display.c</file>
-      <file>$PROJ_DIR$\..\lab3\code\display.h</file>
-      <file>$PROJ_DIR$\..\lab4\code\ekgCapture.h</file>
-      <file>$PROJ_DIR$\..\lab4\code\ekgCapture.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\CircularBuffer.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\fresh_project.pbd</file>
+      <file>$PROJ_DIR$\temp\CircularBuffer.c</file>
+      <file>$PROJ_DIR$\temp\globals.h</file>
+      <file>$PROJ_DIR$\temp\CircularBuffer.h</file>
+      <file>$PROJ_DIR$\temp\globals.c</file>
+      <file>$PROJ_DIR$\required_files\utils\ustdlib.c</file>
+      <file>$PROJ_DIR$\required_files\drivers\rit128x96x4.c</file>
     </outputs>
-    <file>
-      <name>[ROOT_NODE]</name>
-      <outputs>
-        <tool>
-          <name>ILINK</name>
-          <file> 100</file>
-        </tool>
-      </outputs>
-    </file>
     <file>
       <name>$PROJ_DIR$\..\lab4\code\ekgProcess.c</name>
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 42</file>
+          <file> 31</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 7</file>
+          <file> 10</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 14 70 68 71 8 6 38 3 10 63 64 65 73 109 93 88 12 67 59 86 105 74</file>
+          <file> 44 80 78 81 0 5 26 9 8 73 74 75 83 13 104 98 12 77 67 97 111 84</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 14 70 68 71 8 6 38 3 10 63 64 65 73 109 93 88 12 67 59 86 105 74</file>
+          <file> 44 80 78 81 0 5 26 9 8 73 74 75 83 13 104 98 12 77 67 97 111 84</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\lab4\code\globals.c</name>
+      <name>$PROJ_DIR$\..\lab3\code\compute.c</name>
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 5</file>
+          <file> 115</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 41</file>
+          <file> 43</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 14 70 68 71 8 6 38 3 10 63 64 65 73 109 93 88</file>
+          <file> 40 14 18 82 80 81 0 5 26 9 8 73 74 75 83 13 104 98 49 54 97 111 84</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 14 70 68 71 8 6 38 3 10 63 64 65 73 109 93 88</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab3\code\keyPad.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 60</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 98</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 16 28 72 70 110 71 8 6 38 3 10 63 64 65 73 109 93 88 29</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 16 28 72 70 110 71 8 6 38 3 10 63 64 65 73 109 93 88 29</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\temp\main.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 102</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 34</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 72 70 110 71 8 6 38 3 10 63 64 65 73 109 93 88 24 117 67 12 86 105 74</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 72 70 110 71 8 6 38 3 10 63 64 65 73 109 93 88 24 117 67 12 86 105 74</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab3\code\measure.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 45</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 106</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 28 110 72 70 71 8 6 38 3 10 63 64 65 73 109 93 88 29 19 22 47 78 95 86 105 74</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 28 110 72 70 71 8 6 38 3 10 63 64 65 73 109 93 88 29 19 22 47 78 95 86 105 74</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab4\code\optfft.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 40</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 0</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 59 69</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 59 69</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab3\code\rit128x96x4.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 96</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 39</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 53 73 48 70 95 109 93 51 88 86</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 53 73 48 70 95 109 93 51 88 86</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab3\code\startup.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 91</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 108</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 29 72 70 110 71 8 6 38 3 10 63 64 65 73 109 93 88 87 47 24 22</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 29 72 70 110 71 8 6 38 3 10 63 64 65 73 109 93 88 87 47 24 22</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab3\code\startup_ewarm.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 35</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 97</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab3\code\status.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 80</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 104</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 27 28 72 70 110 71 8 6 38 3 10 63 64 65 73 109 93 88 29</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 27 28 72 70 110 71 8 6 38 3 10 63 64 65 73 109 93 88 29</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab3\code\ustdlib.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 81</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 99</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 76 8 6 38 3 10 63 64 65 37 95 105 74</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 76 8 6 38 3 10 63 64 65 37 95 105 74</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab3\code\warning.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 82</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 94</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 72 70 110 71 8 6 38 3 10 63 64 65 73 109 93 88 28 29 32 22 86 90 43 66 95 101 105 74</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 72 70 110 71 8 6 38 3 10 63 64 65 73 109 93 88 28 29 32 22 86 90 43 66 95 101 105 74</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab3\code\main.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 102</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 34</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 22 70 29 24 72 110 71 8 6 38 3 10 63 64 65 73 109 93 88 95 87 47</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 22 70 29 24 72 110 71 8 6 38 3 10 63 64 65 73 109 93 88 95 87 47</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab4\code\schedule.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 89</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 111</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 70</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 70</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab3\code\serial.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 50</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 33</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 28 72 70 110 71 8 6 38 3 10 63 64 65 73 109 93 88 29 61 22 4 105 74 76 37</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 28 72 70 110 71 8 6 38 3 10 63 64 65 73 109 93 88 29 61 22 4 105 74 76 37</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab4\code\startup_ewarm.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 35</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 97</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab3\code\schedule.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 89</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 111</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 28 22 70 29 72 110 71 8 6 38 3 10 63 64 65 73 109 93 88 19 114 116 32 27 61 16 86 105 74</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 28 22 70 29 72 110 71 8 6 38 3 10 63 64 65 73 109 93 88 19 114 116 32 27 61 16 86 105 74</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\Debug\Exe\c.out</name>
-      <inputs>
-        <tool>
-          <name>ILINK</name>
-          <file> 83 107 36 92 79 7 41 98 34 106 0 39 108 97 104 99 94 2 54 46 84 49</file>
+          <file> 40 14 18 82 80 81 0 5 26 9 8 73 74 75 83 13 104 98 49 54 97 111 84</file>
         </tool>
       </inputs>
     </file>
@@ -520,7 +184,283 @@
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 56</file>
+          <file> 66</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 118</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 14 27 0 5 26 9 8 73 74 75 76</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 14 27 0 5 26 9 8 73 74 75 76</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\display.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 69</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 101</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 82 80 14 81 0 5 26 9 8 73 74 75 83 13 104 98 40 49 20 97 111 84 99</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 82 80 14 81 0 5 26 9 8 73 74 75 83 13 104 98 40 49 20 97 111 84 99</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\ekgCapture.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 6</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 91</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 80 83 61 88 30 89 44 78 81 0 5 26 9 8 73 74 75 13 104 98 21 77 87 4 97 111 84</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 80 83 61 88 30 89 44 78 81 0 5 26 9 8 73 74 75 13 104 98 21 77 49 97 111 84</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\main.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 113</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 53</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 54 80 49 39 82 14 81 0 5 26 9 8 73 74 75 83 13 104 98 106 96 30</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 54 80 49 39 82 14 81 0 5 26 9 8 73 74 75 83 13 104 98 106 96 30</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\rit128x96x4.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 108</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 28</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 65 83 35 80 106 13 104 60 98 97</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 65 83 35 80 106 13 104 60 98 97</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\globals.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 2</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 25</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 44 80 78 81 0 5 26 9 8 73 74 75 83 13 104 98</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 44 80 78 81 0 5 26 9 8 73 74 75 83 13 104 98</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\startup.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 102</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 117</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 49 82 80 14 81 0 5 26 9 8 73 74 75 83 13 104 98 96 30 39 54</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 49 82 80 14 81 0 5 26 9 8 73 74 75 83 13 104 98 96 30 39 54</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\status.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 92</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 114</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 38 40 82 80 14 81 0 5 26 9 8 73 74 75 83 13 104 98 49</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 38 40 82 80 14 81 0 5 26 9 8 73 74 75 83 13 104 98 49</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\warning.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 94</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 105</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 82 80 14 81 0 5 26 9 8 73 74 75 83 13 104 98 40 49 42 54 97 99 27 76 106 112 111 84</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 82 80 14 81 0 5 26 9 8 73 74 75 83 13 104 98 40 49 42 54 97 99 27 76 106 112 111 84</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\ustdlib.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 93</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 103</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 86 0 5 26 9 8 73 74 75 37 106 111 84</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 86 0 5 26 9 8 73 74 75 37 106 111 84</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\measure.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 33</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 116</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 40 14 82 80 81 0 5 26 9 8 73 74 75 83 13 104 98 49 55 54 30 89 106 97 111 84</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 40 14 82 80 81 0 5 26 9 8 73 74 75 83 13 104 98 49 55 54 30 89 106 97 111 84</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\temp\main.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 113</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 53</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 121 80 122 81 0 5 26 9 8 73 74 75 83 13 104 98 97 111 84</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 121 80 122 81 0 5 26 9 8 73 74 75 83 13 104 98 97 111 84</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\keyPad.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 72</file>
         </tool>
         <tool>
           <name>ICCARM</name>
@@ -530,20 +470,79 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 110 43 8 6 38 3 10 63 64 65 66</file>
+          <file> 59 40 82 80 14 81 0 5 26 9 8 73 74 75 83 13 104 98 49</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 110 43 8 6 38 3 10 63 64 65 66</file>
+          <file> 59 40 82 80 14 81 0 5 26 9 8 73 74 75 83 13 104 98 49</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\lab3\code\compute.c</name>
+      <name>$PROJ_DIR$\..\lab4\code\optfft.c</name>
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 103</file>
+          <file> 29</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 3</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 67 79</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 67 79</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\startup_ewarm.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 24</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 109</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\schedule.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 100</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 17</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 80</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 80</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\serial.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 62</file>
         </tool>
         <tool>
           <name>ICCARM</name>
@@ -553,63 +552,156 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 28 110 114 72 70 71 8 6 38 3 10 63 64 65 73 109 93 88 29 22 86 105 74</file>
+          <file> 40 82 80 14 81 0 5 26 9 8 73 74 75 83 13 104 98 49 71 54 7 111 84 86 37</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 28 110 114 72 70 71 8 6 38 3 10 63 64 65 73 109 93 88 29 22 86 105 74</file>
+          <file> 40 82 80 14 81 0 5 26 9 8 73 74 75 83 13 104 98 49 71 54 7 111 84 86 37</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\lab3\code\display.c</name>
+      <name>$PROJ_DIR$\..\lab4\code\startup_ewarm.c</name>
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 57</file>
+          <file> 24</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 92</file>
+          <file> 109</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\schedule.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 100</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 17</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 72 70 110 71 8 6 38 3 10 63 64 65 73 109 93 88 28 29 116 86 105 74 90</file>
+          <file> 40 54 80 49 82 14 81 0 5 26 9 8 73 74 75 83 13 104 98 55 18 20 42 38 71 59 97 111 84</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 72 70 110 71 8 6 38 3 10 63 64 65 73 109 93 88 28 29 116 86 105 74 90</file>
+          <file> 40 54 80 49 82 14 81 0 5 26 9 8 73 74 75 83 13 104 98 55 18 20 42 38 71 59 97 111 84</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\lab4\code\ekgCapture.c</name>
+      <name>$PROJ_DIR$\Debug\Exe\c.out</name>
+      <inputs>
+        <tool>
+          <name>ILINK</name>
+          <file> 90 118 25 53 28 103 1 63 32 95 34</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\temp\CircularBuffer.c</name>
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 9</file>
+          <file> 66</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 79</file>
+          <file> 118</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 70 73 52 77 47 78 14 68 71 8 6 38 3 10 63 64 65 109 93 88 117 67 85 1 86 105 74</file>
+          <file> 122 27 0 5 26 9 8 73 74 75 76</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 70 73 52 77 47 78 14 68 71 8 6 38 3 10 63 64 65 109 93 88 117 67 29 86 105 74</file>
+          <file> 122 27 0 5 26 9 8 73 74 75 76</file>
         </tool>
       </inputs>
     </file>
-    <forcedrebuild>
-      <name>[REBUILD_ALL]</name>
-    </forcedrebuild>
+    <file>
+      <name>$PROJ_DIR$\temp\globals.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 2</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 25</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 121 80 122 81 0 5 26 9 8 73 74 75 83 13 104 98</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 121 80 122 81 0 5 26 9 8 73 74 75 83 13 104 98</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\required_files\utils\ustdlib.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 93</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 103</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 86 0 5 26 9 8 73 74 75 37 106 111 84</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\required_files\drivers\rit128x96x4.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 108</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 28</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 65 83 35 80 106 13 104 60 98 97</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 65 83 35 80 106 13 104 60 98 97</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>ILINK</name>
+          <file> 110</file>
+        </tool>
+      </outputs>
+    </file>
   </configuration>
   <configuration>
     <name>Release</name>
