@@ -5,9 +5,8 @@
 
 #include "globals.h"
 //#include "startup.h"
-//#include "driverlib/sysctl.h"
-//#include "ekgCapture.h"
-//#include "ekgProcess.h"
+#include "driverlib/sysctl.h"
+#include "commandTask.h"
 //#include "schedule.h"
 
 // Used for debug display
@@ -35,6 +34,7 @@ void main () {
 	RIT128x96x4StringDraw(num, 0, 0, 15);
 #endif
 
+	commandTask.runTaskFunction(commandTask.taskDataPtr);
 	
 #if DEBUG
 	usnprintf(num, 30, "done");

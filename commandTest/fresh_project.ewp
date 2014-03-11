@@ -1842,6 +1842,9 @@
     <name>$PROJ_DIR$\temp\CircularBuffer.h</name>
   </file>
   <file>
+    <name>$PROJ_DIR$\temp\commandTask.c</name>
+  </file>
+  <file>
     <name>$PROJ_DIR$\required_files\driverlib\driverlib-cm3.a</name>
   </file>
   <file>
