@@ -11,7 +11,7 @@ ByteLimit=50
 [LMIFTDIDriver]
 LMI_ResetMode=0x00000000
 [DebugChecksum]
-Checksum=-321755321
+Checksum=-1968216481
 [InterruptLog]
 LogEnabled=0
 SumEnabled=0
@@ -42,6 +42,18 @@ ShowSource=1
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
+[CallStack]
+ShowArgs=0
+[Disassembly]
+MixedMode=1
+[CallStackLog]
+Enabled=0
+[DriverProfiling]
+Enabled=0
+Mode=0
+Graph=0
+Symbiont=0
+Exclusions=
 [Disassemble mode]
 mode=0
 [Breakpoints]
@@ -54,5 +66,6 @@ Category=_ 0
 LoggingEnabled=_ 0
 LogFile=_ ""
 [Aliases]
-Count=0
+A0=_ "C:\Program Files (x86)\StellarisWare\driverlib\sysctl.c" ""
+Count=1
 SuppressDialog=0

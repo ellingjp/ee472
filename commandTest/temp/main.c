@@ -34,6 +34,8 @@ void main () {
 	RIT128x96x4StringDraw(num, 0, 0, 15);
 #endif
 
+	strncpy(global.commandStr, "D\n", COMMAND_LENGTH - 1);
+
 	commandTask.runTaskFunction(commandTask.taskDataPtr);
 	
 #if DEBUG
