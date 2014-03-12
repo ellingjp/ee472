@@ -17,9 +17,9 @@
 
 // Used for debug display
 #if DEBUG_COMMAND
-	#include "drivers/rit128x96x4.h"
-	#include "utils/ustdlib.h"
-	char num[30];
+#include "drivers/rit128x96x4.h"
+#include "utils/ustdlib.h"
+char num[30];
 #endif 
 
 #define TOKEN_DELIM	" \t"	// token delimiter values
@@ -65,17 +65,17 @@ void parse(CommandData *cData) {
 
 	cmd = strtok(parseArr, delim);
 	sensor = strtok(NULL, delim);
-	
+
 }
 
 /*
  * writes an acknowledge or not acknowledge to the response buffer
  */
-void ackNack(tBoolean stat) {
+void ackNack(CommandData *cData, tBoolean stat) {
 	if (stat) 
-		strncpy(data.responseStr, "A\0", 5);
+		strncpy(cData->responseStr, "A\0", 5);
 	else
-		strncpy(data.responseStr, "E\0", 5);
+		strncpy(cData->responseStr, "E\0", 5);
 }
 
 /*
@@ -102,10 +102,16 @@ void commandRunFunction(void *commandDataPtr) {
 
 	switch(*cmd) {
 		case 'D' : // toggle display on/off
-			*(data.displayOn) = !*(data.displayOn);
-			ackNack(true);
+			if (*(cData->displayOn)) {
+				vTaskSuspend(displayHandle);
+				RIT128x96x4Clear();
+			} else {
+				vTaskResume(displayHandle);
+			}
+			*(cData->displayOn) = !*(cData->displayOn);
+			ackNack(cData, true);
 #if DEBUG_COMMAND
-			usnprintf(num, 30, "%d %s", *(data.displayOn), data.responseStr);
+			usnprintf(num, 30, "%d %s", *(cData->displayOn), cData->responseStr);
 			RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
 			break;
@@ -119,22 +125,22 @@ void commandRunFunction(void *commandDataPtr) {
 //			IntEnable(INT_GPIOA);	// for pulse
 //			IntEnable(INT_ADC0SS0);	// for ekg
 //			IntEnable(INT_ADC0SS1);	// for temperature
-//			ackNack(true);
+//			ackNack(cData, true);
 //			break;
 //		case 'P' :	// stop 
 //			vTaskSuspend(measureHandle);
 //			vTaskSuspend(computeHandle);
 //			vTaskSuspend(ekgCaptureHandle);
 //			vTaskSuspend(ekgProcessHandle);
-//		
+//
 //			// disable the interrupts used for measurement
 //			IntDisable(INT_GPIOA);	// for pulse
 //			IntDisable(INT_ADC0SS0);	// for ekg
 //			IntDisable(INT_ADC0SS1);	// for temperature
-//			ackNack(true);
+//			ackNack(cData, true);
 //			break;
 		default :	// send error to remoteStr
-			ackNack(false);
+			ackNack(cData, false);
 #if DEBUG_COMMAND
 			usnprintf(num, 30, "invalid command");
 			RIT128x96x4StringDraw(num, 0, 30, 15);
