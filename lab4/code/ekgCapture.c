@@ -27,6 +27,7 @@
 #include "utils/ustdlib.h"
 #endif 
 
+#define EKG_TIMER_BASE TIMER1_BASE	// the timeer base used for sample collection
 #define EKG_TIMER TIMER_A	// the timer used for EKG sample collection
 #define EKG_SEQ 0	// The sequence number assigned to the ekg sensor
 #define EKG_CH ADC_CTL_CH0	// EKG analog input channel (ch0: pinE7, others: pinE4-6?)
@@ -114,13 +115,13 @@ void initializeEKGTask() {
 
 	// configure timer0 (uses both 16-bit timers) for periodic timing 
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
-	TimerDisable(TIMER0_BASE, TIMER_BOTH);
-	TimerConfigure(TIMER0_BASE, TIMER_CFG_32_BIT_PER );
-	TimerControlTrigger(TIMER0_BASE, TIMER_A, true);
-	TimerLoadSet(TIMER0_BASE, TIMER_A, (SysCtlClockGet() / SAMPLE_FREQ));
+	TimerDisable(EKG_TIMER_BASE, TIMER_BOTH);
+	TimerConfigure(EKG_TIMER_BASE, TIMER_CFG_32_BIT_PER );
+	TimerControlTrigger(EKG_TIMER_BASE, TIMER_A, true);
+	TimerLoadSet(EKG_TIMER_BASE, TIMER_A, (SysCtlClockGet() / SAMPLE_FREQ));
 
 #if DEBUG_EKG
-	long timeLoad =  TimerLoadGet(TIMER0_BASE, TIMER_A);
+	long timeLoad =  TimerLoadGet(EKG_TIMER_BASE, TIMER_A);
 	float secs = (timeLoad) / SysCtlClockGet();
 	usnprintf(num, 30, "timer: %d s %d c", secs, timeLoad);
 	RIT128x96x4StringDraw(num, 0, 10, 15);
@@ -143,12 +144,12 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 	sampleNum = 0;
 
 	ADCIntEnable(ADC0_BASE, EKG_SEQ);
-	TimerEnable(TIMER0_BASE, EKG_TIMER);
+	TimerEnable(EKG_TIMER_BASE, EKG_TIMER);
 
 	while (!ekgComplete) {	// ADC is capturing signal measurements
 	}
 
-	TimerDisable(TIMER0_BASE, EKG_TIMER);
+	TimerDisable(EKG_TIMER_BASE, EKG_TIMER);
 	ADCIntDisable(ADC0_BASE, EKG_SEQ); 
 
 	ekgProcessActive = true;	// we want to process our measurement
