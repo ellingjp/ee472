@@ -214,6 +214,9 @@ xQueueHandle xOLEDQueue;
 
 xTaskHandle computeHandle;
 xTaskHandle serialHandle;
+xTaskHandle measureHandle;
+xTaskHandle ekgComputeHandle;
+xTaskHandle ekgProcessHandle;
 
 /*************************************************************************
  * Please ensure to read http://www.freertos.org/portlm3sx965.html
@@ -230,7 +233,7 @@ int main( void )
     
     /* Start the tasks */
     RIT128x96x4Init(10000000);
-    xTaskCreate(measure, "measure task", 100,NULL, 2,NULL);
+    xTaskCreate(measure, "measure task", 100,NULL, 2, &measureHandle);
     xTaskCreate(compute, "compute task", 100,NULL, 3, &computeHandle);
     xTaskCreate(display, "display task", 100,NULL, 5,NULL);
     xTaskCreate(keyPad, "keyPad task", 100,NULL, 4,NULL);
