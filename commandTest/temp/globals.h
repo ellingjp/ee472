@@ -13,6 +13,7 @@
 #include "inc/hw_memmap.h"
 #include "driverlib/gpio.h"
 #include "driverlib/sysctl.h"
+#include <string.h>
 
 #define TEMP_RAW_INIT 80        // initial 80
 #define SYS_RAW_INIT 80        // initial 50
@@ -32,25 +33,25 @@
 #define COMMAND_LENGTH 10	// length of command and response strings
 
 typedef struct global_data {
-  CircularBuffer temperatureRaw;
-  CircularBuffer systolicPressRaw;
-  CircularBuffer diastolicPressRaw;
-  CircularBuffer pulseRateRaw;
+	CircularBuffer temperatureRaw;
+	CircularBuffer systolicPressRaw;
+	CircularBuffer diastolicPressRaw;
+	CircularBuffer pulseRateRaw;
 	int ekgRaw[NUM_EKG_SAMPLES];
-	 int ekgTemp[NUM_EKG_SAMPLES];
+	int ekgTemp[NUM_EKG_SAMPLES];
 
-  CircularBuffer temperatureCorrected;
-  CircularBuffer systolicPressCorrected;
-  CircularBuffer diastolicPressCorrected;
-  CircularBuffer pulseRateCorrected;
-  CircularBuffer ekgFrequencyResult;
+	CircularBuffer temperatureCorrected;
+	CircularBuffer systolicPressCorrected;
+	CircularBuffer diastolicPressCorrected;
+	CircularBuffer pulseRateCorrected;
+	CircularBuffer ekgFrequencyResult;
 
-  unsigned short batteryState;
-  unsigned short mode;
-  unsigned short measurementSelection;
-  tBoolean alarmAcknowledge;
-  tBoolean select;
-  unsigned short scroll;
+	unsigned short batteryState;
+	unsigned short mode;
+	unsigned short measurementSelection;
+	tBoolean alarmAcknowledge;
+	tBoolean select;
+	unsigned short scroll;
 	char commandStr[COMMAND_LENGTH];
 	char responseStr[COMMAND_LENGTH];
 	tBoolean displayOn;

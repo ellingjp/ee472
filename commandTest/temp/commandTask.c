@@ -55,21 +55,27 @@ void initializeCommandTask(){
 
 
 /*
- *  parses the command string for command parameters, sriting those values to
+ *  parses the command string for command parameters, writing those values to
  *  variables
  */
-void parse() {
-	char delim[2] = " ";
+void parse(CommandData *cData) {
+	char delim[2] = TOKEN_DELIM;
 
-	strncpy(parseArr, data.commandStr, COMMAND_LENGTH - 1);
+	strncpy(parseArr, cData->commandStr, COMMAND_LENGTH - 1);
 
 	cmd = strtok(parseArr, delim);
 	sensor = strtok(NULL, delim);
 	
-#if DEBUG_COMMAND
-	usnprintf(num, 30, strcat(cmd, sensor));
-	RIT128x96x4StringDraw(num, 0, 20, 15);
-#endif
+}
+
+/*
+ * writes an acknowledge or not acknowledge to the response buffer
+ */
+void ackNack(tBoolean stat) {
+	if (stat) 
+		strncpy(data.responseStr, "A\0", 5);
+	else
+		strncpy(data.responseStr, "E\0", 5);
 }
 
 /*
@@ -80,28 +86,55 @@ void commandRunFunction(void *commandDataPtr) {
 		initialized = true;
 		initializeCommandTask();
 	}
+	CommandData *cData = (CommandData *) commandDataPtr;
 
 #if DEBUG_COMMAND
 	usnprintf(num, 30, "Initialize cmd function");
 	RIT128x96x4StringDraw(num, 0, 10, 15);
 #endif
 
-	parse();
+	parse(cData);
 
 #if DEBUG_COMMAND
-	usnprintf(num, 30, strcat(cmd, sensor));
-	RIT128x96x4StringDraw(num, 0, 30, 15);
+	usnprintf(num, 30, "%s %s", cmd, sensor);
+	RIT128x96x4StringDraw(num, 0, 20, 15);
 #endif
 
 	switch(*cmd) {
 		case 'D' : // toggle display on/off
 			*(data.displayOn) = !*(data.displayOn);
+			ackNack(true);
 #if DEBUG_COMMAND
-			usnprintf(num, 30, "%d", *(data.displayOn));
+			usnprintf(num, 30, "%d %s", *(data.displayOn), data.responseStr);
 			RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
 			break;
+//		case 'S' :	// start measurements
+//			vTaskResume(measureHandle);
+//			vTaskResume(computeHandle);
+//			vTaskResume(ekgCaptureHandle);
+//			vTaskResume(ekgProcessHandle);
+//
+//			// enable the interrupts used for measurement
+//			IntEnable(INT_GPIOA);	// for pulse
+//			IntEnable(INT_ADC0SS0);	// for ekg
+//			IntEnable(INT_ADC0SS1);	// for temperature
+//			ackNack(true);
+//			break;
+//		case 'P' :	// stop 
+//			vTaskSuspend(measureHandle);
+//			vTaskSuspend(computeHandle);
+//			vTaskSuspend(ekgCaptureHandle);
+//			vTaskSuspend(ekgProcessHandle);
+//		
+//			// disable the interrupts used for measurement
+//			IntDisable(INT_GPIOA);	// for pulse
+//			IntDisable(INT_ADC0SS0);	// for ekg
+//			IntDisable(INT_ADC0SS1);	// for temperature
+//			ackNack(true);
+//			break;
 		default :	// send error to remoteStr
+			ackNack(false);
 #if DEBUG_COMMAND
 			usnprintf(num, 30, "invalid command");
 			RIT128x96x4StringDraw(num, 0, 30, 15);

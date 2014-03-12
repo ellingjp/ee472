@@ -11,7 +11,7 @@ ByteLimit=50
 [LMIFTDIDriver]
 LMI_ResetMode=0x00000000
 [DebugChecksum]
-Checksum=-1968216481
+Checksum=1364577552
 [InterruptLog]
 LogEnabled=0
 SumEnabled=0
@@ -46,6 +46,8 @@ StopOnThrow=_ 0
 ShowArgs=0
 [Disassembly]
 MixedMode=1
+[watch_formats]
+Fmt0={W}0:delim[2]	5	0
 [CallStackLog]
 Enabled=0
 [DriverProfiling]
@@ -57,7 +59,8 @@ Exclusions=
 [Disassemble mode]
 mode=0
 [Breakpoints]
-Count=0
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\temp\commandTask.c}.89.12" 1 0 0 0 "" 0 ""
+Count=1
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -66,6 +69,6 @@ Category=_ 0
 LoggingEnabled=_ 0
 LogFile=_ ""
 [Aliases]
-A0=_ "C:\Program Files (x86)\StellarisWare\driverlib\sysctl.c" ""
+A0=_ "C:\Program Files (x86)\StellarisWare\driverlib\sysctl.c" "C:\StellarisWare\driverlib\sysctl.c"
 Count=1
-SuppressDialog=0
+SuppressDialog=1
