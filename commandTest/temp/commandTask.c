@@ -115,30 +115,38 @@ void commandRunFunction(void *commandDataPtr) {
 			RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
 			break;
-//		case 'S' :	// start measurements
-//			vTaskResume(measureHandle);
-//			vTaskResume(computeHandle);
-//			vTaskResume(ekgCaptureHandle);
-//			vTaskResume(ekgProcessHandle);
-//
-//			// enable the interrupts used for measurement
-//			IntEnable(INT_GPIOA);	// for pulse
-//			IntEnable(INT_ADC0SS0);	// for ekg
-//			IntEnable(INT_ADC0SS1);	// for temperature
-//			ackNack(cData, true);
-//			break;
-//		case 'P' :	// stop 
-//			vTaskSuspend(measureHandle);
-//			vTaskSuspend(computeHandle);
-//			vTaskSuspend(ekgCaptureHandle);
-//			vTaskSuspend(ekgProcessHandle);
-//
-//			// disable the interrupts used for measurement
-//			IntDisable(INT_GPIOA);	// for pulse
-//			IntDisable(INT_ADC0SS0);	// for ekg
-//			IntDisable(INT_ADC0SS1);	// for temperature
-//			ackNack(cData, true);
-//			break;
+		case 'S' :	// start measurements
+			vTaskResume(measureHandle);
+			vTaskResume(computeHandle);
+			vTaskResume(ekgCaptureHandle);
+			vTaskResume(ekgProcessHandle);
+
+			// enable the interrupts used for measurement
+			IntEnable(INT_GPIOA);	// for pulse
+			IntEnable(INT_ADC0SS0);	// for ekg
+			IntEnable(INT_ADC0SS1);	// for temperature
+			ackNack(cData, true);
+			break;
+		case 'P' :	// stop 
+			vTaskSuspend(measureHandle);
+			vTaskSuspend(computeHandle);
+			vTaskSuspend(ekgCaptureHandle);
+			vTaskSuspend(ekgProcessHandle);
+
+			// disable the interrupts used for measurement
+			IntDisable(INT_GPIOA);	// for pulse
+			IntDisable(INT_ADC0SS0);	// for ekg
+			IntDisable(INT_ADC0SS1);	// for temperature
+			ackNack(cData, true);
+			break;
+		case 'M' : // measure a sensor
+//			measure(cData); //TODO make this sw/c in a new function?
+			ackNack(cData, true);
+			break;
+		case 'G' :
+			debug(cData);
+			ackNack(cData, true);
+			break;
 		default :	// send error to remoteStr
 			ackNack(cData, false);
 #if DEBUG_COMMAND
