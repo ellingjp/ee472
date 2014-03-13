@@ -13,6 +13,7 @@
  * given, commandTask responds with an 'E' character. Otherwise, the immediate
  * response is 'A', followed by any specified return value(s).
  *
+
  * <X> : Primary Command affecting major system functions
  *
  * 		S - Indicates START mode. Causes the hardware to initiate the
