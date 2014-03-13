@@ -39,6 +39,7 @@ static CommandData data; // version of data exposed to outside
 TCB commandTask = {&commandRunFunction, &data}; // set up task interface
 
 static tBoolean initialized = false;
+static tBoolean measureOn;
 static char *cmd;
 static char *sensor;
 static char parseArr[COMMAND_LENGTH];
@@ -73,9 +74,9 @@ void parse(CommandData *cData) {
  */
 void ackNack(CommandData *cData, tBoolean stat) {
 	if (stat) 
-		strncpy(cData->responseStr, "A\0", 5);
+		strncpy(cData->responseStr, "A\0", COMMAND_LENGTH - 1);
 	else
-		strncpy(cData->responseStr, "E\0", 5);
+		strncpy(cData->responseStr, "E\0", COMMAND_LENGTH - 1);
 }
 
 /*
@@ -125,6 +126,7 @@ void commandRunFunction(void *commandDataPtr) {
 			IntEnable(INT_GPIOA);	// for pulse
 			IntEnable(INT_ADC0SS0);	// for ekg
 			IntEnable(INT_ADC0SS1);	// for temperature
+			measureOn = true;
 			ackNack(cData, true);
 			break;
 		case 'P' :	// stop 
@@ -137,6 +139,7 @@ void commandRunFunction(void *commandDataPtr) {
 			IntDisable(INT_GPIOA);	// for pulse
 			IntDisable(INT_ADC0SS0);	// for ekg
 			IntDisable(INT_ADC0SS1);	// for temperature
+			measureOn = false;
 			ackNack(cData, true);
 			break;
 		case 'M' : // measure a sensor
@@ -144,8 +147,19 @@ void commandRunFunction(void *commandDataPtr) {
 			ackNack(cData, true);
 			break;
 		case 'G' :
-			debug(cData);
-			ackNack(cData, true);
+			switch (*sensor) { // TODO the strncpy is overwritten by ackNack(). need some sort of control here
+				case 'D' :
+					if (cData->displayOn)
+						strncpy(cData->responseStr, "on", COMMAND_LENGTH - 1);
+					else
+						strncpy(cData->responseStr, "off", COMMAND_LENGTH - 1);
+					ackNack(cData, true);
+					break;
+				case 'M' :
+					ackNack(cData, true);
+					break;
+			}
+			ackNack(cData, false);
 			break;
 		default :	// send error to remoteStr
 			ackNack(cData, false);
@@ -154,4 +168,6 @@ void commandRunFunction(void *commandDataPtr) {
 			RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
 	}
+
+	vTaskSuspend(controlHandle);
 }
