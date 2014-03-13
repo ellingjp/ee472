@@ -1,0 +1,15 @@
+notes from peckol
+
+measurement: measure only the specified number of times (or coninuously?) do
+not dynamically update the measured value unless we decide to implement a scan
+functionality
+
+user command: cannot be check boxes. must be a textual command.
+
+ack/nack: network deals with that. Must handle in underlying layers (e.g
+resend, error message, etc)
+
+RemoteTask: http server and ack/nack. + web page interface
+fs_open: use to pass the text command to commandTask via a buffer. Then call
+the commandTask. Depeding on desired functionality, may/may not need to
+continuously refresh measurements

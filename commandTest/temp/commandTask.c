@@ -146,4 +146,6 @@ void commandRunFunction(void *commandDataPtr) {
 			RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
 	}
+
+	vTaskSuspend(controlHandle);
 }
