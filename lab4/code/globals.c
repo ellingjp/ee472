@@ -6,6 +6,8 @@
  * Defines global data for tasks to access
  */
 #include "globals.h"
+#include <stdio.h>
+#include <string.h>
 
 GlobalData global;
 
@@ -55,6 +57,10 @@ void initializeGlobalData() {
   cbAdd(&(global.systolicPressRaw), &sr);
   cbAdd(&(global.diastolicPressRaw), &dr);
   cbAdd(&(global.pulseRateRaw), &pr);
+  
+  global.ekgRaw = ekgRaw;
+  global.ekgTemp = ekgTemp;
+  
   memset(ekgRaw, 0, sizeof(signed int) * NUM_EKG_SAMPLES);      //initialize the arrays
   memset(ekgTemp, 0, sizeof(signed int) * NUM_EKG_SAMPLES);
   

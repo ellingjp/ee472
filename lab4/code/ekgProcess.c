@@ -13,6 +13,8 @@
 #include "ekgProcess.h"
 #include "CircularBuffer.h"
 #include "optfft.h"
+#include <stdio.h>
+#include <string.h>
 
 // Used for debug display
 #if DEBUG_PROC
@@ -61,9 +63,6 @@ void ekgProcessRunFunction(void *ekgData) {
 		initializeEKGProcess();
 	}
 
-	// reset Imaginary array
-	memset(eData->ekgImgData, 0, sizeof(signed int) * NUM_EKG_SAMPLES);
-
 	// need to bit shift >> 4 (divide 16) then subtract 32
 	int i = 0;
 	int t = 0;	// debug
@@ -72,7 +71,7 @@ void ekgProcessRunFunction(void *ekgData) {
 		usnprintf(num, 30, "%d \n", eData->ekgRawData[i]);
 		RIT128x96x4StringDraw(num, 0, 10, 15);
 #endif
-		int d = (int)((float) (eData->ekgRawData)[i] / 16 - 32) ;//((eData->ekgRawData)[i] >> 4) - 31;
+		int d = ((eData->ekgRawData)[i] >> 4) - 31;
 		eData->ekgRawData[i] = d;
 #if DEBUG_PROC
 		if (eData->ekgRawData[i] > eData->ekgRawData[t])
@@ -81,17 +80,20 @@ void ekgProcessRunFunction(void *ekgData) {
 		RIT128x96x4StringDraw(num, 0, 20, 15);
 #endif
 	}
-
-
+        
+                	// reset Imaginary array
+	memset(eData->ekgImgData, 0, sizeof(signed int) * NUM_EKG_SAMPLES);
+//	memset(eData->ekgRawData, 0, sizeof(signed int) * NUM_EKG_SAMPLES);
+        
 	signed int max_index = optfft( eData->ekgRawData, eData->ekgImgData );
 	//post processing
-	int freq = (SAMPLE_FREQ) * max_index / 8;
+	int freq = ((SAMPLE_FREQ) * max_index) / NUM_EKG_SAMPLES;
 
 #if DEBUG_PROC
 	usnprintf(num, 30, "%d : %d  ", max_index, freq);
 	RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
-	//	cbAdd(eData->ekgFreqResult, &freq);
+	cbAdd(eData->ekgFreqResult, &freq);
 
 	ekgProcessActive = false;
 }
