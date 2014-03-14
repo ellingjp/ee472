@@ -61,7 +61,7 @@ extern void __iar_program_start(void);
 // Reserve space for the system stack.
 //
 //*****************************************************************************
-static unsigned long pulStack[64] @ ".noinit";
+static unsigned long pulStack[1024] @ ".noinit";
 
 //*****************************************************************************
 //
@@ -116,8 +116,8 @@ __root const uVectorEntry __vector_table[] @ ".intvec" =
     IntDefaultHandler,                      // PWM Generator 1
     IntDefaultHandler,                      // PWM Generator 2
     IntDefaultHandler,                      // Quadrature Encoder 0
-    ADC0IntHandler,                      // ADC Sequence 0
-    IntDefaultHandler,                      // ADC Sequence 1
+    IntDefaultHandler,                      // ADC Sequence 0
+    ADC0IntHandler,                      // ADC Sequence 1
     IntDefaultHandler,                      // ADC Sequence 2
     IntDefaultHandler,                      // ADC Sequence 3
     IntDefaultHandler,                      // Watchdog timer
