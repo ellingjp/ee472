@@ -37,7 +37,7 @@ static char num[30];	// used for display
 #endif
 
 static tBoolean firstRun = true;
-static tBoolean ekgComplete;
+static tBoolean ekgComplete = false;
 extern tBoolean ekgProcessActive;
 
 // ekgCapture data structure. Internal to the task
@@ -60,27 +60,25 @@ void initializeEKGTask() {
 	RIT128x96x4StringDraw("* EKGCapture Debug *", 0, 0, 15);
 #endif
 	data.ekgRawDataAddr =  global.ekgRaw;
-	ekgComplete = false;
 
 	// Enable read from GPIO pin (move this and below to startup?)
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
 	GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_7);
 
-        // Enable ADC1 @ 250ksps
+        // Enable ADC0 @ 500ksps
         SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
         SysCtlADCSpeedSet(SYSCTL_ADCSPEED_500KSPS);
         
-	// Setup ADC1 to sample on trigger from EKG_CH
+	// Setup ADC0 to sample on trigger from EKG_CH
         ADCSequenceDisable(ADC0_BASE, EKG_SEQ);
-	ADCSequenceConfigure(ADC0_BASE, 1, ADC_TRIGGER_TIMER, 1);
-	ADCSequenceStepConfigure(ADC0_BASE, 1, 0, ADC_CTL_IE | ADC_CTL_END | EKG_CH);
+	ADCSequenceConfigure(ADC0_BASE, EKG_SEQ, ADC_TRIGGER_TIMER, 1);
+	ADCSequenceStepConfigure(ADC0_BASE, EKG_SEQ, 0, ADC_CTL_IE | ADC_CTL_END | EKG_CH);
         ADCIntEnable(ADC0_BASE, EKG_SEQ);
         ADCIntRegister(ADC0_BASE, EKG_SEQ, ADC0IntHandler);
         
-        
 	// configure timer0 (uses both 16-bit timers) for periodic timing 
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
-	TimerDisable(TIMER0_BASE, TIMER_BOTH);
+	TimerDisable(TIMER0_BASE, EKG_TIMER);
 	TimerConfigure(TIMER0_BASE, TIMER_CFG_16_BIT_PAIR | TIMER_CFG_A_PERIODIC );
 	TimerControlTrigger(TIMER0_BASE, EKG_TIMER, true);
 	TimerLoadSet(TIMER0_BASE, EKG_TIMER, (SysCtlClockGet() / SAMPLE_FREQ));
@@ -132,7 +130,7 @@ void ADC0IntHandler() {
         static int i = 0;
         
 	// Read the value from the ADC.
-	while (1 != ADCSequenceDataGet(ADC0_BASE, 1, &value));
+	while (1 != ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, &value));
         (data.ekgRawDataAddr)[i++] = (signed int) value;
         
         // Done sampling if we've taken enough samples
