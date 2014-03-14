@@ -298,9 +298,17 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>$PROJ_DIR$\required_files</state>
-          <state>$PROJ_DIR$\..\lab3\code</state>
+          <state>$PROJ_DIR$</state>
           <state>$PROJ_DIR$\..\lab4\code</state>
+          <state>$PROJ_DIR$\..\current_project</state>
+          <state>$PROJ_DIR$\..\FreeRTOS\Source\portable\IAR\ARM_CM3</state>
+          <state>$PROJ_DIR$\..\FreeRTOS\source\include</state>
+          <state>C:\StellarisWare\</state>
+          <state>C:\StellarisWare\inc</state>
+          <state>C:\StellarisWare\utils</state>
+          <state>C:\StellarisWare\driverlib</state>
+          <state>C:\StellarisWare\boards\ek-lm3s8962\drivers</state>
+          <state>C:\StellarisWare\boards\ek-lm3s8962\</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1898,7 +1906,7 @@
     <name>$PROJ_DIR$\..\lab3\code\rit128x96x4.c</name>
   </file>
   <file>
-    <name>$PROJ_DIR$\..\lab3\code\schedule.h</name>
+    <name>$PROJ_DIR$\..\lab4\code\schedule.h</name>
   </file>
   <file>
     <name>$PROJ_DIR$\..\lab3\code\startup.c</name>

@@ -8,6 +8,7 @@
 #include "ekgProcess.h"
 //#include "schedule.h"
 
+#define DEBUG 1
 // Used for debug display
 #if DEBUG
 	#include "drivers/rit128x96x4.h"
@@ -21,11 +22,11 @@ extern tBoolean ekgProcessActive;
 tBoolean ekgProcessActive;
 
 void main () {
-	// SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | 
-	//                SYSCTL_XTAL_8MHZ);
+	SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | 
+	                SYSCTL_XTAL_8MHZ);
 
 	// NOTE: actual clock speed is pll / 2/ div = 400M / 2/ 10
-	SysCtlClockSet(SYSCTL_SYSDIV_10 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_8MHZ); 
+//	SysCtlClockSet(SYSCTL_SYSDIV_10 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_8MHZ); 
 	tBoolean ekgProcessActive = false;
 
 	startup();

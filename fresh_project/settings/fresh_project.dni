@@ -11,7 +11,7 @@ ByteLimit=50
 [LMIFTDIDriver]
 LMI_ResetMode=0x00000000
 [DebugChecksum]
-Checksum=-2142097903
+Checksum=222217578
 [InterruptLog]
 LogEnabled=0
 SumEnabled=0
@@ -51,13 +51,6 @@ Fmt0={W}0:R0	4	0
 Fmt1={W}0:R1	4	0
 Fmt2={W}0:R4	4	0
 Fmt3={W}0:R5	4	0
-[Log file]
-LoggingEnabled=_ 0
-LogFile=_ ""
-Category=_ 0
-[TermIOLog]
-LoggingEnabled=_ 0
-LogFile=_ ""
 [CallStackLog]
 Enabled=0
 [DriverProfiling]
@@ -69,10 +62,18 @@ Exclusions=
 [Disassemble mode]
 mode=0
 [Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\lab4\code\ekgProcess.c}.94.3" 1 0 0 0 "" 0 ""
-Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\lab4\code\ekgProcess.c}.86.13" 1 0 0 0 "" 0 ""
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\ProgramData\Microsoft\Windows\Start Menu\Programs\IAR Systems\IAR Embedded Workbench for ARM 6.40}.787.16" 0 0 0 0 "" 0 ""
+Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\lab4\code\ekgProcess.c}.85.5" 1 0 0 0 "" 0 ""
 Count=2
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
 [Aliases]
 A0=_ "C:\Program Files (x86)\StellarisWare\driverlib\sysctl.c" "C:\StellarisWare\driverlib\sysctl.c"
-Count=1
-SuppressDialog=0
+A1=_ "C:\Program Files (x86)\StellarisWare\driverlib\timer.c" ""
+Count=2
+SuppressDialog=1
