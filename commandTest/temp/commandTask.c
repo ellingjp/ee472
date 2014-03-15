@@ -23,6 +23,7 @@ char num[30];
 #endif 
 
 #define TOKEN_DELIM	" \t"	// token delimiter values
+#define TEMP_BUFFER_LEN 40
 
 // compiler prototypes
 void commandRunFunction(void *commandDataPtr);
@@ -40,6 +41,7 @@ TCB commandTask = {&commandRunFunction, &data}; // set up task interface
 
 static tBoolean initialized = false;
 static tBoolean measureOn;
+static char temporaryBuffer[TEMP_BUFFER_LEN];	// for formatting single responses
 static char *cmd;
 static char *sensor;
 static char parseArr[COMMAND_LENGTH];
@@ -70,17 +72,42 @@ void parse(CommandData *cData) {
 }
 
 /*
- * writes an acknowledge or not acknowledge to the response buffer
+ * Adds an acknowledge or not acknowledge to the response buffer
  */
 void ackNack(CommandData *cData, tBoolean stat) {
 	if (stat) 
-		strncpy(cData->responseStr, "A\0", COMMAND_LENGTH - 1);
+		strncat(cData->responseStr, "<p>A</p>", RESPONSE_LENGTH - 1);
 	else
-		strncpy(cData->responseStr, "E\0", COMMAND_LENGTH - 1);
+		strncat(cData->responseStr, "<p>E</p>", RESPONSE_LENGTH - 1);
+}
+
+/*
+ * Formats given string with appropriate html tags. Returns pointer to
+ * formmated string. If statusOK is false, <blink> or </blink> flags are added.
+ *
+ * CAUTION! addTags does not guard against buffer overflow. Make sure your
+ * string is not too long. The tags add up to 22 characters.
+ */
+char* addTags(char* string, tBoolean statusOK) {
+	strncpy(temporaryBuffer, "<p>", 3); // first tag
+
+	if (!statusOK) {
+		strcat(temporaryBuffer, "<blink>");	// include warning maybe
+	}	
+	strcat(temporaryBuffer, string);
+	if (!statusOK) {
+		strcat(temporaryBuffer, "</blink>");
+	}
+	strcat(temporaryBuffer, "</p>");
+
+	return temporaryBuffer;
 }
 
 /*
  * runs the command task
+ *
+ * NB: the response string needs html formatting:
+ * ex: <p> Temperature: 50 C </p> <p> <blink> Blood Pressure: 120 </blink> </p>
  */
 void commandRunFunction(void *commandDataPtr) {
 	if (!initialized) {
@@ -101,6 +128,7 @@ void commandRunFunction(void *commandDataPtr) {
 	RIT128x96x4StringDraw(num, 0, 20, 15);
 #endif
 
+	memset(cData->responseStr, '\0', RESPONSE_LENGTH);
 	switch(*cmd) {
 		case 'D' : // toggle display on/off
 			if (*(cData->displayOn)) {
@@ -144,19 +172,24 @@ void commandRunFunction(void *commandDataPtr) {
 			break;
 		case 'M' : // measure a sensor
 //			measure(cData); //TODO make this sw/c in a new function?
-			ackNack(cData, true);
+			switch (*sensor) {
+				case 'T':
+			}
+			ackNack(cData, false);
 			break;
-		case 'G' :
-			switch (*sensor) { // TODO the strncpy is overwritten by ackNack(). need some sort of control here
+		case 'G' :	// Commands for DEBUG mode
+			switch (*sensor) { 
 				case 'D' :
-					if (cData->displayOn)
-						strncpy(cData->responseStr, "on", COMMAND_LENGTH - 1);
-					else
-						strncpy(cData->responseStr, "off", COMMAND_LENGTH - 1);
 					ackNack(cData, true);
+					if (cData->displayOn)
+						strncat(cData->responseStr, "<p>0n</p>", RESPONSE_LENGTH - 1);
+					else
+						strncat(cData->responseStr, "<p>off</p>", RESPONSE_LENGTH - 1);
 					break;
 				case 'M' :
 					ackNack(cData, true);
+					addTags((measureON ? "ON" : "OFF"), false); //TODO fix the false vlaue
+					strncat(cData->responseStr, temporaryBuff, RESPONSE_LENGTH - 1);
 					break;
 			}
 			ackNack(cData, false);

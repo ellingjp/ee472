@@ -30,7 +30,8 @@
 
 #define NUM_EKG_SAMPLES 256
 #define SAMPLE_FREQ  9375	// # sample frequency to get a good measure of < 3750 Hz
-#define COMMAND_LENGTH 10	// length of command and response strings
+#define COMMAND_LENGTH 10	// length of command string
+#define RESPONSE_LENGTH 265 // length of response string
 
 typedef struct global_data {
 	CircularBuffer temperatureRaw;

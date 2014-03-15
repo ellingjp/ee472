@@ -33,24 +33,28 @@
  *
  * <Y> : Modifier specifying the sublevel of behavior
  * 		
- * 		A - Instruct the system to measure all sensors
+ * 		A - Instruct the system to measure All sensors
  *
  * 		T - Instruct system to measure Temperature. Will return the temperature
  * 		in degrees Celsius
  *
- * 		B - Instruct system to measure the patient blood pressure. Will return
+ * 		B - Instruct system to measure the patient Blood pressure. Will return
  * 		the systolic and diastolic blood pressure in mmHg
  *
- * 		P - Instruct system to measure patient pulse rate. Will return the heart
+ * 		P - Instruct system to measure patient Pulse rate. Will return the heart
  * 		rate in beats per minute
  *
  * 		E - Instruct the system to perform an EKG measurement. Will return the
  * 		primary EKG frequency
  *
- * 		D - DEBUG mode only. Returns the local display status
+ * 		S - Query the system battery Status. Returns the percentage left.
  *
- * 		M - DEBUG mode only. Returns system measurement status. Returns boolean
+ * 		D - DEBUG mode only. Returns the local Display status
+ *
+ * 		M - DEBUG mode only. Returns system Measurement status. Returns boolean
  * 		true if measurement is enabled, false otherwise
+ *
+ * 		T - DEBUG mode only. Returns the Type of the last measurement performed.
  *
  *
  * <Z> : Modifier specifying the number of measurements to perform. The
