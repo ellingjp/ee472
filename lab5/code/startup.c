@@ -27,6 +27,7 @@
 #include "httpserver_raw/httpd.h"
 #include "drivers/rit128x96x4.h"
 
+
 //*****************************************************************************
 //
 // Defines for setting up the system clock.
@@ -53,52 +54,6 @@ static volatile unsigned long g_ulFlags;
 //
 //*****************************************************************************
 extern void httpd_init(void);
-
-//*****************************************************************************
-//
-// SSI tag indices for each entry in the g_pcSSITags array.
-//
-//*****************************************************************************
-#define SSI_INDEX_LEDSTATE  0
-#define SSI_INDEX_PWMSTATE  1
-#define SSI_INDEX_PWMFREQ   2
-#define SSI_INDEX_PWMDUTY   3
-#define SSI_INDEX_FORMVARS  4
-
-
-//*****************************************************************************
-//
-// This array holds all the strings that are to be recognized as SSI tag
-// names by the HTTPD server.  The server will call SSIHandler to request a
-// replacement string whenever the pattern <!--#tagname--> (where tagname
-// appears in the following array) is found in ".ssi", ".shtml" or ".shtm"
-// files that it serves.
-//
-//*****************************************************************************
-static const char *g_pcConfigSSITags[] =
-{
-    "LEDtxt",        // SSI_INDEX_LEDSTATE
-    "PWMtxt",        // SSI_INDEX_PWMSTATE
-    "PWMfreq",       // SSI_INDEX_PWMFREQ
-    "PWMduty",       // SSI_INDEX_PWMDUTY
-    "FormVars"       // SSI_INDEX_FORMVARS
-};
-
-//*****************************************************************************
-//
-//! The number of individual SSI tags that the HTTPD server can expect to
-//! find in our configuration pages.
-//
-//*****************************************************************************
-#define NUM_CONFIG_SSI_TAGS     (sizeof(g_pcConfigSSITags) / sizeof (char *))
-
-//*****************************************************************************
-//
-//! Prototype for the main handler used to process server-side-includes for the
-//! application's web-based configuration screens.
-//
-//*****************************************************************************
-static int SSIHandler(int iIndex, char *pcInsert, int iInsertLen);
 
 
 //*****************************************************************************
@@ -189,9 +144,6 @@ void startup() {
     //
     // Pass our tag information to the HTTP server.
     //
-    http_set_ssi_handler(SSIHandler, g_pcConfigSSITags,
-                         NUM_CONFIG_SSI_TAGS);
-
 
     // Initialize IO controls
     //
@@ -300,55 +252,3 @@ void lwIPHostTimerHandler(void)
     }
 }
 
-
-//*****************************************************************************
-//
-// This function is called by the HTTP server whenever it encounters an SSI
-// tag in a web page.  The iIndex parameter provides the index of the tag in
-// the g_pcConfigSSITags array. This function writes the substitution text
-// into the pcInsert array, writing no more than iInsertLen characters.
-//
-//*****************************************************************************
-static int
-SSIHandler(int iIndex, char *pcInsert, int iInsertLen)
-{
-    unsigned long ulVal;
-
-    //
-    // Which SSI tag have we been passed?
-    //
-    switch(iIndex)
-    {
-        case SSI_INDEX_LEDSTATE:
-            io_get_ledstate(pcInsert, iInsertLen);
-            break;
-
-        case SSI_INDEX_PWMSTATE:
-            io_get_pwmstate(pcInsert, iInsertLen);
-            break;
-
-        case SSI_INDEX_PWMFREQ:
-            ulVal = io_get_pwmfreq();
-            usnprintf(pcInsert, iInsertLen, "%d", ulVal);
-            break;
-
-        case SSI_INDEX_PWMDUTY:
-            ulVal = io_get_pwmdutycycle();
-            usnprintf(pcInsert, iInsertLen, "%d", ulVal);
-            break;
-
-        case SSI_INDEX_FORMVARS:
-            usnprintf(pcInsert, iInsertLen,
-                      "%sps=%d;\nls=%d;\npf=%d;\npd=%d;\n%s",
-                      JAVASCRIPT_HEADER,
-                      io_is_pwm_on(),
-                      io_is_led_on(),
-                      io_get_pwmfreq(),
-                      io_get_pwmdutycycle(),
-                      JAVASCRIPT_FOOTER);
-            break;
-
-        default:
-            usnprintf(pcInsert, iInsertLen, "??");
-            break;
-    }

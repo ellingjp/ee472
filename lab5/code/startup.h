@@ -21,4 +21,3 @@ void DisplayIPAddress();
 
 void lwIPHostTimerHandler();
 
-static int SSIHandler();
