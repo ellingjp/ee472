@@ -33,7 +33,7 @@ typedef struct commandData
 {
 	char *commandStr;
 	char *responseStr;
-	tBoolean *displayOn;
+
 } CommandData;
 
 static CommandData data; // version of data exposed to outside
@@ -41,6 +41,7 @@ TCB commandTask = {&commandRunFunction, &data}; // set up task interface
 
 static tBoolean initialized = false;
 static tBoolean measureOn;
+static tBoolean displayOn = true;
 static char temporaryBuffer[TEMP_BUFFER_LEN];	// for formatting single responses
 static char *cmd;
 static char *sensor;
@@ -53,7 +54,7 @@ static char parseArr[COMMAND_LENGTH];
 void initializeCommandTask(){
 	data.commandStr = (global.commandStr);
 	data.responseStr = (global.responseStr);
-	data.displayOn = &(global.displayOn);
+//	data.displayOn = &(global.displayOn);
 }
 
 
@@ -131,17 +132,17 @@ void commandRunFunction(void *commandDataPtr) {
 	memset(cData->responseStr, '\0', RESPONSE_LENGTH);
 	switch(*cmd) {
 		case 'D' : // toggle display on/off
-			if (*(cData->displayOn)) {
+			if (displayOn) {
 				//				vTaskSuspend(displayHandle);
 				RIT128x96x4Clear();
 			} else {
 				//				vTaskResume(displayHandle);
 			}
-			*(cData->displayOn) = !*(cData->displayOn);
+			displayOn = !displayOn;
 			ackNack(cData, true);
 			
 #if DEBUG_COMMAND
-			usnprintf(num, 30, "%d %s", *(cData->displayOn), cData->responseStr);
+			usnprintf(num, 30, "%d %s", displayOn, cData->responseStr);
 			RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
 			break;
@@ -183,13 +184,13 @@ void commandRunFunction(void *commandDataPtr) {
 			switch (*sensor) { 
 				case 'D' :
 					ackNack(cData, true);
-					if (cData->displayOn)
-						strncat(cData->responseStr, "<p>0n</p>", RESPONSE_LENGTH - 1);
+					if (displayOn)
+						strncat(cData->responseStr, "<p>On</p>", RESPONSE_LENGTH - 1);
 					else
-						strncat(cData->responseStr, "<p>off</p>", RESPONSE_LENGTH - 1);
+						strncat(cData->responseStr, "<p>Off</p>", RESPONSE_LENGTH - 1);
 
 #if DEBUG_COMMAND
-			usnprintf(num, 30, "%d %s", *(cData->displayOn), cData->responseStr);
+			usnprintf(num, 30, "%d %s", displayOn, cData->responseStr);
 			RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
 					break;

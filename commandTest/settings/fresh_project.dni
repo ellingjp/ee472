@@ -59,8 +59,8 @@ Exclusions=
 [Disassemble mode]
 mode=0
 [Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\temp\commandTask.c}.92.5" 1 0 0 0 "" 0 ""
-Bp1=_ "STD_CODE" "{$PROJ_DIR$\temp\commandTask.c}.131.5" 1 0 0 0 "" 0 ""
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\temp\commandTask.c}.92.11" 1 0 0 0 "" 0 ""
+Bp1=_ "STD_CODE" "{$PROJ_DIR$\temp\commandTask.c}.131.11" 1 0 0 0 "" 0 ""
 Count=2
 [Log file]
 LoggingEnabled=_ 0

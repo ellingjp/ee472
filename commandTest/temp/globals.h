@@ -55,7 +55,6 @@ typedef struct global_data {
 	unsigned short scroll;
 	char commandStr[COMMAND_LENGTH];
 	char responseStr[RESPONSE_LENGTH];
-	tBoolean displayOn;
 } GlobalData;
 
 extern GlobalData global;
