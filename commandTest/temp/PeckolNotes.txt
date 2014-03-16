@@ -25,9 +25,9 @@ reorder data/control flow so that:
 
 measure will perform all measurements.
 	- In the case of taking EKG measurements, it will start the EKGCapture task
-	  (resuming it). 
+	  (resuming it). ekgCaptureDone flag = false
 	- Then measure will start the compute task. 
 	- The Compute task will run EKGProcess if EKGCapture is run (according to
-	  the global measurement selection). 
+	  the global measurement selection). ekgcaptureDone flag = true
 	-	When Compute is finished, it signals to Command that a measurement is done
 		(via global measurementComplete flag).

@@ -20,6 +20,7 @@
 #include "drivers/rit128x96x4.h"
 #include "utils/ustdlib.h"
 char num[30];
+#include "measure.h"
 #endif 
 
 #define TOKEN_DELIM	" \t"	// token delimiter values
@@ -113,40 +114,59 @@ void measureFromSensor(CommandData* cData) {
 	tBoolean meas = true;
 	switch (*sensor) {
 		case 'A' :
+#if DEBUG_COMMAND
 			RIT128x96x4StringDraw("take A", 2, 30, 15);
+#endif
 			*(cData->measureSelect) = 0;
 			break;
 		case 'T':
+#if DEBUG_COMMAND
 			RIT128x96x4StringDraw("take T", 2, 30, 15);
+#endif
 			*(cData->measureSelect) = 1;
 			break;
 		case 'B':
+#if DEBUG_COMMAND
 			RIT128x96x4StringDraw("take B", 2, 30, 15);
+#endif
 			*(cData->measureSelect) = 2;
 			break;
 		case 'P' :
+#if DEBUG_COMMAND
 			RIT128x96x4StringDraw("take P", 2, 30, 15);
+#endif
 			*(cData->measureSelect) = 3;
 			break;
 		case 'E' :
+#if DEBUG_COMMAND
 			RIT128x96x4StringDraw("take E", 2, 30, 15);
+#endif
 			*(cData->measureSelect) = 4;
 			break;
 		case 'S' :
+#if DEBUG_COMMAND
 			RIT128x96x4StringDraw("unsupported", 0, 30, 15);
+#endif
 			*(cData->measureSelect) = '%';
 			break;
 		default :
+#if DEBUG_COMMAND
 			RIT128x96x4StringDraw("invalid command", 0, 30, 15);
+#endif
 			meas = false;
 	}
 
 	if (meas) {
 		ackNack(cData, true);
 //		vTaskResume(measureHandle);
+#if DEBUG_COMMAND
+		measureTask.runTaskFunction(measureTask.taskDataPtr); 
 		RIT128x96x4StringDraw("MeasureTask go!", 0, 40, 15);
+#endif
 	} else {
+#if DEBUG_COMMAND
 		RIT128x96x4StringDraw("no Measure", 0, 40, 15);
+#endif
 		ackNack(cData, false);
 	}
 /* See Peckol notes for structure revision

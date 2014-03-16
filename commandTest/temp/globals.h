@@ -51,9 +51,11 @@ typedef struct global_data {
 	unsigned short mode;
 	unsigned short measurementSelection;
 	tBoolean measurementComplete;
+	tBoolean ekgCaptureDone;
 	tBoolean alarmAcknowledge;
 	tBoolean select;
 	unsigned short scroll;
+	
 	char commandStr[COMMAND_LENGTH];
 	char responseStr[RESPONSE_LENGTH];
 } GlobalData;
