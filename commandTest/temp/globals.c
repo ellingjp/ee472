@@ -25,6 +25,9 @@ static int ekgFrequencyResultArr[16];
 static signed int ekgRaw[NUM_EKG_SAMPLES];	// initialize all the elements to 0
 static signed int ekgTemp[NUM_EKG_SAMPLES];
 
+//static char commandStr[COMMAND_LENGTH];
+//static char responseStr[RESPONSE_LENGTH];
+
 void initializeGlobalData() {
 	// Wrap the arrays
 	global.temperatureRaw = cbWrap(temperatureRawArr, sizeof(int), 8);
@@ -55,6 +58,9 @@ void initializeGlobalData() {
 	cbAdd(&(global.systolicPressRaw), &sr);
 	cbAdd(&(global.diastolicPressRaw), &dr);
 	cbAdd(&(global.pulseRateRaw), &pr);
+	
+//	global.commandStr = &commandStr;
+//	global.responseStr = responseStr;
 
 	cbAdd(&(global.temperatureCorrected), &tc);
 	cbAdd(&(global.systolicPressCorrected), &sc);
@@ -70,7 +76,7 @@ void initializeGlobalData() {
 	global.select = false;
 	global.scroll = 0;
 	memset(&(global.commandStr), NULL, sizeof(char) * COMMAND_LENGTH);
-	memset(&(global.responseStr), NULL, sizeof(char) * COMMAND_LENGTH);
+	memset(&(global.responseStr), NULL, sizeof(char) * RESPONSE_LENGTH);
 	global.displayOn = true;
 }
 

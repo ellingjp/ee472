@@ -132,48 +132,50 @@ void commandRunFunction(void *commandDataPtr) {
 	switch(*cmd) {
 		case 'D' : // toggle display on/off
 			if (*(cData->displayOn)) {
-				vTaskSuspend(displayHandle);
+				//				vTaskSuspend(displayHandle);
 				RIT128x96x4Clear();
 			} else {
-				vTaskResume(displayHandle);
+				//				vTaskResume(displayHandle);
 			}
 			*(cData->displayOn) = !*(cData->displayOn);
 			ackNack(cData, true);
+			
 #if DEBUG_COMMAND
 			usnprintf(num, 30, "%d %s", *(cData->displayOn), cData->responseStr);
 			RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
 			break;
 		case 'S' :	// start measurements
-			vTaskResume(measureHandle);
-			vTaskResume(computeHandle);
-			vTaskResume(ekgCaptureHandle);
-			vTaskResume(ekgProcessHandle);
+			//			vTaskResume(measureHandle);
+			//			vTaskResume(computeHandle);
+			//			vTaskResume(ekgCaptureHandle);
+			//			vTaskResume(ekgProcessHandle);
 
 			// enable the interrupts used for measurement
-			IntEnable(INT_GPIOA);	// for pulse
-			IntEnable(INT_ADC0SS0);	// for ekg
-			IntEnable(INT_ADC0SS1);	// for temperature
+			//			IntEnable(INT_GPIOA);	// for pulse
+			//			IntEnable(INT_ADC0SS0);	// for ekg
+			//			IntEnable(INT_ADC0SS1);	// for temperature
 			measureOn = true;
 			ackNack(cData, true);
 			break;
 		case 'P' :	// stop 
-			vTaskSuspend(measureHandle);
-			vTaskSuspend(computeHandle);
-			vTaskSuspend(ekgCaptureHandle);
-			vTaskSuspend(ekgProcessHandle);
+			//			vTaskSuspend(measureHandle);
+			//			vTaskSuspend(computeHandle);
+			//			vTaskSuspend(ekgCaptureHandle);
+			//			vTaskSuspend(ekgProcessHandle);
 
 			// disable the interrupts used for measurement
-			IntDisable(INT_GPIOA);	// for pulse
-			IntDisable(INT_ADC0SS0);	// for ekg
-			IntDisable(INT_ADC0SS1);	// for temperature
+			//			IntDisable(INT_GPIOA);	// for pulse
+			//			IntDisable(INT_ADC0SS0);	// for ekg
+			//			IntDisable(INT_ADC0SS1);	// for temperature
 			measureOn = false;
 			ackNack(cData, true);
 			break;
 		case 'M' : // measure a sensor
-//			measure(cData); //TODO make this sw/c in a new function?
+			//			measure(cData); //TODO make this sw/c in a new function?
 			switch (*sensor) {
 				case 'T':
+					RIT128x96x4StringDraw("take T", 2, 40, 15);
 			}
 			ackNack(cData, false);
 			break;
@@ -185,11 +187,21 @@ void commandRunFunction(void *commandDataPtr) {
 						strncat(cData->responseStr, "<p>0n</p>", RESPONSE_LENGTH - 1);
 					else
 						strncat(cData->responseStr, "<p>off</p>", RESPONSE_LENGTH - 1);
+
+#if DEBUG_COMMAND
+			usnprintf(num, 30, "%d %s", *(cData->displayOn), cData->responseStr);
+			RIT128x96x4StringDraw(num, 0, 30, 15);
+#endif
 					break;
 				case 'M' :
 					ackNack(cData, true);
-					addTags((measureON ? "ON" : "OFF"), false); //TODO fix the false vlaue
-					strncat(cData->responseStr, temporaryBuff, RESPONSE_LENGTH - 1);
+					addTags((measureOn ? "ON" : "OFF"), false); //TODO fix the false vlaue
+					strncat(cData->responseStr, temporaryBuffer, RESPONSE_LENGTH - 1);
+
+#if DEBUG_COMMAND
+					usnprintf(num, 30, "%d %s", measureOn, cData->responseStr);
+					RIT128x96x4StringDraw(num, 0, 30, 15);
+#endif
 					break;
 			}
 			ackNack(cData, false);
@@ -202,5 +214,5 @@ void commandRunFunction(void *commandDataPtr) {
 #endif
 	}
 
-	vTaskSuspend(controlHandle);
+	//	vTaskSuspend(controlHandle);
 }
