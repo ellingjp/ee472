@@ -299,6 +299,16 @@
         <option>
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\required_files</state>
+          <state>$PROJ_DIR$</state>
+          <state>$PROJ_DIR$\..\FreeRTOS\source\include</state>
+          <state>$PROJ_DIR$\..\FreeRTOS\Source\portable\IAR\ARM_CM3</state>
+          <state>$PROJ_DIR$\..\current_project</state>
+          <state>C:\StellarisWare\</state>
+          <state>C:\StellarisWare\inc</state>
+          <state>C:\StellarisWare\utils</state>
+          <state>C:\StellarisWare\driverlib</state>
+          <state>C:\StellarisWare\boards\ek-lm3s8962\drivers</state>
+          <state>C:\StellarisWare\boards\ek-lm3s8962\</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1845,7 +1855,25 @@
     <name>$PROJ_DIR$\temp\commandTask.c</name>
   </file>
   <file>
+    <name>$PROJ_DIR$\temp\compute.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\temp\compute.h</name>
+  </file>
+  <file>
     <name>$PROJ_DIR$\required_files\driverlib\driverlib-cm3.a</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\temp\ekgCapture.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\temp\ekgCapture.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\temp\ekgProcess.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\temp\ekgProcess.h</name>
   </file>
   <file>
     <name>$PROJ_DIR$\temp\globals.c</name>
@@ -1854,10 +1882,34 @@
     <name>$PROJ_DIR$\temp\globals.h</name>
   </file>
   <file>
+    <name>$PROJ_DIR$\temp\hw_types.h</name>
+  </file>
+  <file>
     <name>$PROJ_DIR$\temp\main.c</name>
   </file>
   <file>
+    <name>$PROJ_DIR$\temp\measure.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\temp\measure.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\temp\optfft.h</name>
+  </file>
+  <file>
     <name>$PROJ_DIR$\required_files\drivers\rit128x96x4.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\temp\schedule.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\temp\tcb.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\temp\timebase.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\temp\timebase.h</name>
   </file>
   <file>
     <name>$PROJ_DIR$\required_files\utils\ustdlib.c</name>

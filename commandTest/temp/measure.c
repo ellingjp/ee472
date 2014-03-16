@@ -29,6 +29,7 @@
 #if DEBUG_MEASURE
 #include "drivers/rit128x96x4.h"
 #include "utils/ustdlib.h"
+#include "compute.h"
 #endif 
 
 // prototype for compiler
@@ -208,7 +209,7 @@ void measureRunFunction(void *dataptr) {
 	}
 	if(measureSelect == 0 || measureSelect == 4)
 	{
-		mData->ekgCaptureDone = false;
+		*(mData->ekgCaptureDone) = false;
 //		vTaskResume(ekgCaptureHandle);
 #if DEBUG_MEASURE
 		RIT128x96x4StringDraw("ekgCapture go!", 0, 50, 15);
@@ -222,31 +223,32 @@ void measureRunFunction(void *dataptr) {
 #endif
 	}
 //    vTaskResume(computeHandle);  // run the compute task
+computeTask.runTaskFunction(computeTask.taskDataPtr);
      
-#if DEBUG_MEASURE
-    char num[30];
-    int temp = *(int *)cbGet(mData->temperatureRaw);
-    int sys = *(int *)cbGet(mData->systolicPressRaw);
-    int dia = *(int *)cbGet(mData->diastolicPressRaw);
-    int pulse = *(int *)cbGet(mData->pulseRateRaw);
-    int batt = global.batteryState;
-
-    usnprintf(num, 30, "<-- MEASURE DEBUG -->");
-    RIT128x96x4StringDraw(num, 0, 0, 15);
-    
-    usnprintf(num, 30, "Raw temp: %d  ", temp);
-    RIT128x96x4StringDraw(num, 0, 10, 15);
-
-    usnprintf(num, 30, "Raw Syst: %d  ", sys);
-    RIT128x96x4StringDraw(num, 0, 20, 15);
-
-    usnprintf(num, 30, "Raw Dia: %d  ", dia);
-    RIT128x96x4StringDraw(num, 0, 30, 15);
-
-    usnprintf(num, 30, "Raw Pulse: %d  ", pulse);
-    RIT128x96x4StringDraw(num, 0, 40, 15);
-    
-    usnprintf(num, 30, "Raw Batt: %d  ", batt);
-    RIT128x96x4StringDraw(num, 0, 50, 15);
-#endif
+//#if DEBUG_MEASURE
+//    char num[30];
+//    int temp = *(int *)cbGet(mData->temperatureRaw);
+//    int sys = *(int *)cbGet(mData->systolicPressRaw);
+//    int dia = *(int *)cbGet(mData->diastolicPressRaw);
+//    int pulse = *(int *)cbGet(mData->pulseRateRaw);
+//    int batt = global.batteryState;
+//
+//    usnprintf(num, 30, "<-- MEASURE DEBUG -->");
+//    RIT128x96x4StringDraw(num, 0, 0, 15);
+//    
+//    usnprintf(num, 30, "Raw temp: %d  ", temp);
+//    RIT128x96x4StringDraw(num, 0, 10, 15);
+//
+//    usnprintf(num, 30, "Raw Syst: %d  ", sys);
+//    RIT128x96x4StringDraw(num, 0, 20, 15);
+//
+//    usnprintf(num, 30, "Raw Dia: %d  ", dia);
+//    RIT128x96x4StringDraw(num, 0, 30, 15);
+//
+//    usnprintf(num, 30, "Raw Pulse: %d  ", pulse);
+//    RIT128x96x4StringDraw(num, 0, 40, 15);
+//    
+//    usnprintf(num, 30, "Raw Batt: %d  ", batt);
+//    RIT128x96x4StringDraw(num, 0, 50, 15);
+//#endif
 }

@@ -68,6 +68,7 @@ void initializeGlobalData() {
 	global.measurementSelection = 0;
 	global.measurementComplete = false;
 	global.ekgCaptureDone = false;
+	global.ekgProcessDone = false;
 	global.alarmAcknowledge = false;
 	global.select = false;
 	global.scroll = 0;

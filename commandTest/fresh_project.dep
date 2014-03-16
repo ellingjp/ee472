@@ -2,7 +2,7 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>4059552610</fileChecksum>
+  <fileChecksum>2849040733</fileChecksum>
   <configuration>
     <name>Debug</name>
     <outputs>
@@ -137,6 +137,34 @@
       <file>$PROJ_DIR$\..\lab3\code\status.h</file>
       <file>$PROJ_DIR$\..\lab3\code\startup.h</file>
       <file>$PROJ_DIR$\Debug\Obj\CircularBuffer.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\timebase.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\timebase.pbi</file>
+      <file>$PROJ_DIR$\temp\optfft.h</file>
+      <file>$PROJ_DIR$\temp\hw_types.h</file>
+      <file>$PROJ_DIR$\..\current_project\FreeRTOSConfig.h</file>
+      <file>$PROJ_DIR$\temp\measure.h</file>
+      <file>$PROJ_DIR$\temp\compute.c</file>
+      <file>$PROJ_DIR$\temp\ekgCapture.c</file>
+      <file>$PROJ_DIR$\temp\ekgProcess.c</file>
+      <file>$PROJ_DIR$\temp\measure.c</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\portable.h</file>
+      <file>$PROJ_DIR$\temp\schedule.h</file>
+      <file>$PROJ_DIR$\temp\compute.h</file>
+      <file>$PROJ_DIR$\temp\timebase.h</file>
+      <file>$PROJ_DIR$\temp\ekgProcess.h</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\projdefs.h</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\FreeRTOS.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\interrupt.h</file>
+      <file>$PROJ_DIR$\temp\timebase.c</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\portable\IAR\ARM_CM3\portmacro.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\inc\hw_memmap.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\sysctl.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\timer.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\inc\hw_ints.h</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\mpu_wrappers.h</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\task.h</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\list.h</file>
+      <file>$PROJ_DIR$\temp\ekgCapture.h</file>
     </outputs>
     <file>
       <name>$PROJ_DIR$\temp\commandTask.c</name>
@@ -153,11 +181,11 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 2 56 0 57 10 72 66 14 85 45 48 49 83 89 111 105 90 127 122 121 95 112 86</file>
+          <file> 2 56 0 57 10 72 66 14 85 45 48 49 83 89 111 105 90 127 122 121 95 112 86 136</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 2 56 0 57 10 72 66 14 85 45 48 49 83 89 111 105 90 127 122 121 95 112 86</file>
+          <file> 2 56 0 57 10 72 66 14 85 45 48 49 83 89 111 105 90 127 122 121 95 112 86 136</file>
         </tool>
       </inputs>
     </file>
@@ -730,7 +758,122 @@
       <inputs>
         <tool>
           <name>ILINK</name>
-          <file> 99 130 78 67 30 73 108 4 37 68 94 125</file>
+          <file> 99 130 78 21 102 84 67 30 120 73 131 108 4 37 68 94 125</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\temp\compute.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 123</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 21</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 0 143 121 2 56 57 10 72 66 14 85 45 48 49 83 89 111 105 90 127 144 134 142 147 146 135 141 150 155 156 157 95 112 86</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 0 143 121 2 56 57 10 72 66 14 85 45 48 49 83 89 111 105 90 127 144 134 142 147 146 135 141 150 155 156 157 95 112 86</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\temp\ekgCapture.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 76</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 102</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 56 83 41 93 71 98 142 147 57 10 72 66 14 85 45 48 49 146 135 141 150 155 156 157 2 0 89 111 105 90 127 158 121 144 134 95 112 86</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 56 83 41 93 71 98 142 147 57 10 72 66 14 85 45 48 49 146 135 141 150 155 156 157 2 0 89 111 105 90 127 158 121 144 134 95 112 86</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\temp\ekgProcess.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 82</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 84</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 2 56 0 57 10 72 66 14 85 45 48 49 83 89 111 105 90 127 145 121 133 95 112 86</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 2 56 0 57 10 72 66 14 85 45 48 49 83 89 111 105 90 127 145 121 133 95 112 86</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\temp\measure.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 17</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 120</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 0 2 56 57 10 72 66 14 85 45 48 49 83 89 111 105 90 127 144 134 136 121 142 147 146 135 141 150 155 156 157 71 98 92 41 95 112 86 143</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 0 2 56 57 10 72 66 14 85 45 48 49 83 89 111 105 90 127 144 134 136 121 142 147 146 135 141 150 155 156 157 71 98 92 41 95 112 86 143</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\temp\timebase.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 132</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 131</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 134 151 154 153 152 2 56 0 57 10 72 66 14 85 45 48 49 83 89 111 105 90 127 148 144</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 134 151 154 153 152 2 56 0 57 10 72 66 14 85 45 48 49 83 89 111 105 90 127 148 144</file>
         </tool>
       </inputs>
     </file>
