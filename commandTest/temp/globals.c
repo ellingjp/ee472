@@ -25,9 +25,6 @@ static int ekgFrequencyResultArr[16];
 static signed int ekgRaw[NUM_EKG_SAMPLES];	// initialize all the elements to 0
 static signed int ekgTemp[NUM_EKG_SAMPLES];
 
-//static char commandStr[COMMAND_LENGTH];
-//static char responseStr[RESPONSE_LENGTH];
-
 void initializeGlobalData() {
 	// Wrap the arrays
 	global.temperatureRaw = cbWrap(temperatureRawArr, sizeof(int), 8);
@@ -59,9 +56,6 @@ void initializeGlobalData() {
 	cbAdd(&(global.diastolicPressRaw), &dr);
 	cbAdd(&(global.pulseRateRaw), &pr);
 	
-//	global.commandStr = &commandStr;
-//	global.responseStr = responseStr;
-
 	cbAdd(&(global.temperatureCorrected), &tc);
 	cbAdd(&(global.systolicPressCorrected), &sc);
 	cbAdd(&(global.diastolicPressCorrected), &dc);
@@ -72,6 +66,7 @@ void initializeGlobalData() {
 	global.batteryState = 200;
 	global.mode = 0;
 	global.measurementSelection = 0;
+	global.measurementComplete = false;
 	global.alarmAcknowledge = false;
 	global.select = false;
 	global.scroll = 0;

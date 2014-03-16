@@ -33,7 +33,8 @@ typedef struct commandData
 {
 	char *commandStr;
 	char *responseStr;
-
+	unsigned short *measureSelect;
+	tBoolean *measureComplete;
 } CommandData;
 
 static CommandData data; // version of data exposed to outside
@@ -54,7 +55,8 @@ static char parseArr[COMMAND_LENGTH];
 void initializeCommandTask(){
 	data.commandStr = (global.commandStr);
 	data.responseStr = (global.responseStr);
-//	data.displayOn = &(global.displayOn);
+	data.measureSelect = &(global.measurementSelection);
+	data.measureComplete = &(global.measurementComplete);
 }
 
 
@@ -102,6 +104,56 @@ char* addTags(char* string, tBoolean statusOK) {
 	strcat(temporaryBuffer, "</p>");
 
 	return temporaryBuffer;
+}
+
+/*
+ * measures the data from a sensor
+ */
+void measureFromSensor(CommandData* cData) {
+	tBoolean meas = true;
+	switch (*sensor) {
+		case 'A' :
+			RIT128x96x4StringDraw("take A", 2, 30, 15);
+			*(cData->measureSelect) = 0;
+			break;
+		case 'T':
+			RIT128x96x4StringDraw("take T", 2, 30, 15);
+			*(cData->measureSelect) = 1;
+			break;
+		case 'B':
+			RIT128x96x4StringDraw("take B", 2, 30, 15);
+			*(cData->measureSelect) = 2;
+			break;
+		case 'P' :
+			RIT128x96x4StringDraw("take P", 2, 30, 15);
+			*(cData->measureSelect) = 3;
+			break;
+		case 'E' :
+			RIT128x96x4StringDraw("take E", 2, 30, 15);
+			*(cData->measureSelect) = 4;
+			break;
+		case 'S' :
+			RIT128x96x4StringDraw("unsupported", 0, 30, 15);
+			*(cData->measureSelect) = '%';
+			break;
+		default :
+			RIT128x96x4StringDraw("invalid command", 0, 30, 15);
+			meas = false;
+	}
+
+	if (meas) {
+		ackNack(cData, true);
+//		vTaskResume(measureHandle);
+		RIT128x96x4StringDraw("MeasureTask go!", 0, 40, 15);
+	} else {
+		RIT128x96x4StringDraw("no Measure", 0, 40, 15);
+		ackNack(cData, false);
+	}
+/* See Peckol notes for structure revision
+	while (!(cData->measureComplete)) {	// TODO better to suspend self?
+	}
+*/
+	
 }
 
 /*
@@ -173,12 +225,7 @@ void commandRunFunction(void *commandDataPtr) {
 			ackNack(cData, true);
 			break;
 		case 'M' : // measure a sensor
-			//			measure(cData); //TODO make this sw/c in a new function?
-			switch (*sensor) {
-				case 'T':
-					RIT128x96x4StringDraw("take T", 2, 40, 15);
-			}
-			ackNack(cData, false);
+			measureFromSensor(cData);
 			break;
 		case 'G' :	// Commands for DEBUG mode
 			switch (*sensor) { 

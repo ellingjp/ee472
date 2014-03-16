@@ -50,6 +50,7 @@ typedef struct global_data {
 	unsigned short batteryState;
 	unsigned short mode;
 	unsigned short measurementSelection;
+	tBoolean measurementComplete;
 	tBoolean alarmAcknowledge;
 	tBoolean select;
 	unsigned short scroll;
