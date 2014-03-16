@@ -39,7 +39,7 @@ void main () {
 	commandTask.runTaskFunction(commandTask.taskDataPtr);
 	
 #if DEBUG
-	usnprintf(num, 30, "done %d %d", global.measurementSelection, global.measurementComplete);
+	usnprintf(num, 30, "done %d %d", global.measurementSelection, global.ekgCaptureDone);
 	RIT128x96x4StringDraw(num, 0, 80, 15);
 #endif
 }

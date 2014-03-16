@@ -21,7 +21,6 @@
 static char num[30];
 #endif 
 
-extern tBoolean ekgProcessActive;
 
 static tBoolean firstRun = true;
 
@@ -30,6 +29,7 @@ typedef struct egkProcessData {
 	signed int *ekgRawData;
 	signed int *ekgImgData;
 	CircularBuffer *ekgFreqResult;
+	tBoolean *ekgProcessDone;
 } EKGProcessData;
 
 static EKGProcessData data;	// internal data object
@@ -42,6 +42,7 @@ void initializeEKGProcess() {
 	data.ekgRawData = (global.ekgRaw);
 	data.ekgImgData = (global.ekgTemp);
 	data.ekgFreqResult = &(global.ekgFrequencyResult);
+	data.ekgProcessDone = &(global.ekgProcessDone);
 
 #if DEBUG_PROC
 	RIT128x96x4Init(1000000);
@@ -55,44 +56,47 @@ void initializeEKGProcess() {
  * data to extract the primary frequency of the signal
  */
 void ekgProcessRunFunction(void *ekgData) {
-  EKGProcessData data = * (EKGProcessData *) ekgData;
+  EKGProcessData *data = (EKGProcessData *) ekgData;
 	if (firstRun) {
 		firstRun = false;
 		initializeEKGProcess();
 	}
 	// reset img array
 	int i = 0;
-	for (i = 0; i < NUM_EKG_SAMPLES; i++){
-	data.ekgImgData[i] = 0;
-	}
-	// need to bit shift >> 4 (divide 16) then subtract 32
-	i = 0;
-	int t = 0;	// debug
-	for (i = 0; i < NUM_EKG_SAMPLES; i++) {
-#if DEBUG_PROC
-		usnprintf(num, 30, "%d \n", data.ekgRawData[i]);
-		RIT128x96x4StringDraw(num, 0, 10, 15);
-#endif
-                int d = (data.ekgRawData[i] >> 4) - 31;
-		data.ekgRawData[i] = d;
-#if DEBUG_PROC
-		if ((int)data.ekgRawData[i] > (int)data.ekgRawData[t])
-			t = i;
-		usnprintf(num, 30, "%d : %d ", data.ekgRawData[i], data.ekgRawData[t]);
-		RIT128x96x4StringDraw(num, 0, 20, 15);
-#endif
-	}
-        
-        
-	signed int max_index = optfft( data.ekgRawData, data.ekgImgData );
-	//post processing
-	int freq = (SAMPLE_FREQ) * max_index / 8;
+//	for (i = 0; i < NUM_EKG_SAMPLES; i++){
+//	data.ekgImgData[i] = 0;
+//	}
+//	// need to bit shift >> 4 (divide 16) then subtract 32
+//	i = 0;
+//	int t = 0;	// debug
+//	for (i = 0; i < NUM_EKG_SAMPLES; i++) {
+//#if DEBUG_PROC
+//		usnprintf(num, 30, "%d \n", data.ekgRawData[i]);
+//		RIT128x96x4StringDraw(num, 0, 10, 15);
+//#endif
+//                int d = (data.ekgRawData[i] >> 4) - 31;
+//		data.ekgRawData[i] = d;
+//#if DEBUG_PROC
+//		if ((int)data.ekgRawData[i] > (int)data.ekgRawData[t])
+//			t = i;
+//		usnprintf(num, 30, "%d : %d ", data.ekgRawData[i], data.ekgRawData[t]);
+//		RIT128x96x4StringDraw(num, 0, 20, 15);
+//#endif
+//	}
+//        
+//        
+//	signed int max_index = optfft( data.ekgRawData, data.ekgImgData );
+//	//post processing
+//	int freq = (SAMPLE_FREQ) * max_index / 8;
+//
+//#if DEBUG_PROC
+//	usnprintf(num, 30, ": %d  ", max_index);
+//	RIT128x96x4StringDraw(num, 0, 30, 15);
+//#endif
+//	cbAdd(data.ekgFreqResult, (void*) &freq);
 
-#if DEBUG_PROC
-	usnprintf(num, 30, ": %d  ", max_index);
-	RIT128x96x4StringDraw(num, 0, 30, 15);
-#endif
-	cbAdd(data.ekgFreqResult, (void*) &freq);
-
-	ekgProcessActive = false;
+	*(data->ekgProcessDone) = true;
+//
+//
+	RIT128x96x4StringDraw("Processed", 0, 70, 15);
 }

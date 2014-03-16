@@ -18,6 +18,7 @@
 #if DEBUG_COMPUTE
 #include "drivers/rit128x96x4.h"
 #include "utils/ustdlib.h"
+#include "ekgProcess.h"
 #endif 
 
 // computeData structure internal to compute task
@@ -95,8 +96,9 @@ void computeRunFunction(void *computeData) {
 //	vTaskResume(ekgProcessHandle);
 //
 		RIT128x96x4StringDraw("go ekgProcess", 0, 60, 15);
+		*(cData->ekgProcessDone) = false;
+		ekgProcessTask.runTaskFunction(ekgProcessTask.taskDataPtr);
 		while (!*(cData->ekgProcessDone)) {	// wait until ekg computed
-			*(cData->ekgProcessDone) = true;
 		}
 	}
 	*(cData->measurementComplete) = true;

@@ -30,6 +30,7 @@
 #include "drivers/rit128x96x4.h"
 #include "utils/ustdlib.h"
 #include "compute.h"
+#include "ekgCapture.h"
 #endif 
 
 // prototype for compiler
@@ -212,6 +213,7 @@ void measureRunFunction(void *dataptr) {
 		*(mData->ekgCaptureDone) = false;
 //		vTaskResume(ekgCaptureHandle);
 #if DEBUG_MEASURE
+		ekgCaptureTask.runTaskFunction(ekgCaptureTask.taskDataPtr);
 		RIT128x96x4StringDraw("ekgCapture go!", 0, 50, 15);
 #endif
 	}
