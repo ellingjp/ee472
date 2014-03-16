@@ -16,3 +16,9 @@ void initializeHWCounter();
 
 // initialize system variables and hardware timer
 void startup();
+
+void DisplayIPAddress();
+
+void lwIPHostTimerHandler();
+
+static int SSIHandler();
