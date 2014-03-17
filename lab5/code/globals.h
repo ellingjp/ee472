@@ -30,6 +30,10 @@
 #define NUM_EKG_SAMPLES 256
 #define SAMPLE_FREQ  9375	// # sample frequency to get a good measure of < 3750 Hz
 
+#define COMMAND_LENGTH 10	// length of command string
+#define RESPONSE_LENGTH 75 // length of response string
+
+
 typedef struct global_data {
   CircularBuffer temperatureRaw;
   CircularBuffer systolicPressRaw;
@@ -50,6 +54,10 @@ typedef struct global_data {
   tBoolean alarmAcknowledge;
   tBoolean select;
   unsigned short scroll;
+  
+  char commandStr[COMMAND_LENGTH];
+  char responseStr[RESPONSE_LENGTH];
+  
 } GlobalData;
 
 extern GlobalData global;
