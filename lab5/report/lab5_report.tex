@@ -887,8 +887,8 @@ struct TCB {
 
     \section{Presentation, Discussion, and Analysis of the Results}
 
-    \subsection{Results} Patrick
-    The project was completed and demonstrated on February 13, 2014.
+    \subsection{Results} 
+    The project was completed and demonstrated on March 17, 2014.
 
     Demonstration of the system to the interested parties showed that the
     system met the majority of the requirements initially presented at the onset of the lab
@@ -900,8 +900,13 @@ struct TCB {
     performing as expected, the system would freeze up. When this happened, the
     system was unresponsive and did not produce any annuniation.
 
+%keep this stuff vv
     Using an oscilloscope, the run times of each task were empirically
-    determined. The results are given in Table~\ref{tab:taskRuntimes}
+		determined. The procedure used involved asserting a GPIO pin high
+		immediately after entering the function in question and deasserting the pin
+		just prior to exiting the function. The trace of the pin output helped
+		determine the exact function timing. The results are given in
+		Table~\ref{tab:taskRuntimes}
 
     \begin{table}[h]
       \centering
@@ -1360,7 +1365,7 @@ struct TCB {
     encountered a number of problems in using the PWM and general purpose input and
     output signals. After consulting the documentation for the Stellaris kit and
     solving their input/output problems, they began testing their design using
-    visual and audio queues, the IAR embedded workbench debugger, and a few
+    visual and audio cues, the IAR embedded workbench debugger, and a few
     specifically programmed debug features. After the results of the testing
     verified the design to be working correctly, the students proceeded to present
     their medical instrument to their instructor.
@@ -1387,6 +1392,49 @@ struct TCB {
     dispensations are due others or myself, I have indicated them below.
 
     \pagebreak
+
+		\section{Supported Web Browser Commands}
+
+		The Commands and Responses for the embedded application task are given as follows. 
+
+		\begin{description}
+
+			\item[S] 
+				The S command indicates START mode. The command shall start the embedded 
+				tasks by directing the hardware to initiate all the measurement tasks. In doing so, the 
+				command shall enable all the interrupts. 
+
+			\item[P] 
+				The P command indicates STOP mode. This command shall stop the embedded tasks 
+				by terminating any running measurement tasks. Such an action shall disable any data 
+				collecting interrupts. 
+
+			\item[D]
+				The D command enables or disables the OLED display. 
+
+			\item[M<payload>]
+				The M command. The M command requests the return of the most recent value(s) of 
+				the specified data. 
+				The M response. The M response returns the most recent value(s) of the specified 
+				data. 
+
+				The <payload> is defined as one of the following:
+				\begin{description}
+					\item[A] - Instruct the system to measure all sensors. Will return the most recent measurement of each sensor
+					\item[T] - Instruct system to measure Temperature. Will return the temperature in degrees Celsius
+					\item[B] - Instruct system to measure the patient blood pressure. Will return the systolic and diastolic blood pressure in mmHg
+					\item[P] - Instruct system to measure patient pulse rate. Will return the heart rate in beats per minute
+					\item[E] - Instruct the system to perform an EKG measurement. Will return the primary EKG frequency
+					\item[D] - DEBUG mode only. Returns the local display status
+					\item[M] - DEBUG mode only. Returns system measurement status. Returns boolean true if measurement is enabled, false otherwise
+				\end{description}
+
+			\item[A]  
+				The A response acknowledges the receipt of the identified command. 
+
+			\item[E]
+				The E error response is given for incorrect commands or non-existent commands.
+		\end{description}
 
     \section{Activity Diagrams}
 
