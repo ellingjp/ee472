@@ -26,6 +26,7 @@
 #define EKG_FREQ_RLT 0
 
 #define BATT_INIT 200
+#define MODE_INIT 1
 
 #define NUM_EKG_SAMPLES 256
 #define SAMPLE_FREQ  8000	// # sample frequency to get a good measure of < 3750 Hz
