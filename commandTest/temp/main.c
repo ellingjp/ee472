@@ -17,11 +17,11 @@
 
 
 void main () {
-	// SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | 
-	//                SYSCTL_XTAL_8MHZ);
+	 SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | 
+	                SYSCTL_XTAL_8MHZ);
 
 	// NOTE: actual clock speed is pll / 2/ div = 400M / 2/ 10
-	SysCtlClockSet(SYSCTL_SYSDIV_10 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_8MHZ); 
+//	SysCtlClockSet(SYSCTL_SYSDIV_10 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_8MHZ); 
 
  initializeGlobalData(); // initialize global data
 #if DEBUG
@@ -34,7 +34,7 @@ void main () {
 	RIT128x96x4StringDraw(num, 0, 0, 15);
 #endif
 
-	strncpy(global.commandStr, "M S", COMMAND_LENGTH - 1);	// this is the test command
+	strncpy(global.commandStr, "M A", COMMAND_LENGTH - 1);	// this is the test command
 
 	commandTask.runTaskFunction(commandTask.taskDataPtr);
 	

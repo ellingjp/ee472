@@ -24,7 +24,7 @@ char num[30];
 #endif 
 
 #define TOKEN_DELIM	" \t"	// token delimiter values
-#define TEMP_BUFFER_LEN 40
+#define TEMP_BUFFER_LEN 55
 
 // compiler prototypes
 void commandRunFunction(void *commandDataPtr);
@@ -114,6 +114,7 @@ void ackNack(CommandData *cData, tBoolean stat) {
  * string is not too long. The tags add up to 22 characters.
  */
 char* addTags(char* string, tBoolean statusOK) {
+  memset(temporaryBuffer, '\0', TEMP_BUFFER_LEN - 1);
 	strncpy(temporaryBuffer, "<p>", 3); // first tag
 
 	if (!statusOK) {
@@ -244,7 +245,7 @@ void printEKG(CommandData *cData, tBoolean statusOK) {
  */
 void printBattery(CommandData *cData, tBoolean statusOK) {
 	value = (int) *(cData->battery) / 2;
-	usnprintf(roughString, TEMP_BUFFER_LEN, "Battery Remaining: %d C", value);
+	usnprintf(roughString, TEMP_BUFFER_LEN, "Battery Remaining: %d %%", value);
 	addTags(roughString, statusOK);
 	strncat(cData->responseStr, formattedStr, RESPONSE_LENGTH - strlen(cData->responseStr) - 1);
 }
@@ -254,14 +255,15 @@ void printBattery(CommandData *cData, tBoolean statusOK) {
  */
 void formatResponseStr(CommandData *cData){
 	switch (*sensor) {
-		case '0' : //take all measurements
-			printTemp(cData, true);
-			printPressure(cData, true);
-			printPulse(cData, true);
-			printEKG(cData, true);
-			printBattery(cData, true);
+		case 'A' : //take all measurements
+			printTemp(cData, false);
+			printPressure(cData, false);
+			printPulse(cData, false);
+			printEKG(cData, false);
+			printBattery(cData, false);
+			break;
 		case 'T' : // get temperature measurementk
-			printTemp(cData, true);
+			printTemp(cData, false);
 			break;
 		case 'B' : // get syst
 			printPressure(cData, true);
