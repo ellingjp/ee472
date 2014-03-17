@@ -7,7 +7,7 @@
  *
  */
 
-#define DEBUG_PROC 0
+#define DEBUG_PROC 1
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -89,7 +89,7 @@ void ekgProcessRunFunction(void *ekgData) {
 
   signed int max_index = optfft( data.ekgRawData, data.ekgImgData );
   //post processing
-  int freq = (SAMPLE_FREQ) * max_index / 8;
+  int freq = (SAMPLE_FREQ * max_index) / 256;
 
 #if DEBUG_PROC
   usnprintf(num, 30, ": %d  ", max_index);
@@ -98,7 +98,7 @@ void ekgProcessRunFunction(void *ekgData) {
 #endif
 
   cbAdd(data.ekgFreqResult, (void*) &freq);
-	*(data->ekgProcessDone) = true;
+	*(data.ekgProcessDone) = true;
   
   // Kill myself
   vTaskSuspend(NULL);   // suspend self

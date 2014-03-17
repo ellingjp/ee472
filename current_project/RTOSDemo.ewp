@@ -941,6 +941,12 @@
       <name>$PROJ_DIR$\..\lab5\code\CircularBuffer.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\lab5\code\commandTask.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab5\code\commandTask.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\lab5\code\compute.c</name>
     </file>
     <file>

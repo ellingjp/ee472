@@ -28,6 +28,12 @@
 #include "utils/ustdlib.h"
 #include "httpserver_raw/fs.h"
 #include "httpserver_raw/fsdata.h"
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include "globals.h"
+
+extern xTaskHandle commandHandle;
 //#include "io.h"
 
 //*****************************************************************************
@@ -49,7 +55,7 @@
 // Global Settings for demo page content.
 //
 //*****************************************************************************
-static char g_cSampleTextBuffer[16] = {0};
+static char g_cSampleTextBuffer[10] = {0};
 
 //*****************************************************************************
 //
@@ -80,24 +86,37 @@ fs_open(char *name)
     //
     // Process command request
     //
-    if(strncmp(name, "/cgi-bin/send_command", 21) == 0)
+    if(strncmp(name, "/cgi-bin/send_command/value=", 28) == 0)
     {
-        //
-        // Toggle the STATUS LED
-        //
-        io_set_led(!io_is_led_on());
+        // Get Command String
+        data = name;
+        data += 28;
+        i = 0;
+        do
+        {
+            switch(data[i])
+            {
+                case '+':
+                    global.commandStr[i] = ' ';
+                    break;
+                default:
+                    global.commandStr[i] = data[i];
+                    break;
+            }
+            if(global.commandStr[i] == 0)
+            {
+                break;
+            }
+            i++;
+        }while(i < sizeof(global.commandStr));
 
-        //
         // Setup the file structure to return whatever.
-        //
         ptFile->data = NULL;
         ptFile->len = 0;
         ptFile->index = 0;
         ptFile->pextension = NULL;
 
-        //
-        // Return the file system pointer.
-        //
+        vTaskResume(commandHandle);
         return(ptFile);
     }
     
@@ -106,16 +125,14 @@ fs_open(char *name)
     //
     if(strncmp(name, "/cgi-bin/receive_command", 24) == 0)
     {
-        //
-        // Toggle the STATUS LED
-        //
-        io_set_led(!io_is_led_on());
+    if (global.responseReady) {
 
-        //
+        char *buf = (char *) mem_malloc(sizeof(global.responseStr));
+        memcpy(buf, global.responseStr, sizeof(global.responseStr));
+
         // Setup the file structure to return whatever.
-        //
-        ptFile->data = NULL;
-        ptFile->len = 0;
+        ptFile->data = buf;
+        ptFile->len = strlen(buf);
         ptFile->index = 0;
         ptFile->pextension = NULL;
 
@@ -123,6 +140,14 @@ fs_open(char *name)
         // Return the file system pointer.
         //
         return(ptFile);
+      }
+
+        ptFile->data = NULL;
+        ptFile->len = 0;
+        ptFile->index = 0;
+        ptFile->pextension = NULL;
+
+      return ptFile;
     }
 
     //

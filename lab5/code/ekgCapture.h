@@ -14,7 +14,7 @@
 #define EKG_CFG TIMER_CFG_B_PERIODIC
 #define EKG_TIMER_PERIPH SYSCTL_PERIPH_TIMER0
 
-#define EKG_SEQ 2	// The sequence number assigned to the ekg sensor
+#define EKG_SEQ 3	// The sequence number assigned to the ekg sensor
 #define EKG_CH ADC_CTL_CH0	// EKG analog input channel (ch0: pinE7, others: pinE4-6?)
 #define EKG_PRIORITY 1	// the ekg sequence capture priority
 

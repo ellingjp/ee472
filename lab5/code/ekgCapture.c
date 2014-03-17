@@ -7,7 +7,7 @@
  * buffer.
  */
 
-#define DEBUG_EKG 0	// ekg task debug
+#define DEBUG_EKG 1	// ekg task debug
 
 #include "FreeRTOS.h"
 #include "task.h"

@@ -14,7 +14,7 @@
 #include "utils/ustdlib.h"
 #include <stdlib.h>
 
-#define DISPLAY_OFF 1
+#define DISPLAY_OFF 0
 
 // Internal data structure
 typedef struct oledDisplayData {

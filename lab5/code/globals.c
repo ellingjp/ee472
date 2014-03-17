@@ -6,11 +6,12 @@
  * Defines global data for tasks to access
  */
 #include "globals.h"
+#include "utils/ustdlib.h"
 
 GlobalData global;
 
 // The arrays to be wrapped in a 
-// circular buffer
+// circular buffer 
 static int temperatureRawArr[8];
 static int systolicPressRawArr[8];
 static int diastolicPressRawArr[8];
@@ -31,7 +32,9 @@ void initializeGlobalData() {
 	global.systolicPressRaw = cbWrap(systolicPressRawArr, sizeof(int), 8);
 	global.diastolicPressRaw = cbWrap(diastolicPressRawArr, sizeof(int), 8);
 	global.pulseRateRaw = cbWrap(pulseRateRawArr, sizeof(int), 8);
-
+        
+	memset(global.ekgRaw, 0, NUM_EKG_SAMPLES);
+	memset(global.ekgTemp, 0, NUM_EKG_SAMPLES);
 
 	global.temperatureCorrected = cbWrap(temperatureCorrectedArr, sizeof(float), 8);
 	global.systolicPressCorrected = cbWrap(systolicPressCorrectedArr, sizeof(float), 8);
