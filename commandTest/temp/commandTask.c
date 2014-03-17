@@ -36,18 +36,33 @@ typedef struct commandData
 	char *responseStr;
 	unsigned short *measureSelect;
 	tBoolean *measureComplete;
+	tBoolean *responseReady;
+	CircularBuffer *temperature;
+	CircularBuffer *systPress;
+	CircularBuffer *diasPress;
+	CircularBuffer *pulse;
+	CircularBuffer *ekg;
+	unsigned short *battery;
 } CommandData;
 
 static CommandData data; // version of data exposed to outside
 TCB commandTask = {&commandRunFunction, &data}; // set up task interface
 
+/*
+ * local private variables
+ */
 static tBoolean initialized = false;
 static tBoolean measureOn;
 static tBoolean displayOn = true;
-static char temporaryBuffer[TEMP_BUFFER_LEN];	// for formatting single responses
+static int value;
 static char *cmd;
 static char *sensor;
+
+// communication arrays
 static char parseArr[COMMAND_LENGTH];
+static char temporaryBuffer[TEMP_BUFFER_LEN];	
+static char roughString[TEMP_BUFFER_LEN];
+static char *formattedStr = temporaryBuffer;
 
 
 /*
@@ -58,8 +73,15 @@ void initializeCommandTask(){
 	data.responseStr = (global.responseStr);
 	data.measureSelect = &(global.measurementSelection);
 	data.measureComplete = &(global.measurementComplete);
-}
+	data.responseReady = &(global.responseReady);
 
+	data.temperature = &(global.temperatureCorrected);
+	data.systPress = &(global.systolicPressCorrected);
+	data.diasPress = &(global.diastolicPressCorrected);
+	data.pulse = &(global.pulseRateCorrected);
+	data.ekg = &(global.ekgFrequencyResult);
+	data.battery = &(global.batteryState);
+}
 
 /*
  *  parses the command string for command parameters, writing those values to
@@ -72,7 +94,6 @@ void parse(CommandData *cData) {
 
 	cmd = strtok(parseArr, delim);
 	sensor = strtok(NULL, delim);
-
 }
 
 /*
@@ -169,11 +190,93 @@ void measureFromSensor(CommandData* cData) {
 #endif
 		ackNack(cData, false);
 	}
-/* See Peckol notes for structure revision
-	while (!(cData->measureComplete)) {	// TODO better to suspend self?
+
+	while (!(cData->measureComplete)) {	// wait until measurement is finished
 	}
-*/
-	
+}
+
+/*
+ * gets & formats string
+ */
+void printTemp(CommandData *cData, tBoolean statusOK) {
+	value = (int) *(float *)cbGet(cData->temperature);
+	usnprintf(roughString, TEMP_BUFFER_LEN, "Temperature: %d C", value);
+	addTags(roughString, statusOK);
+	strncat(cData->responseStr, formattedStr, RESPONSE_LENGTH - strlen(cData->responseStr) - 1);
+}
+
+/*
+ * gets & formats string
+ */
+void printPressure(CommandData *cData, tBoolean statusOK) {
+	value = (int) *(float *)cbGet(cData->systPress);
+	usnprintf(roughString, TEMP_BUFFER_LEN, "Systolic Pressure: %d mmHg", value);
+	addTags(roughString, statusOK);
+	strncat(cData->responseStr, formattedStr, RESPONSE_LENGTH - strlen(cData->responseStr) - 1);
+	value = (int) *(float *)cbGet(cData->diasPress);
+	usnprintf(roughString, TEMP_BUFFER_LEN, "Diastolic Pressure: %d mmHg", value);
+	addTags(roughString, statusOK);
+	strncat(cData->responseStr, formattedStr, RESPONSE_LENGTH - strlen(cData->responseStr) - 1);
+}
+
+/*
+ * gets & formats string
+ */
+void printPulse(CommandData *cData, tBoolean statusOK) {
+	value = (int) *(float *)cbGet(cData->pulse);
+	usnprintf(roughString, TEMP_BUFFER_LEN, "Pulse Rate: %d BPM", value);
+	addTags(roughString, statusOK);
+	strncat(cData->responseStr, formattedStr, RESPONSE_LENGTH - strlen(cData->responseStr) - 1);
+}
+
+/*
+ * gets & formats string
+ */
+void printEKG(CommandData *cData, tBoolean statusOK) {
+	value = (int) *(float *)cbGet(cData->ekg);
+	usnprintf(roughString, TEMP_BUFFER_LEN, "EKG Frequency: %d Hz", value);
+	addTags(roughString, statusOK);
+	strncat(cData->responseStr, formattedStr, RESPONSE_LENGTH - strlen(cData->responseStr) - 1);
+}
+
+/*
+ * gets & formats string
+ */
+void printBattery(CommandData *cData, tBoolean statusOK) {
+	value = (int) *(cData->battery) / 2;
+	usnprintf(roughString, TEMP_BUFFER_LEN, "Battery Remaining: %d C", value);
+	addTags(roughString, statusOK);
+	strncat(cData->responseStr, formattedStr, RESPONSE_LENGTH - strlen(cData->responseStr) - 1);
+}
+
+/*
+ * Format the outgoing response string based on the specified measurement
+ */
+void formatResponseStr(CommandData *cData){
+	switch (*sensor) {
+		case '0' : //take all measurements
+			printTemp(cData, true);
+			printPressure(cData, true);
+			printPulse(cData, true);
+			printEKG(cData, true);
+			printBattery(cData, true);
+		case 'T' : // get temperature measurementk
+			printTemp(cData, true);
+			break;
+		case 'B' : // get syst
+			printPressure(cData, true);
+			break;
+		case 'P' : //pulse rate
+			printPulse(cData, true);
+			break;
+		case 'E' : //ekg frequency
+			printEKG(cData, true);
+			break;
+		case 'S' : // battery state
+			printBattery(cData, true);
+			break;
+	}
+	*(cData->responseReady) = true;
 }
 
 /*
@@ -246,6 +349,7 @@ void commandRunFunction(void *commandDataPtr) {
 			break;
 		case 'M' : // measure a sensor
 			measureFromSensor(cData);
+			formatResponseStr(cData);
 			break;
 		case 'G' :	// Commands for DEBUG mode
 			switch (*sensor) { 

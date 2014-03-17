@@ -74,6 +74,7 @@ void initializeGlobalData() {
 	global.scroll = 0;
 	memset(&(global.commandStr), NULL, sizeof(char) * COMMAND_LENGTH);
 	memset(&(global.responseStr), NULL, sizeof(char) * RESPONSE_LENGTH);
+	global.responseReady = false;
 }
 
 // debug tool

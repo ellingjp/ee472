@@ -34,12 +34,14 @@ void main () {
 	RIT128x96x4StringDraw(num, 0, 0, 15);
 #endif
 
-	strncpy(global.commandStr, "M E", COMMAND_LENGTH - 1);	// this is the test command
+	strncpy(global.commandStr, "M S", COMMAND_LENGTH - 1);	// this is the test command
 
 	commandTask.runTaskFunction(commandTask.taskDataPtr);
 	
 #if DEBUG
-	usnprintf(num, 30, "done %d %d", global.measurementSelection, global.ekgCaptureDone);
+	usnprintf(num, 30, global.responseStr);
+	RIT128x96x4StringDraw(num, 0, 70, 7);
+	usnprintf(num, 30, "done %d %d", global.measurementSelection, global.responseReady);
 	RIT128x96x4StringDraw(num, 0, 80, 15);
 #endif
 }
