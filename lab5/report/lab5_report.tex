@@ -165,6 +165,14 @@ ranges, or the user fails to comply with a prescribed logging regimen. \\
       \item Improve overall system performance
       \item Improve overall system safety
     \end{itemize}
+	\item In Phase 3, the following requirements were added:
+		\begin{itemize}
+			\item 
+		\end{itemize}<++>
+	\item In Phase 4, the following requirements were added:
+		\begin{itemize}
+			\item 
+		\end{itemize}<++>
 \end{itemize}
 
 \subsubsection{Identified Use Cases}
@@ -244,14 +252,45 @@ Possible exception conditions may include:
     terminal connection is improperly configured or initialized, data received
     may be corrupted and not display properly. The device cannot ensure a
     proper connection and it is the responsibility of the remote user to ensure
-    the correct configuration is used
-  \item \emph{Remote Connection Lost} – If the user terminates the connection
+    the correct configuration is used.
+  \item \emph{Remote Connection Lost} - If the user terminates the connection
     or the connection is lost, messages sent by the device may not arrive at
     the remote terminal or data may be corrupted. The device will not
     necessarily monitor the status of any remote connection; this
     responsibility is the remote terminals. In the event a connection is
     broken, the device system must continue to perform the other system
     functions without ill effects.
+\end{itemize}
+
+\textbf{Use Case \# 5: Remote Access via Network} \\
+This device may also be used by an individual at a location outside of normal
+doctor or medical facilties.
+
+In these cases, a medical professional may be unable to provide direct
+intervention. Instead, the patient can be monitored remotely from the device
+through the use of an Internet connection. The remote observer should interact
+with the device through a terminal just as though they were using the local
+keypad. Such interactions include starting and stopping measurements, changing
+measurement selections, and viewing recent measured values.
+
+Possible exception conditions may include:
+\begin{itemize}
+	\item \emph{Loss of Network Connection} - The nature of Internet carries the
+		possibility of an unexpected loss of connection. In these instances,
+		information sent from the device or remote terminal may become lost.
+		Various network protocols exist which address and handle these
+		issues. However, the device cannot rely on the remote terminal for
+		operation. In the event data is lost, the local system must
+		continue to operate according to the last received commands or from
+		subsequent local commands.
+	\item \emph{Corruption of Data} - In a remote setting, many environmental
+		variables may affect connection quality. Data sent to and from the device
+		may be corrupted upon reception. The system must be capable of handling
+		corrupted data. In the case of undecipherable commands, the system must
+		fail gracefully.
+	\item \emph{Improperly Formatted Command} - The remote user may send a
+		command that is unsupported by the system. In this case, the user must be
+		informed that an improper command was sent.
 \end{itemize}
 
 
