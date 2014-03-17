@@ -17,6 +17,9 @@
 #include "CircularBuffer.h"
 #include "commandTask.h"
 #include <string.h>
+#include "hw_ints.h"
+#include "driverlib/interrupt.h"
+#include "driverlib/adc.h"
 
 
 #include "drivers/rit128x96x4.h"
@@ -50,6 +53,8 @@ static CommandData data; // version of data exposed to outside
 TCB commandTask = {&commandRunFunction, &data}; // set up task interface
 extern xTaskHandle measureHandle;
 extern xTaskHandle displayHandle;
+extern xTaskHandle ekgCaptureHandle;
+
 /*
  * local private variables
  */
@@ -345,22 +350,22 @@ void commandRunFunction(void *commandDataPtr) {
 			break;
 		case 'S' :	// start measurements
 						vTaskResume(measureHandle);
-			//			vTaskResume(ekgCaptureHandle);
+						vTaskResume(ekgCaptureHandle);
 
 			// enable the interrupts used for measurement
 			//			IntEnable(INT_GPIOA);	// for pulse
-			//			IntEnable(INT_ADC0SS0);	// for ekg
+			ADCSequenceEnable(ADC0_BASE, 0);//			IntEnable(INT_ADC0SS0);	// for ekg
 			//			IntEnable(INT_ADC0SS1);	// for temperature
 			measureOn = true;
 			ackNack(cData, true);
 			break;
 		case 'P' :	// stop 
 						vTaskSuspend(measureHandle);
-			//			vTaskSuspend(ekgCaptureHandle);
+						vTaskSuspend(ekgCaptureHandle);
 
 			// disable the interrupts used for measurement
 			//			IntDisable(INT_GPIOA);	// for pulse
-			//			IntDisable(INT_ADC0SS0);	// for ekg
+			ADCSequenceDisable(ADC0_BASE, 0);//			IntDisable(INT_ADC0SS0);	// for ekg
 			//			IntDisable(INT_ADC0SS1);	// for temperature
 			measureOn = false;
 			ackNack(cData, true);

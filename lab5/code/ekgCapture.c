@@ -139,7 +139,7 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 void ADC0IntHandler() {
 	unsigned long value;
 	static int i = 0;
-debugPin47();
+      debugPin47();
 	// Read the value from the ADC.
         
 	while (1 !=  ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, &value));

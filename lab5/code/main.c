@@ -243,7 +243,7 @@ int main( void )
     /* Start the tasks */
     xTaskCreate(measure, "measure task", 100,NULL, 2, &measureHandle);
     xTaskCreate(compute, "compute task", 100,NULL, 3, &computeHandle);
-    xTaskCreate(ekgCapture, "ekgCapture task", 1024,NULL, 1, NULL);
+    xTaskCreate(ekgCapture, "ekgCapture task", 1024,NULL, 1, &ekgCaptureHandle);
     xTaskCreate(ekgProcess, "ekgProcess task", 1024,NULL, 3, &ekgProcessHandle);
     xTaskCreate(display, "display task", 100,NULL, 5, &displayHandle);
     xTaskCreate(keyPad, "keyPad task", 100,NULL, 4,NULL);
