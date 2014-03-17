@@ -24,12 +24,12 @@ void initializeTimebase() {
   // Determine minor cycle
   TimerLoadSet(TIMER0_BASE, TIMER_A, (SysCtlClockGet() / 1000) * MINOR_CYCLE );
   
-  // Enable Interrupt
-  TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
-
   // Enable the intterupt (again?)
   IntEnable(INT_TIMER0A);
   
+  // Enable Interrupt
+  TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
+
   // Enable the timer
   TimerEnable(TIMER0_BASE, TIMER_A);
 

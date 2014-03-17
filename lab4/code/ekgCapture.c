@@ -28,7 +28,7 @@
 #endif 
 
 #define EKG_TIMER TIMER_A	// the timer used for EKG sample collection
-#define EKG_SEQ 1	// The sequence number assigned to the ekg sensor
+//#define EKG_SEQ 1	// The sequence number assigned to the ekg sensor (def'd in ekgCapture.h)
 #define EKG_CH ADC_CTL_CH0	// EKG analog input channel (ch0: pinE7, others: pinE4-6?)
 #define EKG_PRIORITY 0	// the ekg sequence capture priority
 
@@ -38,7 +38,7 @@ static char num[30];	// used for display
 
 static tBoolean firstRun = true;
 static tBoolean ekgComplete = false;
-extern tBoolean ekgProcessActive;
+//extern tBoolean ekgProcessActive;
 
 // ekgCapture data structure. Internal to the task
 typedef struct ekgCaptureData {
@@ -77,15 +77,15 @@ void initializeEKGTask() {
         ADCIntRegister(ADC0_BASE, EKG_SEQ, ADC0IntHandler);
         
 	// configure timer0 (uses both 16-bit timers) for periodic timing 
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
-	TimerDisable(TIMER0_BASE, EKG_TIMER);
-	TimerConfigure(TIMER0_BASE, TIMER_CFG_16_BIT_PAIR | TIMER_CFG_A_PERIODIC );
-	TimerControlTrigger(TIMER0_BASE, EKG_TIMER, true);
-	TimerLoadSet(TIMER0_BASE, EKG_TIMER, (SysCtlClockGet() / SAMPLE_FREQ));
-        TimerEnable(TIMER0_BASE, EKG_TIMER);
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);
+	TimerDisable(TIMER1_BASE, EKG_TIMER);
+	TimerConfigure(TIMER1_BASE, TIMER_CFG_16_BIT_PAIR | TIMER_CFG_A_PERIODIC );
+	TimerControlTrigger(TIMER1_BASE, EKG_TIMER, true);
+	TimerLoadSet(TIMER1_BASE, EKG_TIMER, (SysCtlClockGet() / SAMPLE_FREQ));
+        TimerEnable(TIMER1_BASE, EKG_TIMER);
 
 #if DEBUG_EKG
-	long timeLoad =  TimerLoadGet(TIMER0_BASE, EKG_TIMER);
+	long timeLoad =  TimerLoadGet(TIMER1_BASE, EKG_TIMER);
 	int secs = (int) ((float) timeLoad / SysCtlClockGet());
 	usnprintf(num, 30, "timer: %d s %d c", secs, timeLoad);
 	RIT128x96x4StringDraw(num, 0, 0, 15);
@@ -109,7 +109,7 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 	}       
 	ADCSequenceDisable(ADC0_BASE, EKG_SEQ);
 
-	ekgProcessActive = true;	// we want to process our measurement
+//	ekgProcessActive = true;	// we want to process our measurement
 
 #if DEBUG_EKG
 	usnprintf(num, 30, "end ADC get");

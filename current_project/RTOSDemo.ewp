@@ -947,6 +947,18 @@
       <name>$PROJ_DIR$\..\lab4\code\display.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\lab4\code\ekgCapture.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\ekgCapture.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\ekgProcess.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\ekgProcess.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\lab4\code\globals.c</name>
     </file>
     <file>

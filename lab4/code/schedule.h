@@ -15,6 +15,7 @@
 // globally setable variables
 extern xTaskHandle computeHandle;	
 extern xTaskHandle serialHandle;
+extern xTaskHandle ekgCaptureHandle;
 extern xTaskHandle ekgProcessHandle;
 
 

@@ -206,11 +206,11 @@ void measureRunFunction(void *dataptr) {
 	}
 	if(measureSelect == 0 || measureSelect == 4)
 	{
-//		vTaskResume(ekgProcessHandle);
+		vTaskResume(ekgCaptureHandle);
 	}
 	else
 	{
-//		vTaskSuspend(ekgProcessHandle);
+		vTaskSuspend(ekgCaptureHandle);
 	}
     vTaskResume(computeHandle);  // run the compute task
      

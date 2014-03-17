@@ -133,6 +133,7 @@ and the TCP/IP stack together cannot be accommodated with the 32K size limit. */
 #include "serial.h"
 #include "status.h"
 #include "keyPad.h"
+#include "ekgCapture.h"
 
 /*-----------------------------------------------------------*/
 
@@ -202,6 +203,7 @@ void keyPad(void *vParameters);
 void warning(void *vParameters);
 void serial(void *vParameters);
 void status(void *vParameters);
+void ekgCapture(void *vParameters);
 
 /*-----------------------------------------------------------*/
 
@@ -216,7 +218,7 @@ xTaskHandle computeHandle;
 xTaskHandle serialHandle;
 xTaskHandle measureHandle;
 xTaskHandle displayHandle;
-xTaskHandle ekgComputeHandle;
+xTaskHandle ekgCaptureHandle;
 xTaskHandle ekgProcessHandle;
 
 /*************************************************************************
@@ -241,6 +243,7 @@ int main( void )
     xTaskCreate(warning, "warning task", 100,NULL, 5,NULL);
     xTaskCreate(serial, "serial task", 100,NULL, 5,&serialHandle);
     xTaskCreate(status, "status task", 100,NULL, 1,NULL);
+ //   xTaskCreate(ekgCapture, "ekgCapture task", 100, NULL, 3, &ekgCaptureHandle);
 
     vTaskSuspend(computeHandle);
     vTaskSuspend(serialHandle);
@@ -315,6 +318,15 @@ void status(void *vParameters)
   while(1)
   {
       statusTask.runTaskFunction(statusTask.taskDataPtr);
+      vTaskDelay(MINOR_CYCLE);
+  }
+}
+
+void ekgCapture(void *vParameters)
+{
+  while(1)
+  {
+      ekgCaptureTask.runTaskFunction(ekgCaptureTask.taskDataPtr);
       vTaskDelay(MINOR_CYCLE);
   }
 }
