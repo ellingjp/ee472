@@ -67,11 +67,13 @@ void initializeEKGTask() {
 	GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_7);
         
 	// Setup ADC0 for EKG capture
+        SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
+        SysCtlADCSpeedSet(SYSCTL_ADCSPEED_500KSPS);
 	ADCSequenceDisable(ADC0_BASE, EKG_SEQ);
 	ADCSequenceConfigure(ADC0_BASE, EKG_SEQ, ADC_TRIGGER_TIMER, 1);
 	ADCSequenceStepConfigure(ADC0_BASE, EKG_SEQ, 0, ADC_CTL_IE | ADC_CTL_END | EKG_CH);
-	ADCIntEnable(ADC0_BASE, EKG_SEQ);
 	ADCIntRegister(ADC0_BASE, EKG_SEQ, ADC0IntHandler);
+        ADCIntEnable(ADC0_BASE, EKG_SEQ);
         
 	// configure timer (uses both 16-bit timers) for periodic timing 
 	SysCtlPeripheralEnable(EKG_TIMER_PERIPH);
@@ -82,10 +84,12 @@ void initializeEKGTask() {
 	TimerEnable(EKG_TIMER_BASE, EKG_TIMER);
 
 #if DEBUG_EKG
+        long clk = SysCtlClockGet();
 	long timeLoad =  TimerLoadGet(EKG_TIMER_BASE, EKG_TIMER);
-	int secs = (int) ((float) timeLoad / SysCtlClockGet());
-	usnprintf(num, 30, "timer: %d s %d c", secs, timeLoad);
-	RIT128x96x4StringDraw(num, 0, 0, 15);
+	usnprintf(num, 30, "load: %ul", timeLoad);
+	RIT128x96x4StringDraw(num, 0, 10, 15);
+        usnprintf(num, 30, "clock: %ul", clk);
+	RIT128x96x4StringDraw(num, 0, 10, 15);
 #endif
 }
 
@@ -126,13 +130,11 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 }
 
 void ADC0IntHandler() {
-  	ADCIntClear(ADC0_BASE, EKG_SEQ);
-        
 	unsigned long value;
 	static int i = 0;
 
 	// Read the value from the ADC.
-	while (1 != ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, &value));
+	while (1 !=  ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, &value));
 	(data.ekgRawDataAddr)[i++] = (signed int) value;
         
 	// Done sampling if we've taken enough samples
@@ -140,4 +142,6 @@ void ADC0IntHandler() {
 		i = 0;
 		ekgComplete = true;
 	}
+        
+        ADCIntClear(ADC0_BASE, EKG_SEQ);
 }

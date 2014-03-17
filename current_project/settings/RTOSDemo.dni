@@ -16,7 +16,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-1544080267
+Checksum=598236675
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -41,19 +41,6 @@ MixedMode=1
 [SfrWindow]
 Show=1 1
 Sort=4 0
-[Disassemble mode]
-mode=1
-[Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\E\Dev\FreeRTOS\WorkingCopy2\Demo\Common\Minimal\IntQueue.c}.363.2@1" 0 0 0 0 "" 0 ""
-Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\windows\system32}.28.3" 0 0 0 0 "" 0 ""
-Count=2
-[Log file]
-LoggingEnabled=_ 0
-LogFile=_ ""
-Category=_ 0
-[Aliases]
-Count=0
-SuppressDialog=0
 [CallStackLog]
 Enabled=0
 [DriverProfiling]
@@ -62,6 +49,21 @@ Mode=0
 Graph=0
 Symbiont=0
 Exclusions=
+[Disassemble mode]
+mode=1
+[Breakpoints]
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\E\Dev\FreeRTOS\WorkingCopy2\Demo\Common\Minimal\IntQueue.c}.363.2@1" 0 0 0 0 "" 0 ""
+Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\windows\system32}.28.3" 0 0 0 0 "" 0 ""
+Bp2=_ "STD_CODE" "{$PROJ_DIR$\..\lab5\code\ekgCapture.c}.62.8" 1 0 0 0 "" 0 ""
+Bp3=_ "STD_CODE" "{$PROJ_DIR$\..\lab5\code\ekgCapture.c}.137.8" 1 0 0 0 "" 0 ""
+Count=4
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
+[Aliases]
+Count=0
+SuppressDialog=0

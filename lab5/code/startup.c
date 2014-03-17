@@ -94,13 +94,6 @@ void startup() {
   
     RIT128x96x4Init(1000000);
     
-    ///////////////////////////////
-    ////// Turn on ADC ////////////
-    ///////////////////////////////
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
-    SysCtlADCSpeedSet(SYSCTL_ADCSPEED_500KSPS);
-    
-    
   // Initialize global data
   initializeGlobalData();   // from globals.h
     initializeTimebase();
