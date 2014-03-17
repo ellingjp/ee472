@@ -7,7 +7,7 @@
  * buffer.
  */
 
-#define DEBUG_EKG 1	// ekg task debug
+#define DEBUG_EKG 0	// ekg task debug
 
 #include "inc/hw_types.h"
 #include "inc/hw_memmap.h"
@@ -34,11 +34,11 @@ static char num[30];	// used for display
 static unsigned long sampleNum; // counter for data collection
 static tBoolean firstRun = true;
 static tBoolean ekgComplete;
-extern tBoolean ekgProcessActive;
 
 // ekgCapture data structure. Internal to the task
 typedef struct ekgCaptureData {
 	signed int *ekgRawDataAddr;	// raw output array address
+	tBoolean *ekgCaptureDone;
 }EKGCaptureData;
 
 static EKGCaptureData data; 	// the interal data
@@ -82,6 +82,7 @@ void initializeEKGTask() {
 	RIT128x96x4StringDraw("* EKGCapture Debug *", 0, 0, 15);
 #endif
 	data.ekgRawDataAddr =  global.ekgRaw;
+	data.ekgCaptureDone = &(global.ekgCaptureDone);
 	sampleNum = 0;
 	ekgComplete = false;
 
@@ -133,6 +134,8 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 		firstRun = false;
 		initializeEKGTask();
 	}
+	
+	EKGCaptureData *eData = (EKGCaptureData *) ekgCaptureData;
 
 	ekgComplete = false;	// reset the adc counters
 	sampleNum = 0;
@@ -146,7 +149,7 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 	TimerDisable(EKG_TIMER_BASE, EKG_TIMER);
 	ADCIntDisable(ADC0_BASE, EKG_SEQ); 
 
-	ekgProcessActive = true;	// we want to process our measurement
+	*(eData->ekgCaptureDone) = true;	// we want to process our measurement
 
 #if DEBUG_EKG
 	usnprintf(num, 30, "end ADC get");

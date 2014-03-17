@@ -7,7 +7,7 @@
  *
  */
 
-#define DEBUG_PROC 1
+#define DEBUG_PROC 0
 
 #include "globals.h"
 #include "ekgProcess.h"
@@ -21,7 +21,6 @@
 static char num[30];
 #endif 
 
-extern tBoolean ekgProcessActive;
 
 static tBoolean firstRun = true;
 
@@ -30,6 +29,7 @@ typedef struct egkProcessData {
 	signed int *ekgRawData;
 	signed int *ekgImgData;
 	CircularBuffer *ekgFreqResult;
+	tBoolean *ekgProcessDone;
 } EKGProcessData;
 
 static EKGProcessData data;	// internal data object
@@ -42,6 +42,7 @@ void initializeEKGProcess() {
 	data.ekgRawData = (global.ekgRaw);
 	data.ekgImgData = (global.ekgTemp);
 	data.ekgFreqResult = &(global.ekgFrequencyResult);
+	data.ekgProcessDone = &(global.ekgProcessDone);
 
 #if DEBUG_PROC
 	RIT128x96x4Init(1000000);
@@ -55,7 +56,7 @@ void initializeEKGProcess() {
  * data to extract the primary frequency of the signal
  */
 void ekgProcessRunFunction(void *ekgData) {
-  EKGProcessData data = * (EKGProcessData *) ekgData;
+  EKGProcessData *data = (EKGProcessData *) ekgData;
 	if (firstRun) {
 		firstRun = false;
 		initializeEKGProcess();
@@ -94,5 +95,8 @@ void ekgProcessRunFunction(void *ekgData) {
 #endif
 	cbAdd(data.ekgFreqResult, (void*) &freq);
 
-	ekgProcessActive = false;
+	*(data->ekgProcessDone) = true;
+//
+//
+	RIT128x96x4StringDraw("Processed", 0, 70, 15);
 }

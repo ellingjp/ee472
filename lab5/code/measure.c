@@ -29,6 +29,8 @@
 #if DEBUG_MEASURE
 #include "drivers/rit128x96x4.h"
 #include "utils/ustdlib.h"
+#include "compute.h"
+#include "ekgCapture.h"
 #endif 
 
 // prototype for compiler
@@ -42,6 +44,7 @@ typedef struct measureData {
   CircularBuffer *diastolicPressRaw;
   CircularBuffer *pulseRateRaw;
   unsigned short *measureSelect;
+	tBoolean *ekgCaptureDone;
 } MeasureData;
 
 static int pulseRate = 0;
@@ -58,6 +61,7 @@ void initializeMeasureTask() {
   data.diastolicPressRaw = &(global.diastolicPressRaw);
   data.pulseRateRaw = &(global.pulseRateRaw);
   data.measureSelect = &(global.measurementSelection);
+	data.ekgCaptureDone = &(global.ekgCaptureDone);
   
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
     SysCtlADCSpeedSet(SYSCTL_ADCSPEED_250KSPS);
@@ -206,11 +210,19 @@ void measureRunFunction(void *dataptr) {
 	}
 	if(measureSelect == 0 || measureSelect == 4)
 	{
-//		vTaskResume(ekgProcessHandle);
+		*(mData->ekgCaptureDone) = false;
+		vTaskResume(ekgCaptureHandle);
+#if DEBUG_MEASURE
+		ekgCaptureTask.runTaskFunction(ekgCaptureTask.taskDataPtr);
+		RIT128x96x4StringDraw("ekgCapture go!", 0, 50, 15);
+#endif
 	}
 	else
 	{
-//		vTaskSuspend(ekgProcessHandle);
+		vTaskSuspend(ekgCaptureHandle);
+#if DEBUG_MEASURE
+		RIT128x96x4StringDraw("no ekg!", 0, 50, 15);
+#endif
 	}
     vTaskResume(computeHandle);  // run the compute task
      
