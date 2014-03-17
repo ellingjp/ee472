@@ -234,7 +234,7 @@ void printPulse(CommandData *cData, tBoolean statusOK) {
  * gets & formats string
  */
 void printEKG(CommandData *cData, tBoolean statusOK) {
-	value = (int) *(float *)cbGet(cData->ekg);
+	value = *(int *)cbGet(cData->ekg);
 	usnprintf(roughString, TEMP_BUFFER_LEN, "EKG Frequency: %d Hz", value);
 	addTags(roughString, statusOK);
 	strncat(cData->responseStr, formattedStr, RESPONSE_LENGTH - strlen(cData->responseStr) - 1);

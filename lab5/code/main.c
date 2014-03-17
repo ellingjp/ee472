@@ -246,9 +246,9 @@ int main( void )
     xTaskCreate(ekgCapture, "ekgCapture task", 1024,NULL, 1, NULL);
     xTaskCreate(ekgProcess, "ekgProcess task", 1024,NULL, 3, &ekgProcessHandle);
     xTaskCreate(display, "display task", 100,NULL, 5, &displayHandle);
-//    xTaskCreate(keyPad, "keyPad task", 100,NULL, 4,NULL);
+    xTaskCreate(keyPad, "keyPad task", 100,NULL, 4,NULL);
     xTaskCreate(warning, "warning task", 100,NULL, 5,NULL);
-//    xTaskCreate(serial, "serial task", 100,NULL, 5,&serialHandle);
+    xTaskCreate(serial, "serial task", 100,NULL, 5,&serialHandle);
     xTaskCreate(status, "status task", 100,NULL, 1,NULL);
     xTaskCreate(command, "command task", 100,NULL, 3, &commandHandle);
 
