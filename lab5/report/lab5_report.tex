@@ -297,7 +297,7 @@ Possible exception conditions may include:
 \end{itemize}
 
 
-\subsubsection{Detailed Specifications (update)}
+\subsubsection{Detailed Specifications }
 For this project, the requirements have been further specified as follows:
 
 \begin{itemize}[$$]
@@ -372,18 +372,28 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
 \begin{itemize}
   \item KeypadTask
+		The keypad allows the user to interact with the system locally. The user
+		can acknowledge alerts and navigate the menu options.
     \begin{itemize}
       \item The keypad task will scan the keypad and decode any keypresses
       \item The task will have support the following user inputs:
-      \item Mode selection between 2 modes (1 button)
-      \item Menu selection between 3 options (1 button)
-      \item Alarm acknowledgement (1 button)
-      \item Up and down scroll functionality (1-2 buttons)
+      \item Mode selection between 2 modes:
+				\begin{itemize}
+					\item Measurement Select Menu
+					\item Annunciation
+				\end{itemize}
+      \item Menu selection between 6 options:
+				\begin{itemize}
+					\item Scan all or measure a specific sensor (Temperature, Blood
+						Pressure, Pulse Rate, or EKG)
+				\end{itemize}
+      \item Alarm acknowledgement
+      \item Up and down scroll functionality 
       \item A new set of global variables will be created to store the state of the keypad and key presses
     \end{itemize}
 
   \item Initialize (Startup):
-		No new changes were made to the start up task
+		The startup task sets up the system hardware when the device is first powered on.
     \begin{itemize}
 			\item The Startup task must be the first task to run
 			\item It must not be part of the task queue and must only run once
@@ -394,6 +404,11 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \end{itemize}
 
   \item Serial Communication:
+		Serial communication produces an alert via RS-232 connection to a remote
+		terminal. The connection is strictly uni-directional, serving to alert the
+		remote station that some aspect of the system is in a warning or alarm
+		state.
+
 		There are no changes to the Serial Communication task since lab 3.
     \begin{itemize}
       \item The task is enabled by the warn/alarm task
@@ -406,8 +421,13 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \end{itemize}
 
   \item MeasureTask:
+		The measure function performs measurement collection of the various sensors
+		attached to the system. The current sensors are a thermometer, blood
+		pressure sensor, and heart rate monitor.
+		
 		No new changes were made to the measure task
     \begin{itemize}
+			\item Measurements must be captured every 5 seconds
       \item Once a complete set of measurements has been taken, the compute
 	task is added to the task queue
       \item Pointers to the variables used in the measure task will be
@@ -421,9 +441,12 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \end{itemize}
 
   \item ComputeTask:
+		The compute task performs numerical calculations to linearize and convert the raw sensor measurements into human-readable values.
+		
 		No new changes were made to the compute task
     \begin{itemize}
       \item All measurements will be recomputed each time the compute task is run
+			\item This task must only be scheduled when new data is available from the Measure Task
 			\item The Compute Task must apply any linearization corrections to the raw data
 			\item The Compute task will store the computed and corrected values into a computed data buffer
       \item After computing the corrected values for all measurements, the
@@ -431,7 +454,10 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \end{itemize}
 
   \item DisplayTask:
-		No new chagnes were made to the display task
+		In the Display task data collected by the system is displayed on the local
+		OLED display based upon user input received frm the keypad. In addition to simply displaying data, the display task will format the data and present a series of menus for the user. The front panel of the OLED display in the Annunciation state is shown in Figure~\ref{}<++>
+
+		No new changes were made to the display task
     \begin{itemize}
       \item Display will now support multiple display options
       \item Menu mode will allow selection of each of the individual
@@ -442,7 +468,15 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 	display in project 1.
     \end{itemize}
 
+		\begin{figure}[h]
+			\centering
+			\includegraphics{../design/OLED_frontPanel.jpg}
+			\caption{Image of OLED front panel display}
+			\label{fig:oled_front_panel}
+		\end{figure}
+
   \item Changes to Warn/AlarmTask:
+		The warn/alarm task performs system monitoring functions, creating alerts when measured values exceed the normally accepted ranges.
 		No changes were made to this task in Phases 3 or 4
     \begin{itemize}
       \item The warnings will be activated and indicated as before in project 1
@@ -455,7 +489,10 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \end{itemize}
 
   \item Changes to Schedule:
-		The Schedule function has been replaced by the RTOS scheduler
+		The Schedule function has been replaced by the RTOS scheduler. Just as
+		before, the Scheduler manages the order in which tasks are executed. It
+		manages resources based on the current running task needs and guarantees
+		tasks complete within the desired timeframe.
     \begin{itemize}
 			\item The Scheduler will provide non-premptive priority-based scheduling
       \item The hardware timer will provide a system interrupt every 250ms or
@@ -466,6 +503,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \end{itemize}
 
   \item Changes to StatusTask:
+		This task monitors the status of the onboard battery.
     \begin{itemize}
       \item There are no changes to the status task
     \end{itemize}
@@ -480,11 +518,39 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 			\item Once a sequence is complete, the EKG Process function must be called
 		\end{itemize}
 	\item New Task: EKG Process
-		The EKG Process function transforms the raw EKg sampled sequence and converts it to a single frequency for analysis
+		The EKG Process function transforms the raw EKg sampled sequence and
+		converts it to a single frequency for analysis.
 		\begin{itemize}
 			\item The EKG Process function must perform a Fast Fourier Transform (FFT) on the raw data
 			\item Following conversion to the frequency domain, the FFT result must be converted to the expected frequency range
 			\item The 16 most recent EKG results must be stored in a buffer for transmission or review
+		\end{itemize}
+	\item New Task: Command
+		When interacting with the device remotely, the command task serves as the interpreter of console/browser commands. It conveys system information to the browser in response to webserver requests.
+		\begin{itemize}
+			\item Command must be scheduled whenever a command has been received by
+				the web server or when a message must be transmitted to the remote
+				computer.
+			\item Receive mode:
+				\begin{itemize}
+					\item A received command must be interpreted and acted upon if valid
+					\item A response acknowledgement or non-acknowledgement must be
+						returned to the webserver whenever a command is received
+					\item Legal commands are given in Appendix~\ref{}
+				\end{itemize}
+			\item Messages to be sent to a remote computer must be compiled into proper HTML code before being sent to the web server
+		\end{itemize}
+
+	\item New Task: Remote communications
+		Remote communications, or the web server, operates as the gateway between
+		the device and the wider internet. It handles communications protocols and
+		incoming requests to the system.
+		\begin{itemize}
+			\item The remote communication task must initialize the network interface
+			\item This task must also connect to and configure a local area network,
+				handling TCP/IP, HTTP, and other protocols
+			\item Set up a webserver and webpage to act as a gateway for remote users
+			\item Update the webpage as needed
 		\end{itemize}
 \end{itemize}
 
