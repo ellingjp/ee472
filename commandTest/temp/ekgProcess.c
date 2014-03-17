@@ -7,7 +7,7 @@
  *
  */
 
-#define DEBUG_PROC 1
+#define DEBUG_PROC 0
 
 #include "globals.h"
 #include "ekgProcess.h"
@@ -63,37 +63,37 @@ void ekgProcessRunFunction(void *ekgData) {
 	}
 	// reset img array
 	int i = 0;
-//	for (i = 0; i < NUM_EKG_SAMPLES; i++){
-//	data.ekgImgData[i] = 0;
-//	}
-//	// need to bit shift >> 4 (divide 16) then subtract 32
-//	i = 0;
-//	int t = 0;	// debug
-//	for (i = 0; i < NUM_EKG_SAMPLES; i++) {
-//#if DEBUG_PROC
-//		usnprintf(num, 30, "%d \n", data.ekgRawData[i]);
-//		RIT128x96x4StringDraw(num, 0, 10, 15);
-//#endif
-//                int d = (data.ekgRawData[i] >> 4) - 31;
-//		data.ekgRawData[i] = d;
-//#if DEBUG_PROC
-//		if ((int)data.ekgRawData[i] > (int)data.ekgRawData[t])
-//			t = i;
-//		usnprintf(num, 30, "%d : %d ", data.ekgRawData[i], data.ekgRawData[t]);
-//		RIT128x96x4StringDraw(num, 0, 20, 15);
-//#endif
-//	}
-//        
-//        
-//	signed int max_index = optfft( data.ekgRawData, data.ekgImgData );
-//	//post processing
-//	int freq = (SAMPLE_FREQ) * max_index / 8;
-//
-//#if DEBUG_PROC
-//	usnprintf(num, 30, ": %d  ", max_index);
-//	RIT128x96x4StringDraw(num, 0, 30, 15);
-//#endif
-//	cbAdd(data.ekgFreqResult, (void*) &freq);
+	for (i = 0; i < NUM_EKG_SAMPLES; i++){
+	data.ekgImgData[i] = 0;
+	}
+	// need to bit shift >> 4 (divide 16) then subtract 32
+	i = 0;
+	int t = 0;	// debug
+	for (i = 0; i < NUM_EKG_SAMPLES; i++) {
+#if DEBUG_PROC
+		usnprintf(num, 30, "%d \n", data.ekgRawData[i]);
+		RIT128x96x4StringDraw(num, 0, 10, 15);
+#endif
+                int d = (data.ekgRawData[i] >> 4) - 31;
+		data.ekgRawData[i] = d;
+#if DEBUG_PROC
+		if ((int)data.ekgRawData[i] > (int)data.ekgRawData[t])
+			t = i;
+		usnprintf(num, 30, "%d : %d ", data.ekgRawData[i], data.ekgRawData[t]);
+		RIT128x96x4StringDraw(num, 0, 20, 15);
+#endif
+	}
+        
+        
+	signed int max_index = optfft( data.ekgRawData, data.ekgImgData );
+	//post processing
+	int freq = (SAMPLE_FREQ) * max_index / 8;
+
+#if DEBUG_PROC
+	usnprintf(num, 30, ": %d  ", max_index);
+	RIT128x96x4StringDraw(num, 0, 30, 15);
+#endif
+	cbAdd(data.ekgFreqResult, (void*) &freq);
 
 	*(data->ekgProcessDone) = true;
 //

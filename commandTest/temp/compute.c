@@ -93,36 +93,35 @@ void computeRunFunction(void *computeData) {
 	if (0 == *(cData->measurementSelect) || 4 == *(cData->measurementSelect)) {
 		while(!(cData->ekgCaptureDone)) {	// wait until ekg captured
 		}
-//	vTaskResume(ekgProcessHandle);
-//
+	vTaskResume(ekgProcessHandle);
+
 		RIT128x96x4StringDraw("go ekgProcess", 0, 60, 15);
 		*(cData->ekgProcessDone) = false;
-		ekgProcessTask.runTaskFunction(ekgProcessTask.taskDataPtr);
 		while (!*(cData->ekgProcessDone)) {	// wait until ekg computed
 		}
 	}
 	*(cData->measurementComplete) = true;
 
-//  vTaskSuspend(NULL);  // suspend self
+  vTaskSuspend(NULL);  // suspend self
 
-//#if DEBUG_COMPUTE
-//  char num[30];
-//  
-//  usnprintf(num, 30, "<-- COMPUTE DEBUG -->");
-//  RIT128x96x4StringDraw(num, 0, 0, 15);
-//  
-//  usnprintf(num, 30, "Corrected temp: %d", (unsigned int) temp);
-//  RIT128x96x4StringDraw(num, 0, 10, 15);
-//
-//  usnprintf(num, 30, "Corrected Syst: %d", (unsigned int) systolic);
-//  RIT128x96x4StringDraw(num, 0, 20, 15);
-//
-//  usnprintf(num, 30, "Corrected Dia: %d", (unsigned int) diastolic);
-//  RIT128x96x4StringDraw(num, 0, 30, 15);
-//
-//  usnprintf(num, 30, "Corrected Pulse: %d", (unsigned int) pulseRate);
-//  RIT128x96x4StringDraw(num, 0, 40, 15);
-//#endif
+#if DEBUG_COMPUTE
+  char num[30];
+  
+  usnprintf(num, 30, "<-- COMPUTE DEBUG -->");
+  RIT128x96x4StringDraw(num, 0, 0, 15);
+  
+  usnprintf(num, 30, "Corrected temp: %d", (unsigned int) temp);
+  RIT128x96x4StringDraw(num, 0, 10, 15);
+
+  usnprintf(num, 30, "Corrected Syst: %d", (unsigned int) systolic);
+  RIT128x96x4StringDraw(num, 0, 20, 15);
+
+  usnprintf(num, 30, "Corrected Dia: %d", (unsigned int) diastolic);
+  RIT128x96x4StringDraw(num, 0, 30, 15);
+
+  usnprintf(num, 30, "Corrected Pulse: %d", (unsigned int) pulseRate);
+  RIT128x96x4StringDraw(num, 0, 40, 15);
+#endif
 }
 
 

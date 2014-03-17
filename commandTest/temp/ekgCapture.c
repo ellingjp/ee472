@@ -7,7 +7,7 @@
  * buffer.
  */
 
-#define DEBUG_EKG 1	// ekg task debug
+#define DEBUG_EKG 0	// ekg task debug
 
 #include "inc/hw_types.h"
 #include "inc/hw_memmap.h"
@@ -92,36 +92,36 @@ void initializeEKGTask() {
 	GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_7);
 
 	// configure ADC sequence (See defines for whichadc/seq combo used)
-//	SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
-//	SysCtlADCSpeedSet(SYSCTL_ADCSPEED_500KSPS);
-//	ADCSequenceDisable(ADC0_BASE, EKG_SEQ);
-//	ADCSequenceConfigure(	// configure when we want to run
-//			ADC0_BASE, 
-//			EKG_SEQ, 
-//			ADC_TRIGGER_TIMER, 
-//			EKG_PRIORITY); 
-//	ADCSequenceStepConfigure(	// input ch, interrupt en, end seq
-//			ADC0_BASE, 
-//			EKG_SEQ, 
-//			0,	// we're only using the first step
-//			EKG_CH | ADC_CTL_IE | ADC_CTL_END);	
-//	IntEnable(INT_ADC0SS0);
-//	ADCSequenceEnable(ADC0_BASE, EKG_SEQ);
-//
-//	// configure timer0 (uses both 16-bit timers) for periodic timing 
-//	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
-//	TimerDisable(EKG_TIMER_BASE, TIMER_BOTH);
-//	TimerConfigure(EKG_TIMER_BASE, TIMER_CFG_32_BIT_PER );
-//	TimerControlTrigger(EKG_TIMER_BASE, TIMER_A, true);
-//	TimerLoadSet(EKG_TIMER_BASE, TIMER_A, (SysCtlClockGet() / SAMPLE_FREQ));
-//
-//#if DEBUG_EKG
-//	long timeLoad =  TimerLoadGet(EKG_TIMER_BASE, TIMER_A);
-//	float secs = (timeLoad) / SysCtlClockGet();
-//	usnprintf(num, 30, "timer: %d s %d c", secs, timeLoad);
-//	RIT128x96x4StringDraw(num, 0, 10, 15);
-//
-//#endif
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
+	SysCtlADCSpeedSet(SYSCTL_ADCSPEED_500KSPS);
+	ADCSequenceDisable(ADC0_BASE, EKG_SEQ);
+	ADCSequenceConfigure(	// configure when we want to run
+			ADC0_BASE, 
+			EKG_SEQ, 
+			ADC_TRIGGER_TIMER, 
+			EKG_PRIORITY); 
+	ADCSequenceStepConfigure(	// input ch, interrupt en, end seq
+			ADC0_BASE, 
+			EKG_SEQ, 
+			0,	// we're only using the first step
+			EKG_CH | ADC_CTL_IE | ADC_CTL_END);	
+	IntEnable(INT_ADC0SS0);
+	ADCSequenceEnable(ADC0_BASE, EKG_SEQ);
+
+	// configure timer0 (uses both 16-bit timers) for periodic timing 
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
+	TimerDisable(EKG_TIMER_BASE, TIMER_BOTH);
+	TimerConfigure(EKG_TIMER_BASE, TIMER_CFG_32_BIT_PER );
+	TimerControlTrigger(EKG_TIMER_BASE, TIMER_A, true);
+	TimerLoadSet(EKG_TIMER_BASE, TIMER_A, (SysCtlClockGet() / SAMPLE_FREQ));
+
+#if DEBUG_EKG
+	long timeLoad =  TimerLoadGet(EKG_TIMER_BASE, TIMER_A);
+	float secs = (timeLoad) / SysCtlClockGet();
+	usnprintf(num, 30, "timer: %d s %d c", secs, timeLoad);
+	RIT128x96x4StringDraw(num, 0, 10, 15);
+
+#endif
 }
 
 
@@ -140,14 +140,14 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 	ekgComplete = false;	// reset the adc counters
 	sampleNum = 0;
 
-//	ADCIntEnable(ADC0_BASE, EKG_SEQ);
-//	TimerEnable(EKG_TIMER_BASE, EKG_TIMER);
-//
-//	while (!ekgComplete) {	// ADC is capturing signal measurements
-//	}
-//
-//	TimerDisable(EKG_TIMER_BASE, EKG_TIMER);
-//	ADCIntDisable(ADC0_BASE, EKG_SEQ); 
+	ADCIntEnable(ADC0_BASE, EKG_SEQ);
+	TimerEnable(EKG_TIMER_BASE, EKG_TIMER);
+
+	while (!ekgComplete) {	// ADC is capturing signal measurements
+	}
+
+	TimerDisable(EKG_TIMER_BASE, EKG_TIMER);
+	ADCIntDisable(ADC0_BASE, EKG_SEQ); 
 
 	*(eData->ekgCaptureDone) = true;	// we want to process our measurement
 
