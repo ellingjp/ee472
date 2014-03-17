@@ -55,7 +55,7 @@ void initializeGlobalData() {
 	cbAdd(&(global.systolicPressRaw), &sr);
 	cbAdd(&(global.diastolicPressRaw), &dr);
 	cbAdd(&(global.pulseRateRaw), &pr);
-
+	
 	cbAdd(&(global.temperatureCorrected), &tc);
 	cbAdd(&(global.systolicPressCorrected), &sc);
 	cbAdd(&(global.diastolicPressCorrected), &dc);
@@ -66,12 +66,15 @@ void initializeGlobalData() {
 	global.batteryState = 200;
 	global.mode = 0;
 	global.measurementSelection = 0;
+	global.measurementComplete = false;
+	global.ekgCaptureDone = false;
+	global.ekgProcessDone = false;
 	global.alarmAcknowledge = false;
 	global.select = false;
 	global.scroll = 0;
 	memset(&(global.commandStr), NULL, sizeof(char) * COMMAND_LENGTH);
-	memset(&(global.responseStr), NULL, sizeof(char) * COMMAND_LENGTH);
-	global.displayOn = true;
+	memset(&(global.responseStr), NULL, sizeof(char) * RESPONSE_LENGTH);
+	global.responseReady = false;
 }
 
 // debug tool

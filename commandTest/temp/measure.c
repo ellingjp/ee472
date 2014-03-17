@@ -52,6 +52,9 @@ static MeasureData data;  // internal data
 TCB measureTask = {&measureRunFunction, &data};  // task interface
 
 void initializeMeasureTask() {
+#if DEBUG
+  RIT128x96x4Init(1000000);
+#endif
   // Load data memory
   data.temperatureRaw = &(global.temperatureRaw);
   data.systolicPressRaw = &(global.systolicPressRaw);
@@ -60,10 +63,13 @@ void initializeMeasureTask() {
   data.measureSelect = &(global.measurementSelection);
 	data.ekgCaptureDone = &(global.ekgCaptureDone);
   
-    //setup for temperature sensor
-    ADCSequenceDisable(ADC0_BASE, 1);
-    ADCSequenceConfigure(ADC0_BASE, 1, ADC_TRIGGER_PROCESSOR, 1);
-    ADCSequenceStepConfigure(ADC0_BASE, 1, 0, ADC_CTL_END | ADC_CTL_TS);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
+    SysCtlADCSpeedSet(SYSCTL_ADCSPEED_250KSPS);
+	//setup for temperature sensor
+        ADCSequenceDisable(ADC0_BASE, 1);
+	ADCSequenceConfigure(ADC0_BASE, 1, ADC_TRIGGER_PROCESSOR, 1);
+	ADCSequenceStepConfigure(ADC0_BASE, 1, 0, ADC_CTL_IE | ADC_CTL_END | ADC_CTL_TS);
+        ADCSequenceEnable(ADC0_BASE, 1);
 
   /* Interrupt setup
    * Note: using statically registered interrupts, because they're faster
@@ -92,15 +98,22 @@ void initializeMeasureTask() {
 
 void setTemp(CircularBuffer *tbuf) {
   int temp = 0;
-  ADCSequenceEnable(ADC0_BASE, 1);
+	//
+	// Trigger the sample sequence.
+	//
+	ADCProcessorTrigger(ADC0_BASE, 1);
+	//
+	// Wait until the sample sequence has completed.
+	//
+	while(!ADCIntStatus(ADC0_BASE, 1, false))
+	{
+	}
+	//
+	// Read the value from the ADC.
+	//
+	ADCSequenceDataGet(ADC0_BASE, 1, &temp);
 
-  // Trigger the sample sequence.
-  ADCProcessorTrigger(ADC0_BASE, 1);
-
-  // Wait until the sample sequence has completed.
-  while( 1 != ADCSequenceDataGet(ADC0_BASE, 1, &temp));
-
-  ADCSequenceDisable(ADC0_BASE, 1);
+	
   cbAdd(tbuf, &temp);
 }
 

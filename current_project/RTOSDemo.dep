@@ -6,6 +6,7 @@
   <configuration>
     <name>Debug</name>
     <outputs>
+<<<<<<< HEAD
       <file>$PROJ_DIR$\..\lab5\code\CircularBuffer.c</file>
       <file>$PROJ_DIR$\..\lab5\code\CircularBuffer.h</file>
       <file>$PROJ_DIR$\..\lab5\code\compute.c</file>
@@ -171,9 +172,146 @@
       <file>$PROJ_DIR$\..\..\..\..\StellarisWare\third_party\lwip-1.3.2\src\core\snmp\msg_in.c</file>
       <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\rom_map.h</file>
       <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
+=======
+      <file>$PROJ_DIR$\..\lab4\code\status.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\status.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\tcb.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\timebase.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\timebase.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\warning.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\warning.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\utils\ustdlib.c</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\ewarm-cm3\Exe\driverlib-cm3.a</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\boards\ek-lm3s8962\drivers\rit128x96x4.c</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\portable\MemMang\heap_2.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\CircularBuffer.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\status.pbi</file>
+      <file>$PROJ_DIR$\..\lab3\code\globals.c</file>
+      <file>$PROJ_DIR$\main.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\CircularBuffer.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\serial.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\inc\hw_ints.h</file>
+      <file>$PROJ_DIR$\Debug\List\RTOSDemo.map</file>
+      <file>$PROJ_DIR$\startup_ewarm.c</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\inc\hw_ssi.h</file>
+      <file>$PROJ_DIR$\..\..\Source\portable\IAR\ARM_CM3\portasm.s</file>
+      <file>$TOOLKIT_DIR$\lib\m7M_tl.a</file>
+      <file>$PROJ_DIR$\Debug\Obj\list.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\portasm.o</file>
+      <file>$TOOLKIT_DIR$\inc\c\ystdio.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\measure.o</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\queue.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\CircularBuffer.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\queue.pbi</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\semphr.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\CircularBuffer.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\compute.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\CircularBuffer.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\display.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\compute.c</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\portable\IAR\ARM_CM3\portasm.s</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\list.c</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\portable\IAR\ARM_CM3\port.c</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\tasks.c</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\queue.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\startup_ewarm.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\display.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\globals.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\globals.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\keyPad.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\keyPad.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\main.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\measure.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\measure.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\schedule.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\schedule.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\serial.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\serial.h</file>
+      <file>$PROJ_DIR$\..\lab4\code\startup.c</file>
+      <file>$PROJ_DIR$\..\lab4\code\startup.h</file>
+      <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
+      <file>$PROJ_DIR$\Debug\Exe\RTOSDemo.out</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\ssi.h</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\StackMacros.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\ustdlib.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\keyPad.c</file>
+      <file>$PROJ_DIR$\FreeRTOSConfig.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\globals.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\schedule.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\keyPad.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\measure.pbi</file>
+      <file>$PROJ_DIR$\..\lab3\code\display.c</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\timers.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\inc\hw_memmap.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\inc\hw_types.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\startup.o</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\inc\hw_sysctl.h</file>
+      <file>$TOOLKIT_DIR$\inc\c\stdlib.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\gpio.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\serial.o</file>
+      <file>$PROJ_DIR$\..\lab3\code\timebase.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\compute.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\compute.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\startup_ewarm.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\warning.pbi</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\projdefs.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\startup.pbi</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\uart.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\timebase.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\display.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\timebase.o</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\pin_map.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\warning.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\serial.pbi</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\sysctl.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\ustdlib.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\heap_2.pbi</file>
+      <file>$PROJ_DIR$\&lt;invalid loc&gt;</file>
+      <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\tasks.pbi</file>
+      <file>$TOOLKIT_DIR$\lib\rt7M_tl.a</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\timer.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\display.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\schedule.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\boards\ek-lm3s8962\drivers\rit128x96x4.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\keyPad.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\status.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\schedule.o</file>
+      <file>$PROJ_DIR$\..\lab3\code\serial.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\measure.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\task.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\interrupt.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\rit128x96x4.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\schedule.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\startup.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\keyPad.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\measure.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\warning.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\debug.h</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\portable\IAR\ARM_CM3\portmacro.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\status.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\ustdlib.o</file>
+      <file>$PROJ_DIR$\..\lab3\code\globals.h</file>
+      <file>$PROJ_DIR$\..\lab3\code\compute.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\startup_ewarm.o</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\mpu_wrappers.h</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\task.h</file>
+      <file>$PROJ_DIR$\..\..\Source\portable\IAR\ARM_CM3\port.c</file>
+      <file>$TOOLKIT_DIR$\inc\c\string.h</file>
+      <file>$TOOLKIT_DIR$\inc\c\stdio.h</file>
+      <file>$PROJ_DIR$\..\..\Source\list.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\systick.h</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\FreeRTOS.h</file>
+      <file>$PROJ_DIR$\..\..\Source\tasks.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+      <file>$PROJ_DIR$\..\..\Source\queue.c</file>
+>>>>>>> commandTask_development
       <file>$PROJ_DIR$\..\lab3\code\compute.h</file>
       <file>$PROJ_DIR$\..\..\Source\queue.c</file>
       <file>$PROJ_DIR$\Debug\Obj\CircularBuffer.pbi</file>
+<<<<<<< HEAD
       <file>$PROJ_DIR$\..\lab3\code\warning.c</file>
       <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\systick.h</file>
       <file>$PROJ_DIR$\..\..\..\..\StellarisWare\third_party\lwip-1.3.2\src\netif\ppp\fsm.c</file>
@@ -184,11 +322,17 @@
       <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\ssi.h</file>
       <file>$PROJ_DIR$\..\lab4\code\timebase.c</file>
       <file>$PROJ_DIR$\..\lab3\code\ustdlib.c</file>
+=======
+      <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
+      <file>$TOOLKIT_DIR$\inc\c\DLib_Product_string.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\tasks.o</file>
+>>>>>>> commandTask_development
       <file>$PROJ_DIR$\..\..\..\..\StellarisWare\driverlib\adc.h</file>
       <file>$PROJ_DIR$\..\lab3\code\globals.c</file>
       <file>$PROJ_DIR$\..\..\Source\portable\MemMang\heap_2.c</file>
       <file>$PROJ_DIR$\Debug\Obj\heap_2.o</file>
       <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
+<<<<<<< HEAD
       <file>$PROJ_DIR$\Debug\Obj\list.pbi</file>
       <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
       <file>$PROJ_DIR$\Debug\Obj\portasm.o</file>
@@ -312,10 +456,24 @@
       <file>$PROJ_DIR$\..\lab4\code\ekgProcess.c</file>
       <file>$PROJ_DIR$\..\..\..\..\StellarisWare\third_party\lwip-1.3.2\src\core\ipv4\inet.c</file>
       <file>$PROJ_DIR$\..\lab4\code\ekgProcess.h</file>
+=======
+      <file>$PROJ_DIR$\rit128x96x4.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\warning.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\rit128x96x4.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\port.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\heap_2.o</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\portable.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\StellarisWare\utils\ustdlib.h</file>
+      <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
+      <file>$TOOLKIT_DIR$\inc\c\stdarg.h</file>
+      <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
+      <file>$TOOLKIT_DIR$\inc\c\DLib_Threads.h</file>
+>>>>>>> commandTask_development
       <file>$PROJ_DIR$\Debug\Obj\RTOSDemo.pbd</file>
       <file>$PROJ_DIR$\Debug\Obj\queue.o</file>
       <file>$PROJ_DIR$\Debug\Obj\display.o</file>
       <file>$PROJ_DIR$\Debug\Obj\globals.o</file>
+<<<<<<< HEAD
       <file>$PROJ_DIR$\Debug\Obj\compute.o</file>
       <file>$PROJ_DIR$\Debug\Obj\optfft.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\warning.pbi</file>
@@ -829,20 +987,51 @@
         <tool>
           <name>ICCARM</name>
           <file> 343</file>
+=======
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\list.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\port.pbi</file>
+      <file>$PROJ_DIR$\..\lab3\code\startup.c</file>
+      <file>$PROJ_DIR$\..\lab3\code\status.h</file>
+      <file>$TOOLKIT_DIR$\inc\c\stddef.h</file>
+      <file>$PROJ_DIR$\..\FreeRTOS\Source\include\croutine.h</file>
+      <file>$TOOLKIT_DIR$\inc\c\xencoding_limits.h</file>
+      <file>$PROJ_DIR$\LM3Sxxxx.icf</file>
+      <file>$PROJ_DIR$\Debug\Obj\list.o</file>
+    </outputs>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\status.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 12</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 103</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 94 157 14 164 182 27 250 219 24 234 6 248 1 223 246 326 301 289 120 112 118 110 3 22 284 16 290 226 220 221 33 136 21</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 94 157 14 164 182 27 250 219 24 234 6 248 1 223 246 326 301 289 120 112 118 110 3 22 284 16 290 226 220 221 33 136 21</file>
+=======
+          <file> 1 2 45 71 34 163 24 136 143 153 151 165 154 95 70 75 88 91 4</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 1 2 45 71 34 163 24 136 143 153 151 165 154 95 70 75 88 91 4</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab5\code\startup.c</name>
       <outputs>
         <tool>
@@ -852,20 +1041,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 28</file>
+=======
+      <name>$PROJ_DIR$\..\lab4\code\timebase.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 85</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 87</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 157 14 164 182 27 250 219 24 234 6 120 248 94 1 223 246 326 301 289 169 336 114 110 3 22 284 16 290 226 220 221 12 249 270 256 258 259 20 103 23 247 294 70 81 76 79 252 72 73 193 200 194 196 151 152 279 202 278 203 207 143 208 209 260 136 21 261 198 235</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 157 14 164 182 27 250 219 24 234 6 120 248 94 1 223 246 326 301 289 169 336 114 110 3 22 284 16 290 226 220 221 12 249 270 256 258 259 20 103 23 247 294 70 81 76 79 252 72 73 193 200 194 196 151 152 279 202 278 203 207 143 208 209 260 136 21 261 198 235</file>
+=======
+          <file> 71 70 17 98 91 45 34 163 24 136 143 153 151 165 154 95 75 88 108 4</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 71 70 17 98 91 45 34 163 24 136 143 153 151 165 154 95 75 88 108 4</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab5\code\status.c</name>
       <outputs>
         <tool>
@@ -875,20 +1084,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 339</file>
+=======
+      <name>$PROJ_DIR$\..\lab4\code\warning.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 81</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 89</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 116 118 94 157 14 164 182 27 250 219 24 234 6 248 1 223 246 326 301 289 120</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 116 118 94 157 14 164 182 27 250 219 24 234 6 248 1 223 246 326 301 289 120</file>
+=======
+          <file> 45 71 34 163 24 136 143 153 151 165 154 95 70 75 88 91 4 6 2 52 130 82 63 149 116 122 123 159 74 126 26 115 142</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 45 71 34 163 24 136 143 153 151 165 154 95 70 75 88 91 4 6 2 52 130 82 63 149 116 122 123 159 74 126 26 115 142</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab5\code\tables.c</name>
       <outputs>
         <tool>
@@ -911,20 +1140,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 276</file>
+=======
+      <name>$PROJ_DIR$\..\..\..\..\StellarisWare\utils\ustdlib.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 92</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 118</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 248 246 12 235 289 94 157 14 164 182 27 250 219 24 234 6 1 223 326 301 336 120</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 248 246 12 235 289 94 157 14 164 182 27 250 219 24 234 6 1 223 326 301 336 120</file>
+=======
+          <file> 125 24 136 143 153 151 165 154 95 137 115 150 152</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 125 24 136 143 153 151 165 154 95 137 115 150 152</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab5\code\warning.c</name>
       <outputs>
         <tool>
@@ -934,20 +1183,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 75</file>
+=======
+      <name>$PROJ_DIR$\..\..\..\..\StellarisWare\boards\ek-lm3s8962\drivers\rit128x96x4.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 140</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 146</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 94 157 14 164 182 27 250 219 24 234 6 248 1 223 246 326 301 289 120 122 118 110 3 22 284 16 290 226 220 221 245 158 325 340 146</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 94 157 14 164 182 27 250 219 24 234 6 248 1 223 246 326 301 289 120 122 118 110 3 22 284 16 290 226 220 221 245 158 325 340 146</file>
+=======
+          <file> 20 70 73 71 115 75 88 59 91 101</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 20 70 73 71 115 75 88 59 91 101</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\..\..\..\StellarisWare\utils\ustdlib.c</name>
       <outputs>
         <tool>
@@ -957,20 +1226,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 135</file>
+=======
+      <name>$PROJ_DIR$\..\FreeRTOS\Source\portable\MemMang\heap_2.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 93</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 148</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 157 14 164 182 27 250 219 24 234 6 340 136 21</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 157 14 164 182 27 250 219 24 234 6 340 136 21</file>
+=======
+          <file> 74 24 136 143 153 151 165 154 95 130 163 82 63 149 116 122 123 159</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 74 24 136 143 153 151 165 154 95 130 163 82 63 149 116 122 123 159</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\..\..\..\StellarisWare\boards\ek-lm3s8962\drivers\rit128x96x4.c</name>
       <outputs>
         <tool>
@@ -980,20 +1269,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 150</file>
+=======
+      <name>$PROJ_DIR$\..\lab3\code\globals.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 64</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 158</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 5 246 17 248 340 326 301 175 289 198</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 5 246 17 248 340 326 301 175 289 198</file>
+=======
+          <file> 119 71 11 163 24 136 143 153 151 165 154 95 70 75 88 91</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 119 71 11 163 24 136 143 153 151 165 154 95 70 75 88 91</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\FreeRTOS\Source\portable\MemMang\heap_2.c</name>
       <outputs>
         <tool>
@@ -1003,20 +1312,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 181</file>
+=======
+      <name>$PROJ_DIR$\main.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 132</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 128</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 245 14 164 182 27 250 219 24 234 3 223 22 284 16 290 226 220 221</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 245 14 164 182 27 250 219 24 234 3 223 22 284 16 290 226 220 221</file>
+=======
+          <file> 126 24 136 143 153 151 165 154 95 26 130 163 82 63 149 116 122 123 159 28 31 70 71 73 91 75 88 101</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 126 24 136 143 153 151 165 154 95 26 130 163 82 63 149 116 122 123 159 28 31 70 71 73 91 75 88 101</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\FreeRTOS\Source\portable\IAR\ARM_CM3\portasm.s</name>
       <outputs>
         <tool>
@@ -1041,20 +1370,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 18</file>
+=======
+      <name>$PROJ_DIR$\..\lab3\code\CircularBuffer.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 135</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 29</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 245 14 164 182 27 250 219 24 234 3 223 22 284 16 290 226 221</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 245 14 164 182 27 250 219 24 234 3 223 22 284 16 290 226 221</file>
+=======
+          <file> 11 126 24 136 143 153 151 165 154 95 26</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 11 126 24 136 143 153 151 165 154 95 26</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\FreeRTOS\Source\portable\IAR\ARM_CM3\port.c</name>
       <outputs>
         <tool>
@@ -1074,10 +1423,31 @@
         <tool>
           <name>ICCARM</name>
           <file> 3 223 14 164 182 27 250 219 24 234 22 284 16 290 226 220 221</file>
+=======
+      <name>$PROJ_DIR$\startup_ewarm.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 80</file>
         </tool>
-      </inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 121</file>
+        </tool>
+      </outputs>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\Source\portable\IAR\ARM_CM3\portasm.s</name>
+      <outputs>
+        <tool>
+          <name>AARM</name>
+          <file> 25</file>
+>>>>>>> commandTask_development
+        </tool>
+      </outputs>
+    </file>
+    <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\FreeRTOS\Source\tasks.c</name>
       <outputs>
         <tool>
@@ -1087,16 +1457,35 @@
         <tool>
           <name>ICCARM</name>
           <file> 195</file>
+=======
+      <name>$PROJ_DIR$\..\lab4\code\CircularBuffer.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 135</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 29</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 158 14 164 182 27 250 219 24 234 325 245 157 6 3 223 22 284 16 290 226 220 221 316 191</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 158 14 164 182 27 250 219 24 234 325 245 157 6 3 223 22 284 16 290 226 220 221 316 191</file>
+=======
+          <file> 34 126 24 136 143 153 151 165 154 95 26</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 34 126 24 136 143 153 151 165 154 95 26</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
@@ -1105,25 +1494,42 @@
       <outputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 241</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 307</file>
+=======
+          <file> 86</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 157</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 245 14 164 182 27 250 219 24 234 157 6 3 223 22 284 16 290 226 220 221 243</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 245 14 164 182 27 250 219 24 234 157 6 3 223 22 284 16 290 226 220 221 243</file>
+=======
+          <file> 45 71 34 163 24 136 143 153 151 165 154 95 70 75 88 91 4 43 2 101 150 152 74</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 45 71 34 163 24 136 143 153 151 165 154 95 70 75 88 91 4 43 2 101 150 152 74</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab5\code\startup_ewarm.c</name>
       <outputs>
         <tool>
@@ -1133,6 +1539,17 @@
         <tool>
           <name>ICCARM</name>
           <file> 344</file>
+=======
+      <name>$PROJ_DIR$\..\lab4\code\compute.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 78</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 79</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
     </file>
@@ -1141,6 +1558,7 @@
       <outputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 132</file>
         </tool>
         <tool>
@@ -1152,10 +1570,18 @@
         <tool>
           <name>BICOMP</name>
           <file> 236</file>
+=======
+          <file> 34 33 2 45 71 163 24 136 143 153 151 165 154 95 70 75 88 91 4 52 130 82 63 149 116 122 123 159</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 34 33 2 45 71 163 24 136 143 153 151 165 154 95 70 75 88 91 4 52 130 82 63 149 116 122 123 159</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\..\Source\list.c</name>
       <outputs>
         <tool>
@@ -1174,24 +1600,47 @@
         <tool>
           <name>BICOMP</name>
           <file> 293</file>
-        </tool>
+=======
+      <name>[ROOT_NODE]</name>
+      <outputs>
         <tool>
+          <name>ILINK</name>
+          <file> 18 58</file>
+>>>>>>> commandTask_development
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\FreeRTOS\Source\portable\IAR\ARM_CM3\portasm.s</name>
+      <outputs>
+        <tool>
+<<<<<<< HEAD
           <name>ICCARM</name>
           <file> 46</file>
+=======
+          <name>AARM</name>
+          <file> 25</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
+<<<<<<< HEAD
           <name>BICOMP</name>
           <file> 157 14 164 182 27 250 219 24 234 6 248 259 20 103 23 247 294 70 81 76 79 252 72 73 193 200 194 196 151 152 279 202 278 203 207 143 208 209 136 21 273 275 97 147</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 157 14 164 182 27 250 219 24 234 6 248 259 20 271 23 247 294 70 81 76 79 252 72 73 193 200 194 196 151 152 279 202 278 203 207 143 208 209 136 21 273 275 97 147</file>
+=======
+          <name>AARM</name>
+          <file> 63</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\..\Source\queue.c</name>
       <outputs>
         <tool>
@@ -1214,20 +1663,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 75</file>
+=======
+      <name>$PROJ_DIR$\..\FreeRTOS\Source\list.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 23</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 167</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 342 248 295 223 14 164 182 27 250 219 24 234 246 326 301 289 335 328 337 138 198 245 158 325 340 146</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 342 248 295 223 14 164 182 27 250 219 24 234 246 326 301 289 335 328 337 138 198 245 158 325 340 146</file>
+=======
+          <file> 74 24 136 143 153 151 165 154 95 130 163 82 63 149 116 122 159</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 74 24 136 143 153 151 165 154 95 130 163 82 63 149 116 122 159</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab4\code\timebase.c</name>
       <outputs>
         <tool>
@@ -1237,20 +1706,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 276</file>
+=======
+      <name>$PROJ_DIR$\..\FreeRTOS\Source\portable\IAR\ARM_CM3\port.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 160</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 147</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 248 246 12 235 289 317 232 223 14 164 182 27 250 219 24 234 326 301 336 240</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 248 246 12 235 289 317 232 223 14 164 182 27 250 219 24 234 326 301 336 240</file>
+=======
+          <file> 130 163 24 136 143 153 151 165 154 95 82 63 149 116 122 123 159</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 130 163 24 136 143 153 151 165 154 95 82 63 149 116 122 123 159</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab3\code\ustdlib.c</name>
       <outputs>
         <tool>
@@ -1260,12 +1749,31 @@
         <tool>
           <name>ICCARM</name>
           <file> 135</file>
+=======
+      <name>$PROJ_DIR$\..\FreeRTOS\Source\tasks.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 96</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 138</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 157 14 164 182 27 250 219 24 234 6 340 136 21</file>
+=======
+          <file> 126 24 136 143 153 151 165 154 95 26 74 125 137 130 163 82 63 149 116 122 123 159 69 60</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 126 24 136 143 153 151 165 154 95 26 74 125 137 130 163 82 63 149 116 122 123 159 69 60</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
@@ -1274,25 +1782,42 @@
       <outputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 134</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 309</file>
+=======
+          <file> 30</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 156</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 342 248 295 223 14 164 182 27 250 219 24 234 246 326 301 289</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 342 248 295 223 14 164 182 27 250 219 24 234 246 326 301 289</file>
+=======
+          <file> 74 24 136 143 153 151 165 154 95 125 137 130 163 82 63 149 116 122 123 159 164</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 74 24 136 143 153 151 165 154 95 125 137 130 163 82 63 149 116 122 123 159 164</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\..\Source\portable\MemMang\heap_2.c</name>
       <outputs>
         <tool>
@@ -1338,20 +1863,53 @@
         <tool>
           <name>ICCARM</name>
           <file> 308</file>
+=======
+      <name>$PROJ_DIR$\..\lab4\code\startup_ewarm.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 80</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 121</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\globals.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 64</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 158</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 342 248 295 223 14 164 182 27 250 219 24 234 246 326 301 289 335 328 233 198 136 21 245</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 342 248 295 223 14 164 182 27 250 219 24 234 246 326 301 289 335 328 233 198 136 21 245</file>
+=======
+          <file> 45 71 34 163 24 136 143 153 151 165 154 95 70 75 88 91</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 45 71 34 163 24 136 143 153 151 165 154 95 70 75 88 91</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\startup_ewarm.c</name>
       <outputs>
         <tool>
@@ -1361,6 +1919,17 @@
         <tool>
           <name>ICCARM</name>
           <file> 344</file>
+=======
+      <name>$PROJ_DIR$\..\lab4\code\keyPad.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 66</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 102</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
     </file>
@@ -1368,18 +1937,29 @@
       <name>$PROJ_DIR$\Debug\Exe\RTOSDemo.out</name>
       <outputs>
         <tool>
+<<<<<<< HEAD
           <name>ILINK</name>
           <file> 149</file>
+=======
+          <name>BICOMP</name>
+          <file> 47 2 45 71 34 163 24 136 143 153 151 165 154 95 70 75 88 91 4</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
+<<<<<<< HEAD
           <name>ILINK</name>
           <file> 25 124 329 310 308 313 78 309 181 292 277 171 18 46 45 297 15 238 82 172 185 307 150 346 343 28 344 339 83 195 276 135 75 231 9 184</file>
+=======
+          <name>ICCARM</name>
+          <file> 47 2 45 71 34 163 24 136 143 153 151 165 154 95 70 75 88 91 4</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab4\code\serial.c</name>
       <outputs>
         <tool>
@@ -1389,10 +1969,16 @@
         <tool>
           <name>ICCARM</name>
           <file> 343</file>
-        </tool>
-      </outputs>
-      <inputs>
+=======
+      <name>$PROJ_DIR$\..\lab4\code\main.c</name>
+      <outputs>
         <tool>
+          <name>BICOMP</name>
+          <file> 132</file>
+>>>>>>> commandTask_development
+        </tool>
+        <tool>
+<<<<<<< HEAD
           <name>BICOMP</name>
           <file> 317 248 232 223 14 164 182 27 250 219 24 234 246 326 301 289 240 216 144 324 3 22 284 16 290 226 220 221 33 136 21 157 6</file>
         </tool>
@@ -1423,32 +2009,64 @@
           <name>ICCARM</name>
           <file> 240 248 317 232 223 14 164 182 27 250 219 24 234 246 326 301 289 169 336 141 324 3 22 284 16 290 226 220 221</file>
         </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab3\code\serial.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 74</file>
-        </tool>
-        <tool>
+=======
           <name>ICCARM</name>
-          <file> 343</file>
+          <file> 128</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+          <file> 126 24 136 143 153 151 165 154 95 26 130 163 82 63 149 116 122 123 159 28 31 70 71 73 91 75 88 101 4 52 2 56 50 33 43 6 47 54 1</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 126 24 136 143 153 151 165 154 95 26 130 163 82 63 149 116 122 123 159 28 31 70 71 73 91 75 88 101 4 52 2 56 50 33 43 6 47 54 1</file>
+        </tool>
+>>>>>>> commandTask_development
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab4\code\measure.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+<<<<<<< HEAD
+          <file> 74</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 343</file>
+=======
+          <file> 67</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 27</file>
+>>>>>>> commandTask_development
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 335 342 248 295 223 14 164 182 27 250 219 24 234 246 326 301 289 328 4 138 33 136 21 157 6</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 335 342 248 295 223 14 164 182 27 250 219 24 234 246 326 301 289 328 4 138 33 136 21 157 6</file>
+=======
+          <file> 34 45 71 163 24 136 143 153 151 165 154 95 70 75 88 91 4 50 2 52 130 82 63 149 116 122 123 159 108 17 115 139</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 34 45 71 163 24 136 143 153 151 165 154 95 70 75 88 91 4 50 2 52 130 82 63 149 116 122 123 159 108 17 115 139</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\..\Source\tasks.c</name>
       <outputs>
         <tool>
@@ -1458,10 +2076,32 @@
         <tool>
           <name>ICCARM</name>
           <file> 195</file>
+=======
+      <name>$PROJ_DIR$\..\lab4\code\schedule.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 65</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 104</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 71</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 71</file>
+        </tool>
+      </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\..\Source\portable\IAR\ARM_CM3\port.c</name>
       <outputs>
         <tool>
@@ -1484,20 +2124,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 329</file>
+=======
+      <name>$PROJ_DIR$\..\lab4\code\serial.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 90</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 76</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 232 158 14 164 182 27 250 219 24 234 325</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 232 158 14 164 182 27 250 219 24 234 325</file>
+=======
+          <file> 45 71 34 163 24 136 143 153 151 165 154 95 70 75 88 91 4 54 2 52 130 82 63 149 116 122 123 159 84 150 152 125 137</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 45 71 34 163 24 136 143 153 151 165 154 95 70 75 88 91 4 54 2 52 130 82 63 149 116 122 123 159 84 150 152 125 137</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab4\code\compute.c</name>
       <outputs>
         <tool>
@@ -1507,20 +2167,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 310</file>
+=======
+      <name>$PROJ_DIR$\..\lab4\code\startup.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 83</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 72</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 232 300 144 317 248 223 14 164 182 27 250 219 24 234 246 326 301 289 240 324 3 22 284 16 290 226 220 221</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 232 300 144 317 248 223 14 164 182 27 250 219 24 234 246 326 301 289 240 324 3 22 284 16 290 226 220 221</file>
+=======
+          <file> 4 71 45 34 163 24 136 143 153 151 165 154 95 70 75 88 91 129 108 56 52 130 82 63 149 116 122 123 159</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 4 71 45 34 163 24 136 143 153 151 165 154 95 70 75 88 91 129 108 56 52 130 82 63 149 116 122 123 159</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab4\code\display.c</name>
       <outputs>
         <tool>
@@ -1530,20 +2210,51 @@
         <tool>
           <name>ICCARM</name>
           <file> 308</file>
+=======
+      <name>$PROJ_DIR$\Debug\Exe\RTOSDemo.out</name>
+      <outputs>
+        <tool>
+          <name>ILINK</name>
+          <file> 18</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ILINK</name>
+          <file> 166 8 29 79 157 158 148 102 167 128 27 147 25 156 146 104 76 72 121 103 138 87 118 89 97 22 57</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\ustdlib.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 92</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 118</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 317 248 232 223 14 164 182 27 250 219 24 234 246 326 301 289 240 228 144 198 136 21 245</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 317 248 232 223 14 164 182 27 250 219 24 234 246 326 301 289 240 228 144 198 136 21 245</file>
+=======
+          <file> 125 24 136 143 153 151 165 154 95 137 115 150 152</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab4\code\warning.c</name>
       <outputs>
         <tool>
@@ -1553,20 +2264,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 75</file>
+=======
+      <name>$PROJ_DIR$\..\lab3\code\keyPad.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 66</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 102</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 317 248 232 223 14 164 182 27 250 219 24 234 246 326 301 289 240 242 144 324 3 22 284 16 290 226 220 221 245 158 325 340 146</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 317 248 232 223 14 164 182 27 250 219 24 234 246 326 301 289 240 242 144 324 3 22 284 16 290 226 220 221 245 158 325 340 146</file>
+=======
+          <file> 112 107 119 71 11 163 24 136 143 153 151 165 154 95 70 75 88 91 77</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 112 107 119 71 11 163 24 136 143 153 151 165 154 95 70 75 88 91 77</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab4\code\startup_ewarm.c</name>
       <outputs>
         <tool>
@@ -1622,33 +2353,107 @@
         <tool>
           <name>ICCARM</name>
           <file> 317 248 232 223 14 164 182 27 250 219 24 234 246 326 301 289 305 144 263 198 136 21</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\lab4\code\globals.c</name>
+=======
+      <name>$PROJ_DIR$\..\lab3\code\display.c</name>
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 134</file>
+          <file> 86</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 309</file>
+          <file> 157</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+          <file> 119 71 11 163 24 136 143 153 151 165 154 95 70 75 88 91 107 77 99 101 150 152 74</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 119 71 11 163 24 136 143 153 151 165 154 95 70 75 88 91 107 77 99 101 150 152 74</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\serial.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 90</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 76</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 107 119 71 11 163 24 136 143 153 151 165 154 95 70 75 88 91 77 16 100 84 150 152 125 137</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 107 119 71 11 163 24 136 143 153 151 165 154 95 70 75 88 91 77 16 100 84 150 152 125 137</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\lab3\code\rit128x96x4.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 140</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 146</file>
+>>>>>>> commandTask_development
+        </tool>
+      </inputs>
+    </file>
+    <file>
+<<<<<<< HEAD
+      <name>$PROJ_DIR$\..\lab4\code\globals.c</name>
+=======
+      <name>$PROJ_DIR$\..\lab3\code\schedule.c</name>
+>>>>>>> commandTask_development
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 65</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+<<<<<<< HEAD
+          <file> 309</file>
+=======
+          <file> 104</file>
+>>>>>>> commandTask_development
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 317 248 232 223 14 164 182 27 250 219 24 234 246 326 301 289 158 325 157 6</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 317 248 232 223 14 164 182 27 250 219 24 234 246 326 301 289 158 325 157 6</file>
+=======
+          <file> 107 100 71 77 119 11 163 24 136 143 153 151 165 154 95 70 75 88 91 106 134 99 114 162 16 112 101 150 152</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 107 100 71 77 119 11 163 24 136 143 153 151 165 154 95 70 75 88 91 106 134 99 114 162 16 112 101 150 152</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab4\code\keyPad.c</name>
       <outputs>
         <tool>
@@ -1658,20 +2463,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 171</file>
+=======
+      <name>$PROJ_DIR$\..\lab3\code\measure.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 67</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 27</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 319 144 317 248 232 223 14 164 182 27 250 219 24 234 246 326 301 289 240</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 319 144 317 248 232 223 14 164 182 27 250 219 24 234 246 326 301 289 240</file>
+=======
+          <file> 107 11 119 71 163 24 136 143 153 151 165 154 95 70 75 88 91 77 106 100 108 17 115</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 107 11 119 71 163 24 136 143 153 151 165 154 95 70 75 88 91 77 106 100 108 17 115</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab4\code\main.c</name>
       <outputs>
         <tool>
@@ -1681,20 +2506,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 15</file>
+=======
+      <name>$PROJ_DIR$\..\lab3\code\status.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 12</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 103</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 158 14 164 182 27 250 219 24 234 325 3 223 22 284 16 290 226 220 221 327 333 246 248 17 289 326 301 198 240 324 144 141 322 300 228 242 319 216 173</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 158 14 164 182 27 250 219 24 234 325 3 223 22 284 16 290 226 220 221 327 333 246 248 17 289 326 301 198 240 324 144 141 322 300 228 242 319 216 173</file>
+=======
+          <file> 162 107 119 71 11 163 24 136 143 153 151 165 154 95 70 75 88 91 77</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 162 107 119 71 11 163 24 136 143 153 151 165 154 95 70 75 88 91 77</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab4\code\measure.c</name>
       <outputs>
         <tool>
@@ -1704,20 +2549,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 238</file>
+=======
+      <name>$PROJ_DIR$\..\lab3\code\compute.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 78</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 79</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 232 317 248 223 14 164 182 27 250 219 24 234 246 326 301 289 240 322 144 324 3 22 284 16 290 226 220 221 336 12 340 178</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 232 317 248 223 14 164 182 27 250 219 24 234 246 326 301 289 240 322 144 324 3 22 284 16 290 226 220 221 336 12 340 178</file>
+=======
+          <file> 107 11 134 119 71 163 24 136 143 153 151 165 154 95 70 75 88 91 77 100</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 107 11 134 119 71 163 24 136 143 153 151 165 154 95 70 75 88 91 77 100</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab4\code\schedule.c</name>
       <outputs>
         <tool>
@@ -1750,20 +2615,56 @@
         <tool>
           <name>ICCARM</name>
           <file> 28</file>
-        </tool>
-      </outputs>
-      <inputs>
+=======
+      <name>$PROJ_DIR$\..\..\Source\portable\IAR\ARM_CM3\port.c</name>
+      <outputs>
         <tool>
           <name>BICOMP</name>
+          <file> 160</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 147</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Source\list.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 23</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 167</file>
+>>>>>>> commandTask_development
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Source\tasks.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 328 342 248 295 223 14 164 182 27 250 219 24 234 246 326 301 289 169 336 330 138</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 328 342 248 295 223 14 164 182 27 250 219 24 234 246 326 301 289 169 336 330 138</file>
+=======
+          <file> 96</file>
         </tool>
-      </inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 138</file>
+>>>>>>> commandTask_development
+        </tool>
+      </outputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab3\code\schedule.c</name>
       <outputs>
         <tool>
@@ -1773,21 +2674,47 @@
         <tool>
           <name>ICCARM</name>
           <file> 346</file>
-        </tool>
-      </outputs>
-      <inputs>
+=======
+      <name>$PROJ_DIR$\..\..\Source\queue.c</name>
+      <outputs>
         <tool>
           <name>BICOMP</name>
+          <file> 30</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 156</file>
+>>>>>>> commandTask_development
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Source\portable\MemMang\heap_2.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 335 138 248 328 342 295 223 14 164 182 27 250 219 24 234 246 326 301 289 19 165 233 337 222 4 334 198 136 21</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 335 138 248 328 342 295 223 14 164 182 27 250 219 24 234 246 326 301 289 19 165 233 337 222 4 334 198 136 21</file>
+=======
+          <file> 93</file>
         </tool>
-      </inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 148</file>
+>>>>>>> commandTask_development
+        </tool>
+      </outputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab3\code\measure.c</name>
+=======
+      <name>$PROJ_DIR$\rit128x96x4.c</name>
+>>>>>>> commandTask_development
       <outputs>
         <tool>
           <name>BICOMP</name>
@@ -1795,21 +2722,30 @@
         </tool>
         <tool>
           <name>ICCARM</name>
+<<<<<<< HEAD
           <file> 238</file>
+=======
+          <file> 146</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 335 295 342 248 223 14 164 182 27 250 219 24 234 246 326 301 289 328 19 138 336 12 340</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 335 295 342 248 223 14 164 182 27 250 219 24 234 246 326 301 289 328 19 138 336 12 340</file>
+=======
+          <file> 94</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab3\code\status.c</name>
       <outputs>
         <tool>
@@ -1819,20 +2755,40 @@
         <tool>
           <name>ICCARM</name>
           <file> 339</file>
+=======
+      <name>$PROJ_DIR$\..\lab3\code\warning.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 81</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 89</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 222 335 342 248 295 223 14 164 182 27 250 219 24 234 246 326 301 289 328</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 222 335 342 248 295 223 14 164 182 27 250 219 24 234 246 326 301 289 328</file>
+=======
+          <file> 119 71 11 163 24 136 143 153 151 165 154 95 70 75 88 91 107 77 114 100 101 74 126 26 115 142</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 119 71 11 163 24 136 143 153 151 165 154 95 70 75 88 91 107 77 114 100 101 74 126 26 115 142</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>
     <file>
+<<<<<<< HEAD
       <name>$PROJ_DIR$\..\lab3\code\compute.c</name>
       <outputs>
         <tool>
@@ -1842,16 +2798,35 @@
         <tool>
           <name>ICCARM</name>
           <file> 310</file>
+=======
+      <name>$PROJ_DIR$\..\lab3\code\startup.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 83</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 72</file>
+>>>>>>> commandTask_development
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
+<<<<<<< HEAD
           <file> 335 295 165 342 248 223 14 164 182 27 250 219 24 234 246 326 301 289 328 138</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 335 295 165 342 248 223 14 164 182 27 250 219 24 234 246 326 301 289 328 138</file>
+=======
+          <file> 77 119 71 11 163 24 136 143 153 151 165 154 95 70 75 88 91 129 108 111 100</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 77 119 71 11 163 24 136 143 153 151 165 154 95 70 75 88 91 129 108 111 100</file>
+>>>>>>> commandTask_development
         </tool>
       </inputs>
     </file>

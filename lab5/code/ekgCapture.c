@@ -7,7 +7,7 @@
  * buffer.
  */
 
-#define DEBUG_EKG 1	// ekg task debug
+#define DEBUG_EKG 0	// ekg task debug
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -41,9 +41,10 @@ extern xTaskHandle ekgProcessHandle;
 // ekgCapture data structure. Internal to the task
 typedef struct ekgCaptureData {
 	signed int *ekgRawDataAddr;	// raw output array address
-} EKGCaptureData;
+	tBoolean *ekgCaptureDone;
+}EKGCaptureData;
 
-static EKGCaptureData data; 	// the internal data
+static EKGCaptureData data; 	// the interal data
 
 void ekgCaptureRunFunction(void *ekgCaptureData);     // Compiler function prototypes
 TCB ekgCaptureTask = {&ekgCaptureRunFunction, &data}; // task interface
@@ -57,7 +58,9 @@ void initializeEKGTask() {
 	RIT128x96x4Init(1000000);
 	RIT128x96x4StringDraw("* EKGCapture Debug *", 0, 0, 15);
 #endif
+
 	data.ekgRawDataAddr = global.ekgRaw;
+	data.ekgCaptureDone = &(global.ekgCaptureDone);
 
 	// Enable read from GPIO pin (move this and below to startup?)
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
@@ -95,13 +98,16 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 		firstRun = false;
 		initializeEKGTask();
 	}
-        
+
+	EKGCaptureData *eData = (EKGCaptureData *) ekgCaptureData;
 	ekgComplete = false;	// reset the adc counters
 
 	ADCSequenceEnable(ADC0_BASE, EKG_SEQ);
 	while (!ekgComplete) {
 	}       
 	ADCSequenceDisable(ADC0_BASE, EKG_SEQ);
+
+	*(eData->ekgCaptureDone) = true;	// we want to process our measurement
 
 #if DEBUG_EKG
 	usnprintf(num, 30, "end ADC get");

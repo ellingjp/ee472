@@ -7,7 +7,7 @@
  *
  */
 
-#define DEBUG_PROC 1
+#define DEBUG_PROC 0
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -28,9 +28,10 @@ static tBoolean firstRun = true;
 
 // ekgProcess data structure. Internal to this task
 typedef struct egkProcessData {
-  signed int *ekgRawData;
-  signed int *ekgImgData;
-  CircularBuffer *ekgFreqResult;
+	signed int *ekgRawData;
+	signed int *ekgImgData;
+	CircularBuffer *ekgFreqResult;
+	tBoolean *ekgProcessDone;
 } EKGProcessData;
 
 static EKGProcessData data; // internal data object
@@ -40,9 +41,10 @@ void ekgProcessRunFunction(void *ekgProcessData);
 TCB ekgProcessTask = {&ekgProcessRunFunction, &data}; // task interface
 
 void initializeEKGProcess() {
-  data.ekgRawData = (global.ekgRaw);
-  data.ekgImgData = (global.ekgTemp);
-  data.ekgFreqResult = &(global.ekgFrequencyResult);
+	data.ekgRawData = (global.ekgRaw);
+	data.ekgImgData = (global.ekgTemp);
+	data.ekgFreqResult = &(global.ekgFrequencyResult);
+	data.ekgProcessDone = &(global.ekgProcessDone);
 
 #if DEBUG_PROC
  // RIT128x96x4Init(1000000);
@@ -92,8 +94,11 @@ void ekgProcessRunFunction(void *ekgData) {
 #if DEBUG_PROC
   usnprintf(num, 30, ": %d  ", max_index);
   RIT128x96x4StringDraw(num, 0, 30, 15);
+	RIT128x96x4StringDraw("Processed", 0, 70, 15);
 #endif
+
   cbAdd(data.ekgFreqResult, (void*) &freq);
+	*(data->ekgProcessDone) = true;
   
   // Kill myself
   vTaskSuspend(NULL);   // suspend self
