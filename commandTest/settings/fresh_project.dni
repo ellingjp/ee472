@@ -48,6 +48,13 @@ ShowArgs=0
 MixedMode=1
 [watch_formats]
 Fmt0={W}0:delim[2]	5	0
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
 [CallStackLog]
 Enabled=0
 [DriverProfiling]
@@ -59,16 +66,9 @@ Exclusions=
 [Disassemble mode]
 mode=0
 [Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\temp\commandTask.c}.89.13" 1 0 0 0 "" 0 ""
-Count=1
-[Log file]
-LoggingEnabled=_ 0
-LogFile=_ ""
-Category=_ 0
-[TermIOLog]
-LoggingEnabled=_ 0
-LogFile=_ ""
+Count=0
 [Aliases]
-A0=_ "C:\Program Files (x86)\StellarisWare\driverlib\sysctl.c" "C:\StellarisWare\driverlib\sysctl.c"
-Count=1
+A0=_ "C:\Program Files (x86)\StellarisWare\driverlib\cpu.c" "C:\StellarisWare\driverlib\cpu.c"
+A1=_ "C:\Program Files (x86)\StellarisWare\driverlib\sysctl.c" "C:\StellarisWare\driverlib\sysctl.c"
+Count=2
 SuppressDialog=1
