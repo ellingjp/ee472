@@ -1,0 +1,133 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<meta http-equiv="content-type" content="text/html;charset=ISO-8869-1"><title>Doctor at Your Fingertips - Web Interface</title>
+
+<script language="JavaScript">
+<!--
+function send_command()
+{
+  var send = false;
+  var command = document.getElementById("terminal");
+
+  // Create a send request (don't bother with ActiveX Objects)
+  send = new XMLHttpRequest();
+
+  if(send)
+  {
+    // User entered non-blank command
+    if(command.value != "")
+    {
+      // Send request to special url for server processing
+      // send.open("GET", "/send_command?value=" + command.value + "&id=" + Math.random(), true); // /send_command doesn't exist right now
+      // send.send(null);
+      receive_command()
+    }
+  }
+}
+
+function receive_command() {
+  var receive = false;
+
+  receive = new XMLHttpRequest();
+
+  // Send a request for the current command response
+  if(receive)
+  {
+    receive.open("GET", "/receive_command?id=" + Math.random(), true);
+
+    // Register command_complete() with this XMLHTTPRequest so it is called when a response is received
+    receive.onreadystatechange = receive_complete;
+    receive.send(null);
+  }
+
+  function receive_complete()
+  {
+    document.getElementById("response").innerHTML = "<blink>Hello, world!</blink>";
+
+    if(receive.readyState == 4)
+    {
+      if(receive.status == 200)
+      {
+        document.getElementById("response").innerHTML = receive.responseText;
+      }
+    }
+  }
+}
+
+function blink() {
+  var blinks = document.getElementsByTagName('blink');
+  for (var i = blinks.length - 1; i >= 0; i--) {
+    var s = blinks[i];
+    s.style.visibility = (s.style.visibility === 'visible') ? 'hidden' : 'visible';
+  }
+  window.setTimeout(blink, 1000);
+}
+if (document.addEventListener) document.addEventListener("DOMContentLoaded", blink, false);
+else if (window.addEventListener) window.addEventListener("load", blink, false);
+else if (window.attachEvent) window.attachEvent("onload", blink);
+else window.onload = blink;
+//-->
+</script>
+<style type="text/css">
+body
+{
+  font-family: Arial;
+  background-color: white;
+  margin: 20px;
+  padding: 0px
+}
+h1
+{
+  color: #000000;
+  font-family: Arial;
+  font-size: 24pt;
+}
+
+</style>
+</head>
+<body>
+
+<div id="container" style="float:right; right:50%; position:relative">
+  <div id="uicontainer" style="float:right; right:-50%; position:relative">
+    <div id="title"> <h1> Doctor at Your Fingertips </h1> </div>
+    <div id="ui" style="padding:10px;float:left;border: 1px solid;">
+      <div id="enter"> Enter a command: </div>
+      <div id="command" style="margin-bottom:10px">
+        <input id="terminal" type="text" onkeydown="if (event.keyCode == 13) send_command()"/> 
+        <input id="send" value="Send" type="button" onclick="send_command()"/>
+      </div>
+      <div id="response"> </div>
+    </div>
+
+    <div id="validcommands" style="margin-left:20;float:left;border:1px solid;"> 
+      <table>
+        <tr>
+          <td> <b> Command </b> </td>
+          <td> <b> Effect/Usage </b> </td>
+        </tr>
+        <tr>
+          <td> S </td>
+          <td> Starts the device.  Enables measurement devices and interrupts. </td>
+        </tr>
+        <tr>
+          <td> P </td>
+          <td> Stops the device.  Disables measurement devices and interrupts. </td>
+        </tr>
+        <tr>
+          <td> D </td>
+          <td> Enables/disables the onboard OLED. </td>
+        </tr>
+        <tr>
+          <td> M &lt;sensor(s)&gt; </td>
+          <td> Measure the specified sensor(s). Sensors are specified by... </td>
+        </tr> 
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+
+</body>
+</html>
