@@ -7,7 +7,7 @@
  * buffer.
  */
 
-#define DEBUG_EKG 1	// ekg task debug
+#define DEBUG_EKG 0	// ekg task debug
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -141,7 +141,7 @@ void ADC0IntHandler() {
 	static int i = 0;
 debugPin47();
 	// Read the value from the ADC.
-        ADCIntClear(ADC0_BASE, EKG_SEQ);
+        
 	while (1 !=  ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, &value));
 	(data.ekgRawDataAddr)[i++] = (signed int) value;
         
@@ -150,5 +150,5 @@ debugPin47();
 		i = 0;
 		ekgComplete = true;
 	}
-
+ADCIntClear(ADC0_BASE, EKG_SEQ);
 }

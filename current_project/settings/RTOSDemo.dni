@@ -16,7 +16,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=598236675
+Checksum=-827602600
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -54,11 +54,8 @@ mode=1
 [Breakpoints]
 Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\E\Dev\FreeRTOS\WorkingCopy2\Demo\Common\Minimal\IntQueue.c}.363.2@1" 0 0 0 0 "" 0 ""
 Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\windows\system32}.28.3" 0 0 0 0 "" 0 ""
-Bp2=_ "STD_CODE" "{$PROJ_DIR$\..\lab5\code\ekgCapture.c}.62.25" 1 0 0 0 "" 0 ""
-Bp3=_ "STD_CODE" "{$PROJ_DIR$\..\lab5\code\timebase.c}.31.6" 1 0 0 0 "" 0 ""
-Bp4=_ "STD_CODE" "{$PROJ_DIR$\..\lab5\code\timebase.c}.28.6" 1 0 0 0 "" 0 ""
-Bp5=_ "STD_CODE" "{$PROJ_DIR$\..\lab5\code\ekgCapture.c}.109.4" 1 0 0 0 "" 0 ""
-Count=6
+Bp2=_ "STD_CODE" "{$PROJ_DIR$\..\lab5\code\timebase.c}.33.10" 1 0 0 0 "" 0 ""
+Count=3
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""

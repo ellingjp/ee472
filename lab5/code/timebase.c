@@ -22,7 +22,7 @@ void initializeTimebase() {
   TimerDisable(TIMER0_BASE, TIMER_A);
   
   // Configure TimerA as periodic
-  TimerConfigure(TIMER0_BASE, TIMER_CFG_A_PERIODIC);
+  TimerConfigure(TIMER0_BASE, TIMER_CFG_32_BIT_PER); //TIMER_CFG_A_PERIODIC);
     
   // Determine minor cycle
   TimerLoadSet(TIMER0_BASE, TIMER_A, (SysCtlClockGet() / 1000) * MINOR_CYCLE );
