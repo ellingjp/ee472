@@ -133,6 +133,8 @@ and the TCP/IP stack together cannot be accommodated with the 32K size limit. */
 #include "serial.h"
 #include "status.h"
 #include "keyPad.h"
+#include "ekgCapture.h"
+#include "ekgProcess.h"
 
 /*-----------------------------------------------------------*/
 
@@ -202,6 +204,8 @@ void keyPad(void *vParameters);
 void warning(void *vParameters);
 void serial(void *vParameters);
 void status(void *vParameters);
+void ekgCapture(void *vParameters);
+void ekgProcess(void *vParameters);
 
 /*-----------------------------------------------------------*/
 
@@ -216,7 +220,7 @@ xTaskHandle computeHandle;
 xTaskHandle serialHandle;
 xTaskHandle measureHandle;
 xTaskHandle displayHandle;
-xTaskHandle ekgComputeHandle;
+xTaskHandle ekgCaptureHandle;
 xTaskHandle ekgProcessHandle;
 
 /*************************************************************************
@@ -233,9 +237,10 @@ int main( void )
     startup();
     
     /* Start the tasks */
-    RIT128x96x4Init(10000000);
     xTaskCreate(measure, "measure task", 100,NULL, 2, &measureHandle);
     xTaskCreate(compute, "compute task", 100,NULL, 3, &computeHandle);
+    xTaskCreate(ekgCapture, "ekgCapture task", 100,NULL, 2, NULL);
+    xTaskCreate(ekgProcess, "ekgProcess task", 300,NULL, 3, &ekgProcessHandle);
     xTaskCreate(display, "display task", 100,NULL, 5, &displayHandle);
     xTaskCreate(keyPad, "keyPad task", 100,NULL, 4,NULL);
     xTaskCreate(warning, "warning task", 100,NULL, 5,NULL);
@@ -244,6 +249,7 @@ int main( void )
 
     vTaskSuspend(computeHandle);
     vTaskSuspend(serialHandle);
+    vTaskSuspend(ekgProcessHandle);
     /* Start the scheduler. */
     vTaskStartScheduler();
 
@@ -315,6 +321,24 @@ void status(void *vParameters)
   while(1)
   {
       statusTask.runTaskFunction(statusTask.taskDataPtr);
+      vTaskDelay(MINOR_CYCLE);
+  }
+}
+
+void ekgCapture(void *vParameters)
+{
+  while(1)
+  {
+      ekgCaptureTask.runTaskFunction(ekgCaptureTask.taskDataPtr);
+      vTaskDelay(MINOR_CYCLE);
+  }
+}
+
+void ekgProcess(void *vParameters)
+{
+  while(1)
+  {
+      ekgProcessTask.runTaskFunction(ekgProcessTask.taskDataPtr);
       vTaskDelay(MINOR_CYCLE);
   }
 }

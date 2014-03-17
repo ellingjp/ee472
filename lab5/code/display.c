@@ -14,7 +14,7 @@
 #include "utils/ustdlib.h"
 #include <stdlib.h>
 
-#define DISPLAY_OFF 0
+#define DISPLAY_OFF 1
 
 // Internal data structure
 typedef struct oledDisplayData {
@@ -38,8 +38,6 @@ static DisplayData data;  // internal data
 TCB displayTask = {&displayRunFunction, &data};          // task interface
 
 void initializeDisplayTask() {
-  RIT128x96x4Init(1000000);
-  
   // Load data
   data.temperatureCorrected = &(global.temperatureCorrected);
   data.systolicPressCorrected = &(global.systolicPressCorrected);

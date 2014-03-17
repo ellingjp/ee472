@@ -41,6 +41,8 @@
 static void NmiSR(void);
 static void FaultISR(void);
 static void IntDefaultHandler(void);
+extern void lwIPEthernetIntHandler(void);
+extern void timer1IntHandler (void);
 
 //*****************************************************************************
 //
@@ -71,7 +73,7 @@ extern void ADC0IntHandler(void);	// ADC0 -- for EKG sensor
 //
 //*****************************************************************************
 #ifndef STACK_SIZE
-#define STACK_SIZE                              120
+#define STACK_SIZE                              1024
 #endif
 static unsigned long pulStack[STACK_SIZE] @ ".noinit";
 
@@ -129,8 +131,7 @@ __root const uVectorEntry __vector_table[] @ ".intvec" =
     IntDefaultHandler,                      // PWM Generator 1
     IntDefaultHandler,                      // PWM Generator 2
     IntDefaultHandler,                      // Quadrature Encoder
-    IntDefaultHandler,
-//    ADC0IntHandler,                      // ADC Sequence 0
+    IntDefaultHandler,                      // ADC Sequence 0
     IntDefaultHandler,                      // ADC Sequence 1
     IntDefaultHandler,                      // ADC Sequence 2
     IntDefaultHandler,                      // ADC Sequence 3
@@ -158,7 +159,7 @@ __root const uVectorEntry __vector_table[] @ ".intvec" =
     IntDefaultHandler,                      // CAN0
     IntDefaultHandler,                      // CAN1
     IntDefaultHandler,                      // CAN2
-    IntDefaultHandler,                     			// Ethernet
+    lwIPEthernetIntHandler,                 // Ethernet
     IntDefaultHandler,                      // Hibernate
     IntDefaultHandler,                      // USB0
     IntDefaultHandler,                      // PWM Generator 3

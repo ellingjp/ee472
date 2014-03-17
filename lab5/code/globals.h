@@ -7,6 +7,7 @@
  * MUST be initialized before using
  */
 
+#include <String.h>
 #include "inc/hw_types.h"
 #include "CircularBuffer.h"
 #include "stddef.h"

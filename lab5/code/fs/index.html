@@ -19,7 +19,7 @@ function send_command()
     if(command.value != "")
     {
       // Send request to special url for server processing
-      // send.open("GET", "/send_command?value=" + command.value + "&id=" + Math.random(), true); // /send_command doesn't exist right now
+      // send.open("GET", "/cgi_bin/send_command?value=" + command.value + "&id=" + Math.random(), true); // /send_command doesn't exist right now
       // send.send(null);
       receive_command()
     }
@@ -34,7 +34,7 @@ function receive_command() {
   // Send a request for the current command response
   if(receive)
   {
-    receive.open("GET", "/receive_command?id=" + Math.random(), true);
+    receive.open("GET", "/cgi-bin/receive_command?id=" + Math.random(), true);
 
     // Register command_complete() with this XMLHTTPRequest so it is called when a response is received
     receive.onreadystatechange = receive_complete;

@@ -6,6 +6,7 @@
  * initializes the system and system variables
  */
 
+#include <String.h>
 #include "timebase.h"
 #include "globals.h"
 #include "driverlib/systick.h" // for systick interrupt (minor cycle)
@@ -26,6 +27,8 @@
 #include "utils/ustdlib.h"
 #include "httpserver_raw/httpd.h"
 #include "drivers/rit128x96x4.h"
+#include "driverlib/timer.h"
+
 
 
 //*****************************************************************************
@@ -65,14 +68,9 @@ extern void httpd_init(void);
 #define DHCP_EXPIRE_TIMER_SECS  45
 #endif
 
+void timer1IntHandler (void) {
 
-
-/*
- * Minor Cycle Handler
- */
-void SysTickIntHandler (void) {
-  minor_cycle_ctr = minor_cycle_ctr + 1;
-  
+    TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
     //
     // Indicate that a SysTick interrupt has occurred.
     //
@@ -82,9 +80,6 @@ void SysTickIntHandler (void) {
     // Call the lwIP timer handler.
     //
     lwIPTimer(SYSTICKMS);
-  
-  
-//  runSchedule = true;
 }
 
 
@@ -92,78 +87,81 @@ void SysTickIntHandler (void) {
  * Initializes hw counter ans system state variables
  */
 void startup() {
-  IntMasterEnable();
-  initializeTimebase();
   
+      SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN |
+      SYSCTL_XTAL_8MHZ);
+  
+  
+    RIT128x96x4Init(1000000);
+    
+    ///////////////////////////////
+    ////// Turn on ADC ////////////
+    ///////////////////////////////
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
+    SysCtlADCSpeedSet(SYSCTL_ADCSPEED_500KSPS);
+    
+    
   // Initialize global data
   initializeGlobalData();   // from globals.h
+    initializeTimebase();
+    
+    
+    
+////////////////////////////////////////////
+/////  Web server initialization stuff /////
+////////////////////////////////////////////
+  unsigned long ulUser0, ulUser1;
+  unsigned char pucMACArray[8];
   
-  
-  
-  
-  	
+    // Enable and Reset the Ethernet Controller.
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_ETH);
+    SysCtlPeripheralReset(SYSCTL_PERIPH_ETH);
+
+    // Enable Port F for Ethernet LEDs.
+    //  LED0        Bit 3   Output
+    //  LED1        Bit 2   Output
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+    GPIOPinTypeEthernetLED(GPIO_PORTF_BASE, GPIO_PIN_2 | GPIO_PIN_3);
+
+    // Configure timer for a periodic interrupt.
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);        
+	TimerDisable(TIMER1_BASE, TIMER_BOTH);
+	TimerConfigure(TIMER1_BASE, TIMER_CFG_32_BIT_PER );
+	TimerLoadSet(TIMER1_BASE, TIMER_A, (SysCtlClockGet() / SYSTICKHZ));
+        TimerIntRegister(TIMER1_BASE,TIMER_A, timer1IntHandler);
+        TimerIntEnable(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
+        TimerEnable(TIMER1_BASE, TIMER_A);
+
+  IntMasterEnable();
+
     FlashUserGet(&ulUser0, &ulUser1);
     if((ulUser0 == 0xffffffff) || (ulUser1 == 0xffffffff))
     {
-        //
         // We should never get here.  This is an error if the MAC address
         // has not been programmed into the device.  Exit the program.
-        //
-        RIT128x96x4StringDraw("MAC Address", 0, 16, 15);
-        RIT128x96x4StringDraw("Not Programmed!", 0, 24, 15);
+        RIT128x96x4StringDraw("MAC Address", 0, 76, 15);
+        RIT128x96x4StringDraw("Not Programmed!", 0, 86, 15);
         while(1);
     }
 	
-	pucMACArray[0] = ((ulUser0 >>  0) & 0xff);
+    pucMACArray[0] = ((ulUser0 >>  0) & 0xff);
     pucMACArray[1] = ((ulUser0 >>  8) & 0xff);
     pucMACArray[2] = ((ulUser0 >> 16) & 0xff);
     pucMACArray[3] = ((ulUser1 >>  0) & 0xff);
     pucMACArray[4] = ((ulUser1 >>  8) & 0xff);
     pucMACArray[5] = ((ulUser1 >> 16) & 0xff);
-
 	
-	    //
     // Initialze the lwIP library, using DHCP.
-    //
     lwIPInit(pucMACArray, 0, 0, 0, IPADDR_USE_DHCP);
 
-    //
     // Setup the device locator service.
-    //
     LocatorInit();
     LocatorMACAddrSet(pucMACArray);
     LocatorAppTitleSet("EK-LM3S8962 enet_io");
 
-	
-	
-	   //
     // Initialize a sample httpd server.
-    //
     httpd_init();
-
-    //
-    // Pass our tag information to the HTTP server.
-    //
-
-    // Initialize IO controls
-    //
-    io_init();
-	
-	
-
-  //computeActive = false;	// neither serial or compute task runs at start up
-  //serialActive = false;
-  //ekgProcessActive = false;
-
-//  initializeQueue(); // start up task queue with basic tasks
 }
-
-
-
-
-
-
-
 
 //*****************************************************************************
 //
@@ -210,25 +208,25 @@ void lwIPHostTimerHandler(void)
         //
         // Update status bar on the display.
         //
-        RIT128x96x4Enable(1000000);
+ //       RIT128x96x4Enable(1000000);
         if(iColumn < 12)
         {
-            RIT128x96x4StringDraw(" >", 114, 24, 15);
-            RIT128x96x4StringDraw("< ", 0, 24, 15);
-            RIT128x96x4StringDraw("*",iColumn, 24, 7);
+            RIT128x96x4StringDraw(" >", 114, 86, 15);
+            RIT128x96x4StringDraw("< ", 0, 86, 15);
+            RIT128x96x4StringDraw("*",iColumn, 86, 7);
         }
         else
         {
-            RIT128x96x4StringDraw(" *",iColumn - 6, 24, 7);
+            RIT128x96x4StringDraw(" *",iColumn - 6, 86, 7);
         }
 
         iColumn += 4;
         if(iColumn > 114)
         {
             iColumn = 6;
-            RIT128x96x4StringDraw(" >", 114, 24, 15);
+            RIT128x96x4StringDraw(" >", 114, 86, 15);
         }
-        RIT128x96x4Disable();
+        //RIT128x96x4Disable();
     }
 
     //
@@ -237,18 +235,18 @@ void lwIPHostTimerHandler(void)
     else if(ulLastIPAddress != ulIPAddress)
     {
         ulLastIPAddress = ulIPAddress;
-        RIT128x96x4Enable(1000000);
-        RIT128x96x4StringDraw("                       ", 0, 16, 15);
-        RIT128x96x4StringDraw("                       ", 0, 24, 15);
-        RIT128x96x4StringDraw("IP:   ", 0, 16, 15);
-        RIT128x96x4StringDraw("MASK: ", 0, 24, 15);
-        RIT128x96x4StringDraw("GW:   ", 0, 32, 15);
-        DisplayIPAddress(ulIPAddress, 36, 16);
-        ulIPAddress = lwIPLocalNetMaskGet();
-        DisplayIPAddress(ulIPAddress, 36, 24);
-        ulIPAddress = lwIPLocalGWAddrGet();
-        DisplayIPAddress(ulIPAddress, 36, 32);
-        RIT128x96x4Disable();
+//        RIT128x96x4Enable(1000000);
+//        RIT128x96x4StringDraw("                       ", 0, 16, 15);
+        RIT128x96x4StringDraw("                       ", 0, 86, 15);
+        RIT128x96x4StringDraw("IP:   ", 0, 86, 15);
+//        RIT128x96x4StringDraw("MASK: ", 0, 24, 15);
+//        RIT128x96x4StringDraw("GW:   ", 0, 32, 15);
+        DisplayIPAddress(ulIPAddress, 36, 86);
+//        ulIPAddress = lwIPLocalNetMaskGet();
+//        DisplayIPAddress(ulIPAddress, 36, 24);
+//        ulIPAddress = lwIPLocalGWAddrGet();
+//        DisplayIPAddress(ulIPAddress, 36, 32);
+//        RIT128x96x4Disable();
     }
 }
 

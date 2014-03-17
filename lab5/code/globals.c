@@ -64,7 +64,7 @@ void initializeGlobalData() {
 
   // Set normal variables
   global.batteryState = 200;
-  global.mode = 0;
+  global.mode = 1;
   global.measurementSelection = 0;
   global.alarmAcknowledge = false;
   global.select = false;
