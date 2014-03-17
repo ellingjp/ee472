@@ -18,11 +18,8 @@ void initializeTimebase() {
   // Enable it
   SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
   
-  // Make sure its disabled before using
-  TimerDisable(TIMER0_BASE, TIMER_A);
-  
   // Configure TimerA as periodic
-  TimerConfigure(TIMER0_BASE, TIMER_CFG_32_BIT_PER); //TIMER_CFG_A_PERIODIC);
+  TimerConfigure(TIMER0_BASE, TIMER_CFG_A_PERIODIC);
     
   // Determine minor cycle
   TimerLoadSet(TIMER0_BASE, TIMER_A, (SysCtlClockGet() / 1000) * MINOR_CYCLE );
@@ -35,6 +32,7 @@ void initializeTimebase() {
   
   // Enable the timer
   TimerEnable(TIMER0_BASE, TIMER_A);
+
 }
 
 tBoolean timeHasPassed(int start_time, int length) {
@@ -42,7 +40,6 @@ tBoolean timeHasPassed(int start_time, int length) {
 }
 
 void TimerAIntHandler(void) {
-  TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
   minor_cycle_ctr++;
   
 #if DEBUG
@@ -50,4 +47,6 @@ void TimerAIntHandler(void) {
   usnprintf(num, 30, "minor_cycle_ctr =  %d  ", minor_cycle_ctr);
   RIT128x96x4StringDraw(num, 0, 80, 15);
 #endif
+  
+  TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
 }

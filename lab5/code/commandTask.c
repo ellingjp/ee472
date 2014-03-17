@@ -8,20 +8,24 @@
  * the actions requested, and sends a reply signal.
  */
 
-#define DEBUG_COMMAND 1
+#define DEBUG_COMMAND 0
 
+#include "FreeRTOS.h"
+#include "task.h"
 #include "globals.h"
+#include "warning.h"
 #include "CircularBuffer.h"
 #include "commandTask.h"
 #include <string.h>
+#include "hw_ints.h"
+#include "driverlib/interrupt.h"
+#include "driverlib/adc.h"
 
-// Used for debug display
-#if DEBUG_COMMAND
+
 #include "drivers/rit128x96x4.h"
 #include "utils/ustdlib.h"
 char num[30];
-#include "measure.h"
-#endif 
+
 
 #define TOKEN_DELIM	" \t"	// token delimiter values
 #define TEMP_BUFFER_LEN 55
@@ -47,6 +51,9 @@ typedef struct commandData
 
 static CommandData data; // version of data exposed to outside
 TCB commandTask = {&commandRunFunction, &data}; // set up task interface
+extern xTaskHandle measureHandle;
+extern xTaskHandle displayHandle;
+extern xTaskHandle ekgCaptureHandle;
 
 /*
  * local private variables
@@ -180,9 +187,7 @@ void measureFromSensor(CommandData* cData) {
 
 	if (meas) {
 		ackNack(cData, true);
-//		vTaskResume(measureHandle);
 #if DEBUG_COMMAND
-		measureTask.runTaskFunction(measureTask.taskDataPtr); 
 		RIT128x96x4StringDraw("MeasureTask go!", 0, 40, 15);
 #endif
 	} else {
@@ -192,8 +197,8 @@ void measureFromSensor(CommandData* cData) {
 		ackNack(cData, false);
 	}
 
-	while (!(cData->measureComplete)) {	// wait until measurement is finished
-	}
+//	while (!(cData->measureComplete)) {	// wait until measurement is finished
+//	}
 }
 
 /*
@@ -234,7 +239,7 @@ void printPulse(CommandData *cData, tBoolean statusOK) {
  * gets & formats string
  */
 void printEKG(CommandData *cData, tBoolean statusOK) {
-	value = (int) *(float *)cbGet(cData->ekg);
+	value = *(int *)cbGet(cData->ekg);
 	usnprintf(roughString, TEMP_BUFFER_LEN, "EKG Frequency: %d Hz", value);
 	addTags(roughString, statusOK);
 	strncat(cData->responseStr, formattedStr, RESPONSE_LENGTH - strlen(cData->responseStr) - 1);
@@ -254,31 +259,50 @@ void printBattery(CommandData *cData, tBoolean statusOK) {
  * Format the outgoing response string based on the specified measurement
  */
 void formatResponseStr(CommandData *cData){
+        
+        int temp = *(int *)cbGet(cData->temperature);
+        int sysPress = *(int *)cbGet(cData->systPress);
+        int diaPress = *(int *)cbGet(cData->diasPress);
+        int pulse = *(int *)cbGet(cData->pulse);
+        
+    tBoolean bpWarn = false;
+    tBoolean tempWarn = false;
+    tBoolean pulseWarn = false;
+    tBoolean battWarn = false;
+    
+    if ( sysPress > SYS_MAX*ALARM_HIGH || diaPress > DIA_MAX*ALARM_HIGH )
+      bpWarn = true;
+    if ( temp < TEMP_MIN*WARN_LOW || temp > TEMP_MAX*WARN_HIGH )
+      tempWarn = true;
+    if ( pulse < PULSE_MIN*WARN_LOW || pulse > PULSE_MAX*WARN_HIGH )
+      pulseWarn = true;
+    if (*(cData->battery) < BATTERY_MIN)
+      battWarn = true;
+  
 	switch (*sensor) {
 		case 'A' : //take all measurements
-			printTemp(cData, false);
-			printPressure(cData, false);
-			printPulse(cData, false);
-			printEKG(cData, false);
-			printBattery(cData, false);
+			printTemp(cData, !tempWarn);
+			printPressure(cData, !bpWarn);
+			printPulse(cData, !pulseWarn);
+			printEKG(cData, true);
+			printBattery(cData, !battWarn);
 			break;
 		case 'T' : // get temperature measurementk
-			printTemp(cData, false);
+			printTemp(cData, tempWarn);
 			break;
 		case 'B' : // get syst
-			printPressure(cData, true);
+			printPressure(cData, bpWarn);
 			break;
 		case 'P' : //pulse rate
-			printPulse(cData, true);
+			printPulse(cData, pulseWarn);
 			break;
 		case 'E' : //ekg frequency
 			printEKG(cData, true);
 			break;
 		case 'S' : // battery state
-			printBattery(cData, true);
+			printBattery(cData, battWarn);
 			break;
 	}
-	*(cData->responseReady) = true;
 }
 
 /*
@@ -288,11 +312,12 @@ void formatResponseStr(CommandData *cData){
  * ex: <p> Temperature: 50 C </p> <p> <blink> Blood Pressure: 120 </blink> </p>
  */
 void commandRunFunction(void *commandDataPtr) {
+  	CommandData *cData = (CommandData *) commandDataPtr;
+        *(cData->responseReady) = false;
 	if (!initialized) {
 		initialized = true;
 		initializeCommandTask();
 	}
-	CommandData *cData = (CommandData *) commandDataPtr;
 
 #if DEBUG_COMMAND
 	usnprintf(num, 30, "Initialize cmd function");
@@ -310,10 +335,10 @@ void commandRunFunction(void *commandDataPtr) {
 	switch(*cmd) {
 		case 'D' : // toggle display on/off
 			if (displayOn) {
-				//				vTaskSuspend(displayHandle);
+				vTaskSuspend(displayHandle);
 				RIT128x96x4Clear();
 			} else {
-				//				vTaskResume(displayHandle);
+				vTaskResume(displayHandle);
 			}
 			displayOn = !displayOn;
 			ackNack(cData, true);
@@ -324,27 +349,23 @@ void commandRunFunction(void *commandDataPtr) {
 #endif
 			break;
 		case 'S' :	// start measurements
-			//			vTaskResume(measureHandle);
-			//			vTaskResume(computeHandle);
-			//			vTaskResume(ekgCaptureHandle);
-			//			vTaskResume(ekgProcessHandle);
+						vTaskResume(measureHandle);
+						vTaskResume(ekgCaptureHandle);
 
 			// enable the interrupts used for measurement
 			//			IntEnable(INT_GPIOA);	// for pulse
-			//			IntEnable(INT_ADC0SS0);	// for ekg
+			ADCSequenceEnable(ADC0_BASE, 0);//			IntEnable(INT_ADC0SS0);	// for ekg
 			//			IntEnable(INT_ADC0SS1);	// for temperature
 			measureOn = true;
 			ackNack(cData, true);
 			break;
 		case 'P' :	// stop 
-			//			vTaskSuspend(measureHandle);
-			//			vTaskSuspend(computeHandle);
-			//			vTaskSuspend(ekgCaptureHandle);
-			//			vTaskSuspend(ekgProcessHandle);
+						vTaskSuspend(measureHandle);
+						vTaskSuspend(ekgCaptureHandle);
 
 			// disable the interrupts used for measurement
 			//			IntDisable(INT_GPIOA);	// for pulse
-			//			IntDisable(INT_ADC0SS0);	// for ekg
+			ADCSequenceDisable(ADC0_BASE, 0);//			IntDisable(INT_ADC0SS0);	// for ekg
 			//			IntDisable(INT_ADC0SS1);	// for temperature
 			measureOn = false;
 			ackNack(cData, true);
@@ -387,6 +408,6 @@ void commandRunFunction(void *commandDataPtr) {
 			RIT128x96x4StringDraw(num, 0, 30, 15);
 #endif
 	}
-
-	//	vTaskSuspend(controlHandle);
+	*(cData->responseReady) = true;
+	vTaskSuspend(NULL);
 }

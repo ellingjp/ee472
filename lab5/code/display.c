@@ -38,8 +38,6 @@ static DisplayData data;  // internal data
 TCB displayTask = {&displayRunFunction, &data};          // task interface
 
 void initializeDisplayTask() {
-  RIT128x96x4Init(1000000);
-  
   // Load data
   data.temperatureCorrected = &(global.temperatureCorrected);
   data.systolicPressCorrected = &(global.systolicPressCorrected);
@@ -155,7 +153,7 @@ void displayRunFunction(void *dataptr) {
     usnprintf(num,40, "Pulse rate: %d BPM              ",(int) *( (float*) cbGet(dData->pulseRateCorrected)));
     RIT128x96x4StringDraw(num, 0, 50, 15);
 	
-	usnprintf(num,40, "EKG: %d Hz                      ",(int) *( (float*) cbGet(dData->ekgFrequencyResult)));
+	usnprintf(num,40, "EKG: %d Hz                      ", *((int *) cbGet(dData->ekgFrequencyResult)));
     RIT128x96x4StringDraw(num, 0, 60, 15);
 
     usnprintf(num,40, "Battery: %d %%                 ",(int) *(dData->batteryState)/2);

@@ -6,7 +6,7 @@
  * Implements compute.c
  */
 
-#define DEBUG_COMPUTE 0
+#define DEBUG_COMPUTE 1
 
 #include "CircularBuffer.h"
 #include "compute.h"
@@ -90,16 +90,16 @@ void computeRunFunction(void *computeData) {
   cbAdd(cData->diastolicPressCorrected, &diastolic);
   cbAdd(cData->pulseRateCorrected, &pulseRate);
   
-//	if (0 == *(cData->measurementSelect) || 4 == *(cData->measurementSelect)) {
-//		while(!(cData->ekgCaptureDone)) {	// wait until ekg captured
-//		}
-//	vTaskResume(ekgProcessHandle);
-//
-//		RIT128x96x4StringDraw("go ekgProcess", 0, 60, 15);
-//		*(cData->ekgProcessDone) = false;
-//		while (!*(cData->ekgProcessDone)) {	// wait until ekg computed
-//		}
-//	}
+	if (0 == *(cData->measurementSelect) || 4 == *(cData->measurementSelect)) {
+		while(!(cData->ekgCaptureDone)) {	// wait until ekg captured
+		}
+	vTaskResume(ekgProcessHandle);
+
+		RIT128x96x4StringDraw("go ekgProcess", 0, 60, 15);
+		*(cData->ekgProcessDone) = false;
+		while (!*(cData->ekgProcessDone)) {	// wait until ekg computed
+		}
+	}
 	*(cData->measurementComplete) = true;
 
   vTaskSuspend(NULL);  // suspend self

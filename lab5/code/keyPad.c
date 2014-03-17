@@ -1,6 +1,7 @@
 /*
  * keyPad.c
- * Author(s): Jarrett Gaddy
+
+* Author(s): Jarrett Gaddy
  * 2/10/2014
  *
  * implements keyPad.h

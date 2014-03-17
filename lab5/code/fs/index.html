@@ -18,10 +18,12 @@ function send_command()
     // User entered non-blank command
     if(command.value != "")
     {
+      var res = command.value.split(" ");
+			var uri = encodeURI("/cgi-bin/send_command/value=" + res.join("+"));
       // Send request to special url for server processing
-      // send.open("GET", "/send_command?value=" + command.value + "&id=" + Math.random(), true); // /send_command doesn't exist right now
-      // send.send(null);
-      receive_command()
+      send.open("GET", uri,  true); 
+      send.send(null);
+      setTimeout(receive_command, 500);
     }
   }
 }
@@ -34,17 +36,15 @@ function receive_command() {
   // Send a request for the current command response
   if(receive)
   {
-    receive.open("GET", "/receive_command?id=" + Math.random(), true);
+    receive.open("GET", "/cgi-bin/receive_command", true);
 
-    // Register command_complete() with this XMLHTTPRequest so it is called when a response is received
+    // Register receive_complete() with this XMLHTTPRequest so it is called when a response is received
     receive.onreadystatechange = receive_complete;
     receive.send(null);
   }
 
   function receive_complete()
   {
-    document.getElementById("response").innerHTML = "<blink>Hello, world!</blink>";
-
     if(receive.readyState == 4)
     {
       if(receive.status == 200)

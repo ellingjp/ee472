@@ -299,6 +299,14 @@
         <option>
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\required_files</state>
+          <state>$PROJ_DIR$</state>
+          <state>$PROJ_DIR$\..\FreeRTOS\source\include</state>
+          <state>C:\StellarisWare\</state>
+          <state>C:\StellarisWare\inc</state>
+          <state>C:\StellarisWare\utils</state>
+          <state>C:\StellarisWare\driverlib</state>
+          <state>C:\StellarisWare\boards\ek-lm3s8962\drivers</state>
+          <state>C:\StellarisWare\boards\ek-lm3s8962\</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1836,7 +1844,121 @@
     </settings>
   </configuration>
   <file>
+    <name>$PROJ_DIR$\..\lab5\code\CircularBuffer.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\CircularBuffer.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\compute.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\compute.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\display.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\display.h</name>
+  </file>
+  <file>
     <name>$PROJ_DIR$\required_files\driverlib\driverlib-cm3.a</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\ekgCapture.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\ekgCapture.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\ekgProcess.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\ekgProcess.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\current_project\FreeRTOSConfig.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\globals.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\globals.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\..\..\..\StellarisWare\third_party\lwip-1.3.2\apps\httpserver_raw\httpd.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\keyPad.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\keyPad.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\..\..\..\StellarisWare\utils\locator.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\..\..\..\StellarisWare\utils\lwiplib.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\main.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\measure.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\measure.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\optfft.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\optfft.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\schedule.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\schedule.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\serial.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\serial.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\startup.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\startup.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\startup_ewarm.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\status.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\status.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\tables.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\tcb.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\timebase.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\timebase.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\warning.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\lab5\code\warning.h</name>
   </file>
 </project>
 

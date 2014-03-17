@@ -10,9 +10,6 @@
 
 #define DEBUG_MEASURE 0
 
-#include "FreeRTOS.h"
-#include "task.h"
-
 #include "CircularBuffer.h"
 #include "globals.h"
 #include "timebase.h"
@@ -53,9 +50,11 @@ typedef struct measureData {
 static int pulseRate = 0;
 static MeasureData data;  // internal data
 TCB measureTask = {&measureRunFunction, &data};  // task interface
-extern xTaskHandle ekgCaptureHandle;
 
 void initializeMeasureTask() {
+#if DEBUG
+  RIT128x96x4Init(1000000);
+#endif
   // Load data memory
   data.temperatureRaw = &(global.temperatureRaw);
   data.systolicPressRaw = &(global.systolicPressRaw);
@@ -64,10 +63,13 @@ void initializeMeasureTask() {
   data.measureSelect = &(global.measurementSelection);
 	data.ekgCaptureDone = &(global.ekgCaptureDone);
   
-    //setup for temperature sensor
-    ADCSequenceDisable(ADC0_BASE, 1);
-    ADCSequenceConfigure(ADC0_BASE, 1, ADC_TRIGGER_PROCESSOR, 1);
-    ADCSequenceStepConfigure(ADC0_BASE, 1, 0, ADC_CTL_END | ADC_CTL_TS);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
+    SysCtlADCSpeedSet(SYSCTL_ADCSPEED_250KSPS);
+	//setup for temperature sensor
+        ADCSequenceDisable(ADC0_BASE, 1);
+	ADCSequenceConfigure(ADC0_BASE, 1, ADC_TRIGGER_PROCESSOR, 1);
+	ADCSequenceStepConfigure(ADC0_BASE, 1, 0, ADC_CTL_IE | ADC_CTL_END | ADC_CTL_TS);
+        ADCSequenceEnable(ADC0_BASE, 1);
 
   /* Interrupt setup
    * Note: using statically registered interrupts, because they're faster
@@ -96,15 +98,22 @@ void initializeMeasureTask() {
 
 void setTemp(CircularBuffer *tbuf) {
   int temp = 0;
-  ADCSequenceEnable(ADC0_BASE, 1);
+	//
+	// Trigger the sample sequence.
+	//
+	ADCProcessorTrigger(ADC0_BASE, 1);
+	//
+	// Wait until the sample sequence has completed.
+	//
+	while(!ADCIntStatus(ADC0_BASE, 1, false))
+	{
+	}
+	//
+	// Read the value from the ADC.
+	//
+	ADCSequenceDataGet(ADC0_BASE, 1, &temp);
 
-  // Trigger the sample sequence.
-  ADCProcessorTrigger(ADC0_BASE, 1);
-
-  // Wait until the sample sequence has completed.
-  while( 1 != ADCSequenceDataGet(ADC0_BASE, 1, &temp));
-
-  ADCSequenceDisable(ADC0_BASE, 1);
+	
   cbAdd(tbuf, &temp);
 }
 
@@ -182,38 +191,40 @@ void measureRunFunction(void *dataptr) {
   
   // only run on major cycle
   short measureSelect = *(mData->measureSelect);
-//	if(measureSelect == 0 || measureSelect == 1)
-//	{
+	if(measureSelect == 0 || measureSelect == 1)
+	{
 		setTemp(mData->temperatureRaw);
-//    }
-//	if(measureSelect == 0 || measureSelect == 2)
-//	{
+    }
+	if(measureSelect == 0 || measureSelect == 2)
+	{
 		setBloodPress(mData->systolicPressRaw, mData->diastolicPressRaw);
-//	}
-//	if(measureSelect == 0 || measureSelect == 3)
-//	{
+	}
+	if(measureSelect == 0 || measureSelect == 3)
+	{
       int prev = *(int*) cbGet(mData->pulseRateRaw);
       
       // Only save if +- 15%
       if (rate < prev*0.85 || rate > prev*1.15) {
         cbAdd(mData->pulseRateRaw, (void *)&rate);
       }
-//	}
-//	if(measureSelect == 0 || measureSelect == 4)
-//	{
+	}
+	if(measureSelect == 0 || measureSelect == 4)
+	{
 		*(mData->ekgCaptureDone) = false;
-//		vTaskResume(ekgCaptureHandle);
+		vTaskResume(ekgCaptureHandle);
 #if DEBUG_MEASURE
+		ekgCaptureTask.runTaskFunction(ekgCaptureTask.taskDataPtr);
 		RIT128x96x4StringDraw("ekgCapture go!", 0, 50, 15);
 #endif
-//	}
-//	else
-//	{
-//		vTaskSuspend(ekgCaptureHandle);
+	}
+	else
+	{
+		vTaskSuspend(ekgCaptureHandle);
 #if DEBUG_MEASURE
 		RIT128x96x4StringDraw("no ekg!", 0, 50, 15);
 #endif
-//	}
+	}
+    vTaskResume(computeHandle);  // run the compute task
      
 #if DEBUG_MEASURE
     char num[30];
@@ -241,6 +252,4 @@ void measureRunFunction(void *dataptr) {
     usnprintf(num, 30, "Raw Batt: %d  ", batt);
     RIT128x96x4StringDraw(num, 0, 50, 15);
 #endif
-    
-    vTaskResume(computeHandle);  // run the compute task
 }

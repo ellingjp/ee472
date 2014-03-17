@@ -13,3 +13,21 @@ RemoteTask: http server and ack/nack. + web page interface
 fs_open: use to pass the text command to commandTask via a buffer. Then call
 the commandTask. Depeding on desired functionality, may/may not need to
 continuously refresh measurements
+
+
+Patrick's NTS:
+reorder data/control flow so that:
+	-	server -> command
+	- command -> measure
+	- measure -> compute
+	-	measure -> ekgCapture
+	- compute -> ekgProcess
+
+measure will perform all measurements.
+	- In the case of taking EKG measurements, it will start the EKGCapture task
+	  (resuming it). ekgCaptureDone flag = false
+	- Then measure will start the compute task. 
+	- The Compute task will run EKGProcess if EKGCapture is run (according to
+	  the global measurement selection). ekgcaptureDone flag = true
+	-	When Compute is finished, it signals to Command that a measurement is done
+		(via global measurementComplete flag).

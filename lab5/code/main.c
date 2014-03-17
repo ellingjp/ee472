@@ -133,6 +133,9 @@ and the TCP/IP stack together cannot be accommodated with the 32K size limit. */
 #include "serial.h"
 #include "status.h"
 #include "keyPad.h"
+#include "ekgCapture.h"
+#include "ekgProcess.h"
+#include "commandTask.h"
 
 /*-----------------------------------------------------------*/
 
@@ -202,6 +205,10 @@ void keyPad(void *vParameters);
 void warning(void *vParameters);
 void serial(void *vParameters);
 void status(void *vParameters);
+void ekgCapture(void *vParameters);
+void ekgProcess(void *vParameters);
+
+void command(void *vParameters);
 
 /*-----------------------------------------------------------*/
 
@@ -216,8 +223,9 @@ xTaskHandle computeHandle;
 xTaskHandle serialHandle;
 xTaskHandle measureHandle;
 xTaskHandle displayHandle;
-xTaskHandle ekgComputeHandle;
+xTaskHandle ekgCaptureHandle;
 xTaskHandle ekgProcessHandle;
+xTaskHandle commandHandle;
 
 /*************************************************************************
  * Please ensure to read http://www.freertos.org/portlm3sx965.html
@@ -233,17 +241,22 @@ int main( void )
     startup();
     
     /* Start the tasks */
-    RIT128x96x4Init(10000000);
     xTaskCreate(measure, "measure task", 100,NULL, 2, &measureHandle);
     xTaskCreate(compute, "compute task", 100,NULL, 3, &computeHandle);
+    xTaskCreate(ekgCapture, "ekgCapture task", 1024,NULL, 1, &ekgCaptureHandle);
+    xTaskCreate(ekgProcess, "ekgProcess task", 1024,NULL, 3, &ekgProcessHandle);
     xTaskCreate(display, "display task", 100,NULL, 5, &displayHandle);
     xTaskCreate(keyPad, "keyPad task", 100,NULL, 4,NULL);
     xTaskCreate(warning, "warning task", 100,NULL, 5,NULL);
     xTaskCreate(serial, "serial task", 100,NULL, 5,&serialHandle);
     xTaskCreate(status, "status task", 100,NULL, 1,NULL);
+    xTaskCreate(command, "command task", 100,NULL, 3, &commandHandle);
 
+    vTaskSuspend(measureHandle);
     vTaskSuspend(computeHandle);
     vTaskSuspend(serialHandle);
+    vTaskSuspend(commandHandle);
+    vTaskSuspend(ekgProcessHandle);
     /* Start the scheduler. */
     vTaskStartScheduler();
 
@@ -315,6 +328,33 @@ void status(void *vParameters)
   while(1)
   {
       statusTask.runTaskFunction(statusTask.taskDataPtr);
+      vTaskDelay(MINOR_CYCLE);
+  }
+}
+
+void ekgCapture(void *vParameters)
+{
+  while(1)
+  {
+      ekgCaptureTask.runTaskFunction(ekgCaptureTask.taskDataPtr);
+      vTaskDelay(MINOR_CYCLE);
+  }
+}
+
+void ekgProcess(void *vParameters)
+{
+  while(1)
+  {
+      ekgProcessTask.runTaskFunction(ekgProcessTask.taskDataPtr);
+      vTaskDelay(MINOR_CYCLE);
+  }
+}
+
+void command(void *vParameters)
+{
+  while(1)
+  {
+      commandTask.runTaskFunction(commandTask.taskDataPtr);
       vTaskDelay(MINOR_CYCLE);
   }
 }

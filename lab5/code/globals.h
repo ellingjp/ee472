@@ -7,12 +7,14 @@
  * MUST be initialized before using
  */
 
+#include <String.h>
 #include "inc/hw_types.h"
 #include "CircularBuffer.h"
 #include "stddef.h"
 #include "inc/hw_memmap.h"
 #include "driverlib/gpio.h"
 #include "driverlib/sysctl.h"
+#include <string.h>
 
 #define TEMP_RAW_INIT 80        // initial 80
 #define SYS_RAW_INIT 80        // initial 50
@@ -28,36 +30,38 @@
 #define BATT_INIT 200
 
 #define NUM_EKG_SAMPLES 256
-#define SAMPLE_FREQ  9375	// # sample frequency to get a good measure of < 3750 Hz
-
+#define SAMPLE_FREQ  8000	// # sample frequency to get a good measure of < 3750 Hz
 #define COMMAND_LENGTH 10	// length of command string
-#define RESPONSE_LENGTH 75 // length of response string
+#define RESPONSE_LENGTH 600 // length of response string
 
 
 typedef struct global_data {
-  CircularBuffer temperatureRaw;
-  CircularBuffer systolicPressRaw;
-  CircularBuffer diastolicPressRaw;
-  CircularBuffer pulseRateRaw;
+	CircularBuffer temperatureRaw;
+	CircularBuffer systolicPressRaw;
+	CircularBuffer diastolicPressRaw;
+	CircularBuffer pulseRateRaw;
 	int ekgRaw[NUM_EKG_SAMPLES];
-	 int ekgTemp[NUM_EKG_SAMPLES];
+	int ekgTemp[NUM_EKG_SAMPLES];
 
-  CircularBuffer temperatureCorrected;
-  CircularBuffer systolicPressCorrected;
-  CircularBuffer diastolicPressCorrected;
-  CircularBuffer pulseRateCorrected;
-  CircularBuffer ekgFrequencyResult;
+	CircularBuffer temperatureCorrected;
+	CircularBuffer systolicPressCorrected;
+	CircularBuffer diastolicPressCorrected;
+	CircularBuffer pulseRateCorrected;
+	CircularBuffer ekgFrequencyResult;
 
-  unsigned short batteryState;
-  unsigned short mode;
-  unsigned short measurementSelection;
-  tBoolean alarmAcknowledge;
-  tBoolean select;
-  unsigned short scroll;
-  
-  char commandStr[COMMAND_LENGTH];
-  char responseStr[RESPONSE_LENGTH];
-  
+	unsigned short batteryState;
+	unsigned short mode;
+	unsigned short measurementSelection;
+	tBoolean measurementComplete;
+	tBoolean ekgCaptureDone;
+	tBoolean ekgProcessDone;
+	tBoolean responseReady;
+	tBoolean alarmAcknowledge;
+	tBoolean select;
+	unsigned short scroll;
+	
+	char commandStr[COMMAND_LENGTH];
+	char responseStr[RESPONSE_LENGTH];
 } GlobalData;
 
 extern GlobalData global;
