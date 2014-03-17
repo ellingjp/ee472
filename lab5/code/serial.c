@@ -68,11 +68,12 @@ void serialRunFunction(void *dataptr) {
     onFirstRun = false;
   }
   
+  
   int temp = (int) *((float *)cbGet(sData->temperatureCorrected));
   int sys = (int) *((float *)cbGet(sData->systolicPressCorrected));
   int dia = (int) *((float *)cbGet(sData->diastolicPressCorrected));
   int pulse = (int) (*(float *)cbGet(sData->pulseRateCorrected));
-  int EKG = (int) *((float *)cbGet(sData->ekgFrequencyResult));
+  int EKG = *((int *)cbGet(sData->ekgFrequencyResult));
   int batt = *(data.batteryState);
   
   char buf[40];

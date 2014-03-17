@@ -7,7 +7,7 @@
  */
 
 #define DEBUG_WARNING 0
-#define ALARM_OFF 1
+#define ALARM_OFF 0
 
 #include "globals.h"
 #include "timebase.h"
@@ -157,7 +157,7 @@ void initializeWarningTask() {
  * Warning task function
  */
 void warningRunFunction(void *dataptr) {
-  
+
   static alarmState aState = OFF;
   static warningState wState = NONE;
   static batteryState bState = NORMAL;
@@ -351,4 +351,5 @@ void warningRunFunction(void *dataptr) {
     usnprintf(num, 30, "pwmEn: %d  ", pwmEnable);
     RIT128x96x4StringDraw(num, 0, 80, 15);
 #endif
+ 
 }

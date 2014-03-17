@@ -95,7 +95,7 @@ void initializeEKGTask() {
 
 void delay_in_ms(int ms) {
   for (volatile int i = 0; i < ms; i++)
-    for (volatile int j = 0; j < 50; j++);
+    for (volatile int j = 0; j < 500; j++);
 }
 
 /*
@@ -139,7 +139,7 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 void ADC0IntHandler() {
 	unsigned long value;
 	static int i = 0;
-      debugPin47();
+      //debugPin47();
 	// Read the value from the ADC.
         
 	while (1 !=  ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, &value));
