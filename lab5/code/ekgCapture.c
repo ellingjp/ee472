@@ -70,18 +70,18 @@ void initializeEKGTask() {
         SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
         SysCtlADCSpeedSet(SYSCTL_ADCSPEED_500KSPS);
 	ADCSequenceDisable(ADC0_BASE, EKG_SEQ);
-	ADCSequenceConfigure(ADC0_BASE, EKG_SEQ, ADC_TRIGGER_TIMER, 1);
+	ADCSequenceConfigure(ADC0_BASE, EKG_SEQ, ADC_TRIGGER_PROCESSOR, 1);
 	ADCSequenceStepConfigure(ADC0_BASE, EKG_SEQ, 0, ADC_CTL_IE | ADC_CTL_END | EKG_CH);
 	ADCIntRegister(ADC0_BASE, EKG_SEQ, ADC0IntHandler);
         ADCIntEnable(ADC0_BASE, EKG_SEQ);
         
 	// configure timer (uses both 16-bit timers) for periodic timing 
-	SysCtlPeripheralEnable(EKG_TIMER_PERIPH);
-	TimerDisable(EKG_TIMER_BASE, EKG_TIMER);
-	TimerConfigure(EKG_TIMER_BASE, EKG_CFG );
-	TimerControlTrigger(EKG_TIMER_BASE, EKG_TIMER, true);
-	TimerLoadSet(EKG_TIMER_BASE, EKG_TIMER, (SysCtlClockGet() / SAMPLE_FREQ));
-	TimerEnable(EKG_TIMER_BASE, EKG_TIMER);
+//	SysCtlPeripheralEnable(EKG_TIMER_PERIPH);
+//	TimerDisable(EKG_TIMER_BASE, EKG_TIMER);
+//	TimerConfigure(EKG_TIMER_BASE, EKG_CFG );
+//	TimerControlTrigger(EKG_TIMER_BASE, EKG_TIMER, true);
+//	TimerLoadSet(EKG_TIMER_BASE, EKG_TIMER, (SysCtlClockGet() / SAMPLE_FREQ));
+//	TimerEnable(EKG_TIMER_BASE, EKG_TIMER);
 
 #if DEBUG_EKG
         long clk = SysCtlClockGet();
@@ -89,8 +89,13 @@ void initializeEKGTask() {
 	usnprintf(num, 30, "load: %ul", timeLoad);
 	RIT128x96x4StringDraw(num, 0, 10, 15);
         usnprintf(num, 30, "clock: %ul", clk);
-	RIT128x96x4StringDraw(num, 0, 10, 15);
+	RIT128x96x4StringDraw(num, 0, 20, 15);
 #endif
+}
+
+void delay_in_ms(int ms) {
+  for (volatile int i = 0; i < ms; i++)
+    for (volatile int j = 0; j < 50; j++);
 }
 
 /*
@@ -108,6 +113,8 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 
 	ADCSequenceEnable(ADC0_BASE, EKG_SEQ);
 	while (!ekgComplete) {
+          ADCProcessorTrigger(ADC0_BASE, EKG_SEQ);
+          delay_in_ms(1);
 	}       
 	ADCSequenceDisable(ADC0_BASE, EKG_SEQ);
 
@@ -132,8 +139,9 @@ void ekgCaptureRunFunction(void *ekgCaptureData) {
 void ADC0IntHandler() {
 	unsigned long value;
 	static int i = 0;
-
+debugPin47();
 	// Read the value from the ADC.
+        ADCIntClear(ADC0_BASE, EKG_SEQ);
 	while (1 !=  ADCSequenceDataGet(ADC0_BASE, EKG_SEQ, &value));
 	(data.ekgRawDataAddr)[i++] = (signed int) value;
         
@@ -142,6 +150,5 @@ void ADC0IntHandler() {
 		i = 0;
 		ekgComplete = true;
 	}
-        
-        ADCIntClear(ADC0_BASE, EKG_SEQ);
+
 }

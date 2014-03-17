@@ -88,7 +88,7 @@ void timer1IntHandler (void) {
  */
 void startup() {
   
-      SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN |
+      SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
       SYSCTL_XTAL_8MHZ);
   
   

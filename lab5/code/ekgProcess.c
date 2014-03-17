@@ -88,7 +88,7 @@ void ekgProcessRunFunction(void *ekgData) {
         
 	signed int max_index = optfft( eData->ekgRawData, eData->ekgImgData );
 	//post processing
-	int freq = ((SAMPLE_FREQ) * max_index) / NUM_EKG_SAMPLES;
+	int freq = ((9000) * max_index) / NUM_EKG_SAMPLES;
 
 #if DEBUG_PROC
 	usnprintf(num, 30, "%d : %d  ", max_index, freq);
