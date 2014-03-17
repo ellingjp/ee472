@@ -150,10 +150,10 @@ ranges, or the user fails to comply with a prescribed logging regimen. \\
   \item The initial Phase 1 functional requirements for the system are:
     \begin{itemize}[$\bullet$]
       \item Provide continuous sensor monitoring capability
-      \item Produce a visual display of the sensor values
+      \item Produce visual display of the sensor values
       \item Accept variety of input data types
       \item Provide visual indication of warning states
-      \item Provide an audible indicator of alarm states
+      \item Provide audible indicator of alarm states
     \end{itemize}
   \item In addition, the following requirements have been added:
     \begin{itemize}[$\bullet$]
@@ -165,6 +165,17 @@ ranges, or the user fails to comply with a prescribed logging regimen. \\
       \item Improve overall system performance
       \item Improve overall system safety
     \end{itemize}
+	\item In Phase 3, the following requirements were added:
+		\begin{itemize}
+			\item Implement a Real time operating system
+			\item Utilize an on-chip thermometer for raw temperature readings
+			\item Display user-selected sensor readings only
+			\item Implement support for EKG sensor readings
+		\end{itemize}
+	\item In Phase 4, the following requirements were added:
+		\begin{itemize}
+			\item Implement a web server and web-based user interface
+		\end{itemize}
 \end{itemize}
 
 \subsubsection{Identified Use Cases}
@@ -244,8 +255,8 @@ Possible exception conditions may include:
     terminal connection is improperly configured or initialized, data received
     may be corrupted and not display properly. The device cannot ensure a
     proper connection and it is the responsibility of the remote user to ensure
-    the correct configuration is used
-  \item \emph{Remote Connection Lost} – If the user terminates the connection
+    the correct configuration is used.
+  \item \emph{Remote Connection Lost} - If the user terminates the connection
     or the connection is lost, messages sent by the device may not arrive at
     the remote terminal or data may be corrupted. The device will not
     necessarily monitor the status of any remote connection; this
@@ -254,41 +265,76 @@ Possible exception conditions may include:
     functions without ill effects.
 \end{itemize}
 
+\textbf{Use Case \# 5: Remote Access via Network} \\
+This device may also be used by an individual at a location outside of normal
+doctor or medical facilties.
 
-\subsubsection{Detailed Specifications (update)}
+In these cases, a medical professional may be unable to provide direct
+intervention. Instead, the patient can be monitored remotely from the device
+through the use of an Internet connection. The remote observer should interact
+with the device through a terminal just as though they were using the local
+keypad. Such interactions include starting and stopping measurements, changing
+measurement selections, and viewing recent measured values.
+
+Possible exception conditions may include:
+\begin{itemize}
+	\item \emph{Loss of Network Connection} - The nature of Internet carries the
+		possibility of an unexpected loss of connection. In these instances,
+		information sent from the device or remote terminal may become lost.
+		Various network protocols exist which address and handle these
+		issues. However, the device cannot rely on the remote terminal for
+		operation. In the event data is lost, the local system must
+		continue to operate according to the last received commands or from
+		subsequent local commands.
+	\item \emph{Corruption of Data} - In a remote setting, many environmental
+		variables may affect connection quality. Data sent to and from the device
+		may be corrupted upon reception. The system must be capable of handling
+		corrupted data. In the case of undecipherable commands, the system must
+		fail gracefully.
+	\item \emph{Improperly Formatted Command} - The remote user may send a
+		command that is unsupported by the system. In this case, the user must be
+		informed that an improper command was sent.
+\end{itemize}
+
+
+\subsubsection{Detailed Specifications }
 For this project, the requirements have been further specified as follows:
 
 \begin{itemize}[$$]
-  \item The system must have the following inputs:
-    \begin{itemize}[$\bullet$]
-      \item Alarm acknowledgment capability using a pushbutton
-      \item Buttons or switches to allow user to access system modes and menu items
-      \item Sensor measurement input capability consisting of:
-	\begin{itemize}
-	  \item Body temperature measurement
-	  \item Pulse rate measurement signal
-	  \item Systolic blood pressure measurement
-	  \item Diastolic blood pressure measurement
-	\end{itemize}
+	\item The system must have the following inputs:
+		\begin{itemize}[$\bullet$]
+			\item Alarm acknowledgment capability using a push button
+			\item Buttons or switches to allow user to access system modes and menu items
+			\item Ethernet and webserver to process incoming data requests
+			\item Sensor measurement input capabilities consisting of:
+				\begin{itemize}
+					\item Body temperature measurement
+					\item Pulse rate measurement signal
+					\item Systolic blood pressure measurement
+					\item Diastolic blood pressure measurement
+					\item EKG frequency measurement
+				\end{itemize}
     \end{itemize}
 \end{itemize}
 
 
 \begin{itemize}[$$]
   \item The system must have the following outputs:
-    \begin{itemize}[$\bullet$]
-      \item Visual display of the following data in human-readable formats:
-	\begin{itemize}
-	  \item Body temperature
-	  \item Pulse rate
-	  \item Systolic blood pressure
-	  \item Diastolic blood pressure
-	  \item Battery status
+		\begin{itemize}[$\bullet$]
+			\item Visual display of the following data in human-readable formats:
+				\begin{itemize}
+					\item Body temperature
+					\item Pulse rate
+					\item Systolic blood pressure
+					\item Diastolic blood pressure
+					\item Battery status
+					\item EKG Frequency
 	\end{itemize}
-      \item Visually indicate warning state with a flashing LED
-      \item Visually indicate a low battery state with an LED
-      \item Audibly indicate an alarm state using a speaker
+      \item Visual indication of warning state with a flashing LED
+      \item Visual indication of a low battery state with an LED
+      \item Audible indication of an alarm state using a speaker
       \item External data connection to a remote terminal
+			\item Internet connectivity over an Ethernet connection
     \end{itemize}
 \end{itemize}
 
@@ -305,6 +351,7 @@ Table~\ref{tab:sensorDefs}. The sensors must be sampled every five seconds and t
     Systolic BP & mm Hg & 80 & - & 120 mmHg & 0.5 sec \\ \hline
     Diastolic BP & mm Hg & 80 & - & 80mmHg & 0.5 sec \\ \hline
     Pulse Rate & BPM & 50 & 60 BPM & 100 BPM & 2 sec \\ \hline
+		EKG Frequency & Hz & - & - & - & - \\ \hline
     Remaining Battery & \% & 200 & 40~\% & - & Constant \\ \hline
   \end{tabular}
   \caption{Specifications for measurement data}
@@ -314,9 +361,8 @@ Table~\ref{tab:sensorDefs}. The sensors must be sampled every five seconds and t
 A measurement enters a warning state when its value falls outside the stated 
 normal range by 5\%. 
 
-\emph{requirement modification: }An alarm state occurs when the systolic blood
-pressure falls outside
-its stated normal range by 20\%.	
+\emph{requirement modification: }An alarm state occurs when a measured value
+falls outside of its specified normal range by more than 15\%.
 
 Additionally, the system must be implemented using the Stellaris 
 EKI-LM3S8962 ARM Cortex-M3 microcomputer board, The software for the system 
@@ -325,31 +371,45 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 \subsubsection{Detailed Task Specifications (updates)}
 
 \begin{itemize}
-  \item New task: KeypadTask
+  \item KeypadTask
+		The keypad allows the user to interact with the system locally. The user
+		can acknowledge alerts and navigate the menu options.
     \begin{itemize}
       \item The keypad task will scan the keypad and decode any keypresses
       \item The task will have support the following user inputs:
-      \item Mode selection between 2 modes (1 button)
-      \item Menu selection between 3 options (1 button)
-      \item Alarm acknowledgement (1 button)
-      \item Up and down scroll functionality (1-2 buttons)
-      \item A new set of global variable will be created to store the state of the keypad and key presses
+      \item Mode selection between 2 modes:
+				\begin{itemize}
+					\item Measurement Select Menu
+					\item Annunciation
+				\end{itemize}
+      \item Menu selection between 6 options:
+				\begin{itemize}
+					\item Scan all or measure a specific sensor (Temperature, Blood
+						Pressure, Pulse Rate, or EKG)
+				\end{itemize}
+      \item Alarm acknowledgement
+      \item Up and down scroll functionality 
+      \item A new set of global variables will be created to store the state of the keypad and key presses
     \end{itemize}
 
-  \item New Task: Initialize (Startup):
+  \item Initialize (Startup):
+		The startup task sets up the system hardware when the device is first powered on.
     \begin{itemize}
-      \item Changes to Warn/AlarmTask:
-      \item The warnings will be activated and indicated as before in project 1
-      \item The alarm state is changed to activate only when the systolic
-	pressure is 20\% above the normal range.
-      \item The alarm will sound in 1 second tones (1 second on, 1 second off)
-      \item When an alarm or warning state occurs, the serial communication
-	task will be added to the task queue
-      \item The deactivation period of the alarm sound is defined as 5
-	measurement periods
+			\item The Startup task must be the first task to run
+			\item It must not be part of the task queue and must only run once
+			\item The task must configure and activate the system timebase
+			\item Configure and initialize all hardware subsystems
+			\item Enable any necessary interrupts
+			\item Assign priorities to each task prior to creation of the task queue
     \end{itemize}
 
-  \item New task: Serial Communication:
+  \item Serial Communication:
+		Serial communication produces an alert via RS-232 connection to a remote
+		terminal. The connection is strictly uni-directional, serving to alert the
+		remote station that some aspect of the system is in a warning or alarm
+		state.
+
+		There are no changes to the Serial Communication task since lab 3.
     \begin{itemize}
       \item The task is enabled by the warn/alarm task
       \item When run, the task will open an RS-232 connection at 115,200 baud,
@@ -360,8 +420,14 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 	will remove itself from the task queue
     \end{itemize}
 
-  \item Changes to the MeasureTask:
+  \item MeasureTask:
+		The measure function performs measurement collection of the various sensors
+		attached to the system. The current sensors are a thermometer, blood
+		pressure sensor, and heart rate monitor.
+		
+		No new changes were made to the measure task
     \begin{itemize}
+			\item Measurements must be captured every 5 seconds
       \item Once a complete set of measurements has been taken, the compute
 	task is added to the task queue
       \item Pointers to the variables used in the measure task will be
@@ -374,14 +440,24 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 	determined empirically. 
     \end{itemize}
 
-  \item Changes to ComputeTask:
+  \item ComputeTask:
+		The compute task performs numerical calculations to linearize and convert the raw sensor measurements into human-readable values.
+		
+		No new changes were made to the compute task
     \begin{itemize}
-      \item All measurements will be recomputed
+      \item All measurements will be recomputed each time the compute task is run
+			\item This task must only be scheduled when new data is available from the Measure Task
+			\item The Compute Task must apply any linearization corrections to the raw data
+			\item The Compute task will store the computed and corrected values into a computed data buffer
       \item After computing the corrected values for all measurements, the
 	ComputeTask will remove itself from the task queue
     \end{itemize}
 
-  \item Changes to DisplayTask:
+  \item DisplayTask:
+		In the Display task data collected by the system is displayed on the local
+		OLED display based upon user input received frm the keypad. In addition to simply displaying data, the display task will format the data and present a series of menus for the user. The front panel of the OLED display in the Annunciation state is shown in Figure~\ref{}<++>
+
+		No new changes were made to the display task
     \begin{itemize}
       \item Display will now support multiple display options
       \item Menu mode will allow selection of each of the individual
@@ -392,11 +468,19 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 	display in project 1.
     \end{itemize}
 
+		\begin{figure}[h]
+			\centering
+			\includegraphics{../design/OLED_frontPanel.jpg}
+			\caption{Image of OLED front panel display}
+			\label{fig:oled_front_panel}
+		\end{figure}
+
   \item Changes to Warn/AlarmTask:
+		The warn/alarm task performs system monitoring functions, creating alerts when measured values exceed the normally accepted ranges.
+		No changes were made to this task in Phases 3 or 4
     \begin{itemize}
       \item The warnings will be activated and indicated as before in project 1
-      \item The alarm state is changed to activate only when the systolic
-	pressure is 20\% above the normal range.
+      \item The alarm state will be triggered whenever any value is outside 15\% of the normal range
       \item The alarm will sound in 1 second tones (1 second on, 1 second off)
       \item When an alarm or warning state occurs, the serial communication
 	task will be added to the task queue
@@ -405,25 +489,69 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \end{itemize}
 
   \item Changes to Schedule:
+		The Schedule function has been replaced by the RTOS scheduler. Just as
+		before, the Scheduler manages the order in which tasks are executed. It
+		manages resources based on the current running task needs and guarantees
+		tasks complete within the desired timeframe.
     \begin{itemize}
-      \item System will maintain a list of activated and deactivated tasks. The
-	list must be updatable during runtime based on the system state
+			\item The Scheduler will provide non-premptive priority-based scheduling
       \item The hardware timer will provide a system interrupt every 250ms or
 	equal to the minor cycle, whichever is shorter
-      \item At runtime, upon a timer interrupt event, all tasks will be added
-	or removed according to the task activation list. The tasks will then
-	be run
-      \item Task Control Blocks will have forward and backward pointers to
-	allow references to the next task
+      \item Task Control Blocks will interact with other tasks via flags and communication buffers
+			\item Tasks will run at least once every five seconds
       \item The scheduler cannot block for five seconds
-      \item The scheduler will toggle a GPIO pin at least once during execution
-	of the task queue 
     \end{itemize}
 
   \item Changes to StatusTask:
+		This task monitors the status of the onboard battery.
     \begin{itemize}
       \item There are no changes to the status task
     \end{itemize}
+	\item New Task: EKG Capture
+		Together EKG Capture and EKG Process will receive EKG sensor information
+		and convert it to human-usable data for analysis
+		\begin{itemize}
+			\item The EKG Capture function must convert a time-varying sinusoidal signal to a digital format
+			\item Each sample must range from 0-3Vdc
+			\item A total of 256 samples per sequence must be taken at 8-bit precision
+			\item The capture function must be capable of discerning inputs signals ranging from 35Hz to 3.75kHz
+			\item Once a sequence is complete, the EKG Process function must be called
+		\end{itemize}
+	\item New Task: EKG Process
+		The EKG Process function transforms the raw EKg sampled sequence and
+		converts it to a single frequency for analysis.
+		\begin{itemize}
+			\item The EKG Process function must perform a Fast Fourier Transform (FFT) on the raw data
+			\item Following conversion to the frequency domain, the FFT result must be converted to the expected frequency range
+			\item The 16 most recent EKG results must be stored in a buffer for transmission or review
+		\end{itemize}
+	\item New Task: Command
+		When interacting with the device remotely, the command task serves as the interpreter of console/browser commands. It conveys system information to the browser in response to webserver requests.
+		\begin{itemize}
+			\item Command must be scheduled whenever a command has been received by
+				the web server or when a message must be transmitted to the remote
+				computer.
+			\item Receive mode:
+				\begin{itemize}
+					\item A received command must be interpreted and acted upon if valid
+					\item A response acknowledgement or non-acknowledgement must be
+						returned to the webserver whenever a command is received
+					\item Legal commands are given in Appendix~\ref{}
+				\end{itemize}
+			\item Messages to be sent to a remote computer must be compiled into proper HTML code before being sent to the web server
+		\end{itemize}
+
+	\item New Task: Remote communications
+		Remote communications, or the web server, operates as the gateway between
+		the device and the wider internet. It handles communications protocols and
+		incoming requests to the system.
+		\begin{itemize}
+			\item The remote communication task must initialize the network interface
+			\item This task must also connect to and configure a local area network,
+				handling TCP/IP, HTTP, and other protocols
+			\item Set up a webserver and webpage to act as a gateway for remote users
+			\item Update the webpage as needed
+		\end{itemize}
 \end{itemize}
 
     \subsection{Software Implementation}
@@ -479,9 +607,16 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
     \begin{figure}[h]
       \centering
+      \includegraphics[width=\textwidth]{../design/top_level_function_block_diagram}
+      \caption{Top Level Functional Block Diagram}
+      \label{fig:func_top}
+    \end{figure}
+
+    \begin{figure}[h]
+      \centering
       \includegraphics[width=\textwidth]{../design/Functional_decomposition}
-      \caption{Functional Decomposition}
-      \label{fig:func}
+      \caption{Lower Level Functional Decomposition}
+      \label{fig:func_low}
     \end{figure}
 
     \subsubsection{System Architecture}
@@ -752,8 +887,8 @@ struct TCB {
 
     \section{Presentation, Discussion, and Analysis of the Results}
 
-    \subsection{Results} Patrick
-    The project was completed and demonstrated on February 13, 2014.
+    \subsection{Results} 
+    The project was completed and demonstrated on March 17, 2014.
 
     Demonstration of the system to the interested parties showed that the
     system met the majority of the requirements initially presented at the onset of the lab
@@ -765,8 +900,13 @@ struct TCB {
     performing as expected, the system would freeze up. When this happened, the
     system was unresponsive and did not produce any annuniation.
 
+%keep this stuff vv
     Using an oscilloscope, the run times of each task were empirically
-    determined. The results are given in Table~\ref{tab:taskRuntimes}
+		determined. The procedure used involved asserting a GPIO pin high
+		immediately after entering the function in question and deasserting the pin
+		just prior to exiting the function. The trace of the pin output helped
+		determine the exact function timing. The results are given in
+		Table~\ref{tab:taskRuntimes}
 
     \begin{table}[h]
       \centering
@@ -902,6 +1042,7 @@ struct TCB {
     section~\ref{sec:designSpec}, the following parts of the system must be 
     tested: 
 
+		\textbf{Phase I Tests:}
     \begin{itemize}
       \item Vitals are measured and updated
       \item System properly displays corrected measurements and units properly
@@ -945,7 +1086,29 @@ struct TCB {
 	  and causes the associated changes in system state
 	\item Hardware timer updates the system's minor cycle counter
     \end{itemize}
+		
+		The specifications added during Phase III require that the following Phase
+		III properties be tested to satisfaction.
 
+		\textbf{Phase III Tests:}
+		\begin{itemize}
+			\item EKG related functions are able to accurately and reliably measure signals within the specified ranges
+			\item The System operates using an non-preemptive, priority-based real time operating system
+			\item Users may use the keypad to retrieve and view specific measurements
+			\item The system startup task properly initializes the hardware needed for operation
+		\end{itemize}
+
+		The following tests are required to ensure the sepcifications and
+		requirements for Phase IV are met.
+
+		\textbf{Phase IV Tests:}
+		\begin{itemize}
+			\item Command task properly handles expected commands
+			\item Command Task properly handles unexpected and incorrect commands
+			\item Web server properly responds to browser requests and forwards information to the system
+			\item Remote connection can initialize and maintains a connection for a significant period of time
+			\item User interaction from keypad and web browser can occur together without significant loss of functionality
+		\end{itemize}
     More detailed explanation of the tests performed is provided in the
     following sections.
     
@@ -1202,7 +1365,7 @@ struct TCB {
     encountered a number of problems in using the PWM and general purpose input and
     output signals. After consulting the documentation for the Stellaris kit and
     solving their input/output problems, they began testing their design using
-    visual and audio queues, the IAR embedded workbench debugger, and a few
+    visual and audio cues, the IAR embedded workbench debugger, and a few
     specifically programmed debug features. After the results of the testing
     verified the design to be working correctly, the students proceeded to present
     their medical instrument to their instructor.
@@ -1215,8 +1378,9 @@ struct TCB {
     \begin{tabular}{|l|*{4}{r|}}
       \hline
       Person & Design Hrs & Code Hrs & Test/Debug Hrs & Documentation Hrs \\ \hline
-      Patrick & 20 & 10 & 10 & 12+  \\ \hline
-      Jonathan & 15 & 5 & 4 & 8  \\ \hline
+      Patrick & 20 & 20 & 30 & 12+  \\ \hline
+			Jarrett & 9 & 30 & 16 & 9 \\ \hline
+      Jonathan & 15 & 30 & 15 & 10  \\ \hline
     \end{tabular}
 
     ~\\
@@ -1228,6 +1392,49 @@ struct TCB {
     dispensations are due others or myself, I have indicated them below.
 
     \pagebreak
+
+		\section{Supported Web Browser Commands}
+
+		The Commands and Responses for the embedded application task are given as follows. 
+
+		\begin{description}
+
+			\item[S] 
+				The S command indicates START mode. The command shall start the embedded 
+				tasks by directing the hardware to initiate all the measurement tasks. In doing so, the 
+				command shall enable all the interrupts. 
+
+			\item[P] 
+				The P command indicates STOP mode. This command shall stop the embedded tasks 
+				by terminating any running measurement tasks. Such an action shall disable any data 
+				collecting interrupts. 
+
+			\item[D]
+				The D command enables or disables the OLED display. 
+
+			\item[M<payload>]
+				The M command. The M command requests the return of the most recent value(s) of 
+				the specified data. 
+				The M response. The M response returns the most recent value(s) of the specified 
+				data. 
+
+				The <payload> is defined as one of the following:
+				\begin{description}
+					\item[A] - Instruct the system to measure all sensors. Will return the most recent measurement of each sensor
+					\item[T] - Instruct system to measure Temperature. Will return the temperature in degrees Celsius
+					\item[B] - Instruct system to measure the patient blood pressure. Will return the systolic and diastolic blood pressure in mmHg
+					\item[P] - Instruct system to measure patient pulse rate. Will return the heart rate in beats per minute
+					\item[E] - Instruct the system to perform an EKG measurement. Will return the primary EKG frequency
+					\item[D] - DEBUG mode only. Returns the local display status
+					\item[M] - DEBUG mode only. Returns system measurement status. Returns boolean true if measurement is enabled, false otherwise
+				\end{description}
+
+			\item[A]  
+				The A response acknowledges the receipt of the identified command. 
+
+			\item[E]
+				The E error response is given for incorrect commands or non-existent commands.
+		\end{description}
 
     \section{Activity Diagrams}
 
@@ -1278,6 +1485,35 @@ struct TCB {
       \includegraphics[width=0.2\textwidth]{../design/Status_activity.png}
       \caption{Status Activity Diagram}
       \label{fig:statusActivity}
+    \end{figure}
+
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.2\textwidth]{../design/ekgCapture_activity.png}
+      \caption{EKG Capture Activity Diagram}
+      \label{fig:ekgCaptureActivity}
+    \end{figure}
+
+		
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.2\textwidth]{../design/ekgProcess_activity.png}
+      \caption{EKG Process Activity Diagram}
+      \label{fig:ekgProcessActivity}
+    \end{figure}
+		
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.2\textwidth]{../design/command_activity.png}
+      \caption{Command Activity Diagram}
+      \label{fig:commandActivity}
+    \end{figure}
+
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.2\textwidth]{../design/remote_activity.png}
+      \caption{Remote Activity Diagram}
+      \label{fig:remoteActivity}
     \end{figure}
 
     \pagebreak
