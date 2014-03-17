@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>
+  <project>
+    <path>$WS_DIR$\..\..\..\StellarisWare\boards\ek-lm3s8962\enet_io\enet_io.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\fresh_project\fresh_project.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\current_project\RTOSDemo.ewp</path>
+  </project>
+  <batchBuild/>
+</workspace>
+
+
