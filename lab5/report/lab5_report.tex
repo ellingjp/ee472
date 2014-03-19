@@ -185,7 +185,9 @@ Figure~\ref{fig:useCases}. Each use case is expanded and explained below.
 
 \begin{figure}[h]
   \centering
+	\fbox{
   \includegraphics[width=\textwidth]{../design/use_cases_graphical.png}
+}
   \caption{Use case diagram}
   \label{fig:useCases}
 \end{figure}
@@ -224,8 +226,8 @@ Identified exceptions to use case:
 		only check for a key press at the end of the silencing period. Therefore,
 		the alarm will be silenced if the button is pressed continuously.
 	\item \emph{No speaker or auditory device present} - The auditory alarm is
-		produced via an onboard speaker. If this speaker is removed, no additional
-		audible alarm is supported. This may change in future implentations.
+		produced via an on-board speaker. If this speaker is removed, no additional
+		audible alarm is supported. This may change in future implementations.
 \end{itemize}
 \textbf{Use Case \#3: View Measurement Logs} \\
 In the third use case, the user wishes to view previously recorded measurements for a given vital sign.
@@ -275,7 +277,7 @@ Possible exception conditions may include:
 
 \textbf{Use Case \# 5: Remote Access via Network} \\
 This device may also be used by an individual at a location outside of normal
-doctor or medical facilties.
+doctor or medical facilities.
 
 In these cases, a medical professional may be unable to provide direct
 intervention. Instead, the patient can be monitored remotely from the device
@@ -313,7 +315,7 @@ For this project, the requirements have been further specified as follows:
 		\begin{itemize}[$\bullet$]
 			\item Alarm acknowledgment capability using a push button
 			\item Buttons or switches to allow user to access system modes and menu items
-			\item Ethernet and webserver to process incoming data requests
+			\item Ethernet and web server to process incoming data requests
 			\item Sensor measurement input capabilities consisting of:
 				\begin{itemize}
 					\item Body temperature measurement
@@ -383,7 +385,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 		The keypad allows the user to interact with the system locally. The user
 		can acknowledge alerts and navigate the menu options.
     \begin{itemize}
-      \item The keypad task will scan the keypad and decode any keypresses
+      \item The keypad task will scan the keypad and decode any key presses
       \item The task will have support the following user inputs:
       \item Mode selection between 2 modes:
 				\begin{itemize}
@@ -430,7 +432,9 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
 		\begin{figure}[h]
 			\centering
+			\fbox{
 			\includegraphics[width=0.5\textwidth]{../design/Serial_screen1.png}
+		}
 			\caption{Expected screen layout of remote serial terminal}
 			\label{fig:serial_display}
 		\end{figure}
@@ -451,7 +455,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 	pulse rate event interrupt
       \item A new value will be stored to memory if the present reading is
 	greater than $\pm$15\% of the previous measurement
-      \item The measurement limits will correspond to 200bpm and 10bpm,
+      \item The measurement limits will correspond to 200 BPM and 10 BPM,
 	determined empirically. 
     \end{itemize}
 
@@ -492,7 +496,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 			\item Display must support multiple display options
 			\item Menu mode will allow selection of each of the individual
 				measurements. Upon selection of a measurement, the current value of the
-				measurement will be displayed onscreen
+				measurement will be displayed on-screen
 			\item Annunciation mode will display the current status of each
 				measurement as in project 1, and provide the same functionality as the
 				display in project 1.
@@ -570,9 +574,9 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 		The Schedule function has been replaced by the RTOS scheduler. Just as
 		before, the Scheduler manages the order in which tasks are executed. It
 		manages resources based on the current running task needs and guarantees
-		tasks complete within the desired timeframe.
+		tasks complete within the desired time frame.
     \begin{itemize}
-			\item The Scheduler will provide non-premptive priority-based scheduling
+			\item The Scheduler will provide non-preemptive priority-based scheduling
       \item The hardware timer will provide a system interrupt every 250ms or
 	equal to the minor cycle, whichever is shorter
       \item Task Control Blocks will interact with other tasks via flags and communication buffers
@@ -581,7 +585,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \end{itemize}
 
 	\item \textbf{StatusTask:}
-		This task monitors the status of the onboard battery.
+		This task monitors the status of the on-board battery.
     \begin{itemize}
       \item Each time the status task is called, the current amount of battery charge left is queried and stored
     \end{itemize}
@@ -591,14 +595,14 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 		and convert it to human-usable data for analysis
 		\begin{itemize}
 			\item The EKG Capture function must convert a time-varying sinusoidal signal to a digital format
-			\item Each sample must range from 0-3Vdc
+		\item Each sample must range from 0-3VDC
 			\item A total of 256 samples per sequence must be taken at 8-bit precision
 			\item The capture function must be capable of discerning inputs signals ranging from 35Hz to 3.75kHz
 			\item Once a sequence is complete, the EKG Process function must be called
 		\end{itemize}
 
 	\item \textbf{New Task: EKG Process}
-		The EKG Process function transforms the raw EKg sampled sequence and
+		The EKG Process function transforms the raw EKG sampled sequence and
 		converts it to a single frequency for analysis.
 		\begin{itemize}
 			\item The EKG Process function must perform a Fast Fourier Transform (FFT) on the raw data
@@ -607,7 +611,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 		\end{itemize}
 
 	\item \textbf{New Task: Command}
-		When interacting with the device remotely, the command task serves as the interpreter of console/browser commands. It conveys system information to the browser in response to webserver requests.
+		When interacting with the device remotely, the command task serves as the interpreter of console/browser commands. It conveys system information to the browser in response to web server requests.
 		\begin{itemize}
 			\item Command must be scheduled whenever a command has been received by
 				the web server or when a message must be transmitted to the remote
@@ -616,7 +620,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 				\begin{itemize}
 					\item A received command must be interpreted and acted upon if valid
 					\item A response acknowledgement or non-acknowledgement must be
-						returned to the webserver whenever a command is received
+						returned to the web server whenever a command is received
 					\item Legal commands are given in Appendix~\ref{appendix:commands}
 				\end{itemize}
 			\item Messages to be sent to a remote computer must be compiled into proper HTML code before being sent to the web server
@@ -630,8 +634,8 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 			\item The remote communication task must initialize the network interface
 			\item This task must also connect to and configure a local area network,
 				handling TCP/IP, HTTP, and other protocols
-			\item Set up a webserver and webpage to act as a gateway for remote users
-			\item Update the webpage as needed
+			\item Set up a web server and web page to act as a gateway for remote users
+			\item Update the web page as needed
 			\item The user interface must accept a textual command entered by the user as defined in Appendix~\ref{appendix:commands}
 		\end{itemize}
 
@@ -639,7 +643,9 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
 		\begin{figure}[h]
 			\centering
+			\fbox{
 			\includegraphics[width=\textwidth]{../design/web_browser.png}
+		}
 			\caption{Expected Web Browser Interface}
 			\label{fig:web_UI}
 		\end{figure}
@@ -697,7 +703,9 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
     \begin{figure}[h]
       \centering
+			\fbox{
       \includegraphics[width=\textwidth]{../design/top_level_function_block_diagram}
+		}
       \caption{Top level system functionality}
       \label{fig:func_top}
     \end{figure}
@@ -708,7 +716,9 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
     \begin{figure}[h]
       \centering
+			\fbox{
       \includegraphics[width=\textwidth]{../design/Functional_decomposition}
+		}
       \caption{Low Level Functional Decomposition}
       \label{fig:func_low}
     \end{figure}
@@ -752,7 +762,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     chosen was 8000 Hz (more than twice the max frequency).
 
     \paragraph{EKG Process} This task is in charge of processing raw EKG data.
-		It will run a FFT over the raw EKG data. The results of the FFT operation
+		It will run a Fast Fourier Transform (FFT) over the raw EKG data. The results of the FFT operation
 		are then used to determine the maximum frequency in the signal sampled.
 		These data are stored in system memory.
 
@@ -788,7 +798,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     on the particular command sent.  For example, if the user requests to view
     all measurements, the response should be an HTML formatted response
     containing all of the data for each measurement.  Each response should also
-    contain an ACK or NACK, depending on whether or not the command was valid or
+    contain an acknowledge (ACK) or non-acknowledge (NACK) signal, depending on whether or not the command was valid or
     not.
 
     \paragraph{Remote Communications}  Remote Communications is not actually a
@@ -804,7 +814,9 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
     \begin{figure}[h]
       \centering
+			\fbox{
       \includegraphics[width=\textwidth]{../design/System_Architecture}
+		}
       \caption{System Architecture Diagram}
       \label{fig:arch}
     \end{figure}
@@ -841,6 +853,8 @@ struct TCB {
     implementation file, and instantiated using a task initialization function. In
     the header file, a void pointer pointing to the initialized structure is
     exposed with global scope, as well as the task's run and initialization functions.
+These tasks are placed into the real time operating system which will schedule them and determine when they need to be run.
+The RTOS can create tasks within its system from the TCBs that have been created for each task.
 
     \subsubsection{Task Implementation}
 
@@ -848,49 +862,36 @@ struct TCB {
 %activity diagram, etc.
 
     The primary task of this project is to implement C code for a medical
-    device on the Stellaris EKI-LM3S8962 and its ARM Coretex A3 processor. The
+    device on the Stellaris EKI-LM3S8962 and its ARM Cortex A3 processor. The
     project was started by creating a main file that initializes the variables
-    used in each task and starts the hardware timer then runs into an infinite
-    while loop. Inside the while loop a run method is called. The run method is
-    part of the scheduler. The run method has a runTask flag which determines
-    whether or not anything should actually be run this call. The flag is set
-    to true by the hardware timer's interrupt handler. Once the runTask flag is
-    true the run method will keep track of whether the device is on a minor
-    cycle or a major cycle and run the preform task method of each task. The
-    runTask flag is then set to false so that the tasks will not be executed
-    again until the hardware interrupt has again been triggered. The tasks
+    used in each task and starts the real time operating system which is implemented using the FreeRTOS software package. 
+The real time operating system(RTOS) contains code that allows us to set up tasks using the TCB struct developed with a void pointer for data and a function pointer for the run function.
+The tasks are then initialized using a task create method and each task has a priority set. The tasks
     included in this project are Compute, Measure, Warning, keyPad,
-    OLEDDisplay, Serial, and status. Each task has a public interface of 2 void
-    pointers. One that when initialized by the main method will point to the
-    preform task function, and another that, when initialized, points to a
-    struct containing pointers to the data required by that task. Each task has
-    a task control block(TCB) in the scheduler. This TCB contains pointers to
-    the preform task function and the data for the task and also has fields for
-    pointers to a next TCB and previous TCB. The TCB is used by the scheduler
-    to run the task. The scheduler contains a doubly linked list of TCB objects
-    that uses the TCB next and previous elements to point to the next and
-    previous tasks in the task queue. In this case there are 7 tasks but not
-    always 7 tasks in the list of tasks to run. The compute task is only to be
-    run after the measure task, and the serial task only needs to be run at
-    certain times. When a task is not being used it's TCB is not included in
-    the linked list of tasks. Therefore and updateQueue method was created.
-    This method checks flags set within the tasks that are running and
-    determines if a task that isnt in the list needs to be added, or if a task
-    that is in the list needs to be removed. The scheduler's run task contains
-    a loop that runs through the linked list of TCBs and runs the function
-    pointed to by the TCB with the argument of the data pointer stored in the
-    TCB until the null value pointed to by the last element in the list is
-    reached. After running all  tasks the runTask flag is set to false again.
-    The hardware timer will count up until it reaches the number of ms that
-    corresponds to a minor cycle then trigger a hardware interrupt. The
-    interrupt handler sets the runTask flag back to true and the task linked
-    list will be updated, traversed and run again.
+    OLEDDisplay, Serial, Status, Command, ekgProcess, and ekgCapture tasks. Each task has a public interface of a task control block. The TCBs for each task are used to create tasks for
+the RTOS. In our system the priority order goes warning, serial, display, keypad, command, compute, ekgProcess, measure, ekgCapture, and then status. These priorities indicate the importance in running each task from the RTOS's point of view.
+In this system the RTOS completely handles the scheduling of the tasks and the execution of the currently scheduled task. The RTOS will decide based on its own criteria and the priorities we set what order it will 
+execute tasks in. Each task can be removed from the list of available tasks that the RTOS can execute using a taskSuspend() method of the RTOS with an argument of a handle for the task to be suspended.
+Each task can likewise be placed again into the list of executable tasks in the RTOS with a taskResume() method, This is useful in our system for tasks that only need to be run at some times. 
+The serial, compute, measure, ekg, and command tasks are suspended initially. These tasks are resumed when needed for system functionality as described below. 
+The system also has a hardware timer that keeps a counter called the minor cycle counter that increments every 500ms. This counter and timer
+are used to time certain actions like the warning alarm buzzer and warning light flash.
+The system contains a startup method that is called at the beginning of our main method. 
+This method initializes the hardware timer for the minor cycle. The function also sets the system clock to run at the correct speed and enables the OLED display.
+Another important task for this function is that it sets up the entire web server system. Instead of taking a task based approach based off the FreeRTOS web server the system instead
+uses an interrupt based http server. The startup function initializes the interrupts required for the HTTP server and starts the process of obtaining an IP address from
+DHCP on the network. Because the web server, TCP/IP stack, and DHCP functionality is all interrupt based and the interrupts are all set up in the startup function, there is no web server task required in the
+medical devices operating system. The web server itself uses the Stellaris utility file system to scan JavaScript input to the web server. Whenever the web server receives an HTTP packet it calls an interrupt service routine that gives the packet to the file system.
+The file system looks at the name of the requested file and instead of opening a file stores the name of the file into a global command array. 
+This is then utilized by the command task to execute commands from the remote terminal. Data can also be sent through global data to the file system to be then sent as a HTTP packet back to the JavaScript running on the web page on the remote terminal.
     
     Control flow is shown in Figure~\ref{fig:Control}. 
 
     \begin{figure}[h]
       \centering
+			\fbox{
       \includegraphics[width=0.7\textwidth]{../design/Control_state_diagram.png}
+		}
       \caption{Control Flow Diagram}
       \label{fig:Control}
     \end{figure}
@@ -898,17 +899,24 @@ struct TCB {
     Each task has its own unique purpose in the system, and each uses a different
     part of the global data.
 
-		\paragraph{Measure Task} The Measure task (Figure~\ref{fig:measureActivity}
-		in Appendix~\ref{appendix:activity_diagrams}), deals only with the raw data from the
-		instruments. This task is meant to act in place of the instruments that are
-		unavailable. The task only runs if the scheduler has set the global value
-		is Major Cycle to 1. On a major cycle the measure function either
-		increments the data of each measurement by 1 or 2 or decrements the data by
-		1 or 2. In the newly improved design a heart rate monitor has been added.
-		The heart rate monitor uses an interrupt handler to count the number of
-		rising edges on an input in a 2 Major cycle period. The number is then used
-		to calculate the heart rate the sensor is receiving. Additionally the
-		measure task adds the compute task to the task queue after it has run.
+\paragraph{Measure Task} The Measure task (Figure~\ref{fig:measureActivity}
+in Appendix~\ref{appendix:activity_diagrams}), deals only with the raw data from the
+instruments. This task is meant to act in place of the instruments that are
+unavailable.  When the runMeasureTask() function is called by the RTOS a few things might happen. First the task checks the global data measurement selected value. 
+This value will be 0 if all measurements are selected, 1 if temperature is selected, 2 if blood pressure is selected, and 3 if pulse rate is selected. 
+When any number besides 0 is selected, only the measurement corresponding to that number will be taken.
+When the blood pressure is taken a new raw blood pressure value is determined by the last one, and the action taken the last time measure blood pressure was called.
+If the blood pressure went up by 1 previously and is still below the maximum range of blood pressure then this cycle the raw blood pressure will go up by 2. If it previously went up by 2 it will only go up by 1 on this cycle.
+When the blood pressure reaches a maximum value it will begin to descend following the same pattern of descending 1 then 2 then 1 until it reaches a minimum and begins to increase once more.
+In the newly improved design a heart rate monitor has been added.
+The heart rate monitor uses an interrupt handler to count the number of
+rising edges on an input in a 10 second period. The number is then used
+to calculate the heart rate the sensor is receiving in the compute task. 
+The Measure task also takes an analog measurement of the Arm 3 temperature sensor when measure temperature is selected.
+To take this measurement an analog digital converter(ADC) is used. The ADC samples the output of the temperature sensor and gives the system a digital representation of the analog value after a short wait.
+All values measured in the measure function are placed into a circular buffer data structure. This data structure is an array wrapper that keeps track of the size of the array, and what index we are currently
+writing to. This way we can continue to write new measurements to the buffer while keeping the previous 8 values.
+The final functionality of the Measure task is that it adds the Compute task into the RTOS schedule by calling the resumeTask() function on the compute task's handle.
 
     \paragraph{Compute Task} The compute task is very simple. This task will
     only run after it has been placed into the task queue by the measure task
@@ -916,9 +924,12 @@ struct TCB {
     data that has been set by the measure task, multiplies by a constant and
     adds a constant to each piece of raw data to get the corrected data. The
     compute task then puts the values for the corrected data in memory at the
-    location of the global data pointer. Compute uses every data value except
-    the battery and keypad data. A diagram of the Compute activity is shown in
-		in Figure~\ref{fig:computeActivity} of Appendix~\ref{appendix:activity_diagrams}
+    location of the global data pointer. Compute uses the circular buffer data structures for the raw and corrected  temperature, blood pressure, and pulse rate data.
+The temperature value is corrected to be in human range from the temperature sensor value by dividing the raw value by 10 then multiplying by .75 and finally adding 5.
+The pulse rate is corrected by multiplying the raw value by 3 then adding 8.
+The systolic blood pressure is corrected by multiplying the raw value by 2 then adding 9. Finally, the Diastolic blood pressure is corrected from the raw value by multiplying it by 1.5 and adding 6.
+A diagram of the Compute activity is shown in
+in Figure~\ref{fig:computeActivity} of Appendix~\ref{appendix:activity_diagrams}.
 
     \paragraph{Warning Task} After compute, the warning task begins checking
     for warning or alarm states. The warning task only deals with the corrected
@@ -927,25 +938,26 @@ struct TCB {
     the other tasks, this task has more to its initialization than just
     initializing the data. In addition to setting up the pointers to the global
     data, during initialization, the task also enables peripheral banks C, F,
-    and G. These are enabled using the SysCtlPeripheralEnable library call.
+    and G. These are enabled using the SysCtlPeripheralEnable() library call.
     Additionally the task set up pins C 5, 6, and 7 as outputs, and pins F 0
-    and G 1 as PWM outputs. Additionally the PWM outputs are set to use a 65 Hz
+    and G 1 as pulse-width modulation (PWM) outputs. Additionally the PWM outputs are set to use a 65 Hz
     clock to play a sound at this frequency whenever enabled. The activity
     diagram is shown in Figure~\ref{fig:warningActivity} in Appendix~\ref{appendix:activity_diagrams}. There
     are 3 subsystems in the warning task. These subsystems each handle a
     different part of user notification. The first subsystem deals with the
     alarm. The subsystem checks to see if the systolic blood pressure data is
     out of range by more than 20\%. If the value is out of that range then the
-    PWM output is enabled using PWMGenEnable and pulsed with a 2 second period.
+    PWM output is enabled using PWMGenEnable() and pulsed with a 2 second period.
     If the values fall back within the acceptable range, or the user hits the
-    acknowledge button, then the PWM is disabled with PWMGenDisable and the
+    acknowledge button, then the PWM is disabled with PWMGenDisable() and the
     sound stops. The acknowledge button is sensed in the keyPad task and a
-    global data value global.alarmAcknowledge is set. When the alarmAcknowledge
-    field is set to 1 the alarm will go to its resting state. The next
+    global data value, global.alarmAcknowledge is set to true. When the alarmAcknowledge
+    field is set to 1 the alarm will go to its resting state for approximately
+five minor cycle counts. The next
     subsystem checks the corrected data for being 5\% out of range of the
     accepted values. If any value is more than 5\% out of its range then a
     warning will be displayed on the red led connected to pin C 5 using the
-    GPIOPinWrite function. Depending on the value that is out of range the
+    GPIOPinWrite() function. Depending on the value that is out of range the
     period the led flashes at will vary. In addition to the led flashing the
     warning will also tell the scheduler to add the serialCommunication task to
     the task list. The final subsystem is the battery check. This system checks
@@ -965,51 +977,64 @@ struct TCB {
     design was simplified by only using 1 column of 4 buttons. By doing this,
     the column keyPad wire can be supplied with a constant 5V from the
     Stellaris board, then each of the 4 row lines can be connected to a GPIO
-    input. when a button in the live column is pushed the 5V column line is
+    input. When a button in the live column is pushed the 5V column line is
     connected to 1 of the GPIO pins which lets the keyPad task know which
     button was pushed. Every time the keyPad task is run the GPIO will tell the
     task what buttons are pressed. 2 of the buttons correspond to up and down
     for scroll in the menu, 1 button corresponds to select in the menu, and 1
     button changes the mode between menu and annunciation. The data that the
     buttons manipulate are the global keyPad data parts which are
-    global.select, global.scroll, and global.mode. Additionaly the input on pin
+    global.select, global.scroll, and global.mode. The select value is set to 1 when the user pushes the select button from the menu. 
+When the user pushes the mode button from a data selection the select value is set back to 0. 
+The scroll value is added to whenever the user pushes down in the selection menu and subtracted from when the user pushes up in the selection menu.
+The mode value is set to 1 when the user pushes the mode button from the selection screen. When mode is 1 the display will show the enunciation screen. 
+When in the enunciation screen the select button will set mode back to 0.
+Additionally the input on pin
     E 0 manipulates the global.alarmAcknowledge signal. The activity diagram
     for this task is shown in Figure~\ref{fig:keyPadActivity} in Appendix~\ref{appendix:activity_diagrams}.
 
     \paragraph{Display Task} To show a user their current medical measurements,
     the system also has an oledDisplay task. This task uses the corrected data
     from measurements, the battery state, and the keyPad data. The display task
-		has an activity diagram shown in Figure~\ref{fig:displayActivity} in
-		Appendix~\ref{appendix:activity_diagrams}. This task uses the usnprintf() function
-		in C to convert the data types that the corrected data is stored in, and
-		properly format these data values into a string which is stored in a
-		buffer. The string contained in the buffer is then printed to the OLED
-		screen using the driver library rit128x96x4 functions. The display has 2
-		modes. The mode that the screen currently displays is determined by the
-		global.mode data which is set in the keyPad task. When mode is 0 this is
-		the menu mode. This mode displays each of the 4 measurement types,
-		temperature, blood pressure, pulse rate, and battery without the data for
-		each. The task then takes the global.scroll data from keyPad and displays a
-		cursor next to the measurement that scroll is currently at, 0 corresponding
-		to temperature, 1 to blood pressure, and so on. If the global.select is set
-		to 1 in keyPad then the currently scrolled to measurement is selected and
-		the screen will change to showing only that measurement and its data. When
-		global.mode is equal to 0 the annunciation screen will instead be
-		displayed. This screen shows each measurement followed by its data.
+has an activity diagram shown in Figure~\ref{fig:displayActivity} in
+Appendix~\ref{appendix:activity_diagrams}. This task uses the usnprintf() function
+in C to convert the data types that the corrected data is stored in, and
+properly format these data values into a string which is stored in a
+buffer. The usnprintf() function cannot handle float values so all float data was rounded to a whole number and displayed as an integer. 
+The string contained in the buffer is then printed to the OLED
+screen using the driver library RIT128x96x4 functions. The display has 2
+modes. The mode that the screen currently displays is determined by the
+global.mode data which is set in the keyPad task. When mode is 0 this is
+the menu mode. This mode displays each of the 5 measurement types,
+temperature, blood pressure, pulse rate, EKG, and battery without the data for
+each. The task then takes the global.scroll data from keyPad and displays a
+cursor next to the measurement that scroll is currently at, 0 corresponding
+to temperature, 1 to blood pressure, 2 to pulse rate, 3 to EKG, and 4 to battery state. If the global.select is set
+to 1 in keyPad then the currently scrolled to measurement is selected and
+the screen will change to showing only that measurement and its data. When
+global.mode is equal to 1 the annunciation screen will instead be
+displayed. This screen shows each measurement followed by its data.
     
     \paragraph{Serial Task} The serial task is only run when a warning occurs.
     The warning causes the TCB for the serial task to be added to the TCB
     schedule linked list. When the serial task is run the first time it will
-    initialize a UART connection using UARTConfigSet and UARTEnable driver
+    initialize a UART connection using UARTConfigSet() and UARTEnable() driver
     functions to enable the UART that communicates to an FTDI chip on the
     Stellaris board. The FTDI chip then converts the UART to a virtual serial
     port over the USB cable to the PC. After the UART is initialized on the
     first run and in all subsequent runs of the serial task, all the
     measurements and their data are formatted and printed into 1 buffer using
-    the usnprintf function. A loop then iterates through the buffer writing
+    the usnprintf() function. A loop then iterates through the buffer writing
     each character in the buffer to the UART. An activity diagram showing the
-		serial task is located in Appendix~\ref{appendix:activity_diagrams} as Figure~\ref{fig:serialActivity}.
-    
+serial task is located in Appendix~\ref{appendix:activity_diagrams} as Figure~\ref{fig:serialActivity}.
+In the case of the lab the device is simulated as being run off USB power which never runs out. The battery state however can reach 0.
+Because this is a simulation without using an actual battery, this system stops decrementing the battery state when it reaches 0 and just leaves the value untouched for the rest of the runtime.
+In the case of use with an actual battery, the system would never go past 0 as a battery state because the battery would have died and the system shut down, therefore this is not an issue.
+
+\paragraph{EKGCapture Task}
+\paragraph{EKGProcess Task}
+\paragraph{Command Task}
+4.4:analysis and implementation of workaround
     \paragraph{Status Task}
     The last task is the status task. This task only deals with one piece of data
     which is the battery state data. The only thing the status task does is that on
@@ -1029,7 +1054,7 @@ struct TCB {
     During the demonstration, all tasks worked as designed and expected with
     the exception of the serial communication task, serialTask. After initially
     performing as expected, the system would freeze up. When this happened, the
-    system was unresponsive and did not produce any annuniation.
+    system was unresponsive and did not produce any annunciation.
 
 %keep this stuff vv
     Using an oscilloscope, the run times of each task were empirically
@@ -1103,7 +1128,7 @@ struct TCB {
     \subsection{Analysis of Any Errors}
     
 		There were two errors found in the final project. Both errors involved a
-		lack of accuracu in the reported values measured by the sensors. The pulse
+		lack of accuracy in the reported values measured by the sensors. The pulse
 		rate measurement was off in the same manner as in Lab 3. The other
 		measurement, from the EKG sensor, was off by a similarly small amount. The
 		cause of this error differed however.
@@ -1129,7 +1154,7 @@ struct TCB {
 		actual EKG frequency. We have attributed this inaccuracy to the
 		implementation of the EKG measurement functions. Specifically the timing
 		mechanism used sample the analog sensor relies on a software defined delay
-		function to capture the signal. This choice was made because the onboard
+		function to capture the signal. This choice was made because the on-board
 		hardware did not have a sufficient number of hardware based timers to use.
 		As a result, the EKG measurements are forced to rely on a system that is
 		not as accurate initially. Previous experience has indicated that a
@@ -1162,7 +1187,7 @@ struct TCB {
     
     
     Many of the challenges the designers of this project faced were in the
-    keypad input and the data output. The keypad input posed a difficult
+    keypad input and the timer setup. The keypad input posed a difficult
     hardware challenge as there are 16 input keys on the keypad but only 8
     connections for the microprocessor to connect to the keypad. This means
     that to identify a single key press 4 connections must be set as outputs
@@ -1172,19 +1197,11 @@ struct TCB {
     allowed the strobe design to be ignored. Instead 1 row of keys was
     activated all the time and that row was scanned for button presses.
     
-    In addition to keypad input, there was also difficulty in implementing data
-    formatting functions. After adding a hardware delay, IAR workbench no
-    longer allows the use of sprintf which had previously been used to print
-    and format data. The usnprintf command was instead used to format and print
-    data to a buffer, however, the students found that usnprintf does not have
-    the ability to print floating point data. This issue was resolved by
-    changing measurements that were previously printed as floats to be printed
-    as integers. usnprintf also caused issues when printing certain data for
-    the serial task. In this case the usnprintf was causing a runtime error and
-    freezing the operation of our device. This issue remained unresolved. 
-    
-    
-    
+The students also faced difficulty in setting up the interrupt based web server.
+In the Stellaris utility example code part of the web server was run with the sysTick timer
+interrupt, Unfortunately, this is also the interrupt used by FreeRTOS to execute and schedule tasks.
+The students were forced to work around this by instead using a hardware timer and an interrupt on 
+the timer to implement that portion of the web server code.
     
     All problems but one were solved before demonstrating the product to the interested
     parties. The final project still contained the serial error previously mentioned.
@@ -1251,7 +1268,7 @@ struct TCB {
 			\item The system startup task properly initializes the hardware needed for operation
 		\end{itemize}
 
-		The following tests are required to ensure the sepcifications and
+		The following tests are required to ensure the specifications and
 		requirements for Phase IV are met.
 
 		\textbf{Phase IV Tests:}
@@ -1399,7 +1416,7 @@ struct TCB {
     be an ``E''.
 
 \begin{lstlisting}[caption=Command Response, captionpos=b, label=lst:comm]
-A
+<p>A</p>
 <p>Temperature 0 C</p>
 \end{lstlisting}
 
@@ -1409,8 +1426,34 @@ A
     commands, it should also recognize these commands.
 
 
-    \subsection{Test Cases} The students begin testing by examining if the
-    alarm sounds at the proper time.  This is initially tested by disabling the
+    \subsection{Test Cases}
+The first step to testing the design was for the students to test the functionality of the 
+web server built into the system. The web server was required to have the functionality to receive an
+OLED enable/disable command, a return measurement command, a start command, a stop command, and the
+ability to send an acknowledgement on receiving a request, an error on receiving an improper request,
+and to send the entire web page that the user of the remote terminal interacts with. The first test that
+was run was whether or not the students could connect to the web server from a computer. To test this the
+students connected the Stellaris board to the Ethernet network and waited for the system to print an IP address
+on the OLED display. The students then connected to the  IP address by typing it in a web browser and the students 
+verified that the correct web page was sent to the remote terminal by inspecting the web page displayed on the remote 
+terminal screen. The students then tested the OLED enable and disable command by typing the D command into the web page 
+and hitting send command. The students verified its operation by checking that the OLED display was no longer activated. 
+The students then tested the reactivation of the OLED by sending the P command. On both commands the students checked the
+web page for the acknowledgement from the web server to be displayed to verify the acknowledge functionality. The students 
+then navigated through the OLED menu to the annunciation menu. The students verified that on startup the system was not 
+taking any measurements by viewing the measurement data on the annunciation menu. Each data value was constant at its 
+initialized value and therefore the measurement system was not activated. The students then tested the start command by sending it from 
+the web page and visually verifying that the measurements started by viewing the data on the annunciation screen. The 
+students then issued a stop command and through the enunciation menu verified that all measurements stopped being taken 
+and remained at their last value before being deactivated. On each of these commands the students once again verified the acknowledgement of the commands.
+The next step was testing the measurement command. To do this the students issued one of each possible measurement command from the web page. 
+On each command the students checked the value shown on the web page against the value shown on the OLED display. Because of networking delays the values were 
+not required to be the same but only in the same range. Finally the error command was checked by the students transmitting a few different pieces of text in the 
+send command box that were not commands in the system. The students tried sending 'a', 'hello', and 'Patrick' to verify that on each an 
+error instead of acknowledgement was sent back to the web page. The error was displayed as an 'E' on the web page under the send command box
+showing the students that an error was properly being returned.
+The students then moved to testing by examining if the
+    alarm sounds at the proper time. This is initially tested by disabling the
     functions that simulate measurements being made on each of the data
     measurements, and setting their initial values to be either within the
     alarm range or outside of the alarm range. The warning states were also
@@ -1453,17 +1496,7 @@ A
     Next the measurement simulation functions were tested. This was done by
     re-enabling each one that had been disabled from the previous test one at a
     time. The initial raw values were again set to the values in Figure 5. When
-    each measurement was re-enabled, the students could watch the temperature
-    change at each major cycle using the OLED display. Since the OLED display
-    indicated that the corrected temperature went up .75 degrees on a major
-    cycle then down 1.5 degrees on the next, the temperature measurement was
-    working as intended.  This situation also gave the students an opportunity
-    to verify that the warning and alarm states initiated as the temperature
-    fell out of the acceptable range.  The Led began flashing with a 1 second
-    period after a few major cycles, then the alarm began sounding, indicating
-    correct operation. Since temperature was working correctly, the temperature
-    measurement function was once again disabled and each blood pressure
-    measurement was re-enabled individually for testing. The Systolic pressure
+    each measurement was re-enabled,the students could watch the OLED to see that the Systolic pressure
     began by rising 4 mm Hg on a major cycle then falling 2 mm Hg on the next,
     and the Diastolic pressure by rising 3 on a Major cycle and falling 1.5 on
     the next, this was consistent with the design. The warning and alarm states
@@ -1479,6 +1512,15 @@ A
     pulse rate value was expected to increase. This was verified to be working
     correctly. As the pulse rate passed through the warning zones the design
     for pulse rate warnings was also verified to be working correctly.
+Next the blood pressure measurement was disabled and the temperature measurement was enabled.
+The temperature sensor is an analog sensor on the Arm 3 processor. To verify its proper operation
+the students heated the processor by placing their finger on it until the OLED showed the temperature increasing.
+The students then placed the processor near an open window and watched as the temperature on the OLED display fell.
+As the temperature fell into the warning zone the students visually verified that the led began blinking at the correct speed.
+The medical device system also has the ability to take ekg measurements. To test the ekg measurement system the students setup
+a pulse generating device and connected it to the processor through an input pin. The pulse generator could be set to a frequency 
+within the range of 35 Hz to 3750 Hz. The students verified that the OLED display showed the a value for the ekg measurement within a few Hz
+of the pulse generator at 35 Hz, 1000 HZ, 2000 Hz, and 3750 Hz to test ekg measurement and processing functionality.
     
     Additionally, the improved medical device now has a menu that is displayed
     on the OLED display and navigated using the testbench keypad. The design
