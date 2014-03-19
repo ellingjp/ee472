@@ -798,7 +798,8 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
     \paragraph{Status Task} Status receives information about the battery on the
     system and updates its current data accordingly.
-
+~\\
+~\\
     Each of these tasks interact using the shared data shown in Figure~\ref{fig:arch}. 
 
     \begin{figure}[h]
@@ -811,7 +812,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \subsubsection{High-level Implementation in C}
     After developing the system architecture, the design needed to be translated into the C programming language. The design manifested in a multi-file program consisting of the following source files:
     \begin{itemize}
-      \item \textbf{globals.c/globals.h} - Used to define the Shared Data used among the tasks
+      \item \textbf{globals.c, globals.h} - Used to define the Shared Data used among the tasks
       \item \textbf{timebase.h} - Defines the timebase used for the scheduler and tasks
       \item \textbf{task.h} - Defines the TCB interface for a task
     \end{itemize}
@@ -821,11 +822,14 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     not contain any task-specific information. Instead, the TCB consists of
     only a void pointer to the tasks data, and a pointer to a function that
     returns void and takes a void pointer, as shown in Listing~\ref{lst:tcb}.
-
+	
+% JON: is this correct? addeding prev/next fields?
 \begin{lstlisting}[caption=TCB Construct, captionpos=b, label=lst:tcb]
 struct TCB {
     void *taskDataPtr;
     void (*taskRunFn)(void *);
+		void *TCB nextTCBPtr;
+		void *TCB prevTCBPtr;
 }
 \end{lstlisting}
     Leaving out the type information allows the scheduler to pass the task's data
@@ -882,7 +886,7 @@ struct TCB {
     interrupt handler sets the runTask flag back to true and the task linked
     list will be updated, traversed and run again.
     
-    control flow is shown in Figure~\ref{fig:Control}. 
+    Control flow is shown in Figure~\ref{fig:Control}. 
 
     \begin{figure}[h]
       \centering
@@ -890,21 +894,21 @@ struct TCB {
       \caption{Control Flow Diagram}
       \label{fig:Control}
     \end{figure}
-
+~\\
     Each task has its own unique purpose in the system, and each uses a different
     part of the global data.
 
-\paragraph{Measure Task} The Measure task (Figure~\ref{fig:measureActivity}
-    in the appendix), deals only with the raw data from the instruments. This
-    task is meant to act in place of the instruments that are unavailable. The
-    task only runs if the scheduler has set the global value is Major Cycle to
-    1. On a major cycle the measure function either increments the data of each
-    measurement by 1 or 2 or decrements the data by 1 or 2. In the newly
-    improved design a heart rate monitor has been added. The heart rate monitor
-    uses an interrupt handler to count the number of rising edges on an input
-    in a 2 Major cycle period. The number is then used to calculate the heart
-    rate the sensor is receiving. Additionally the measure task adds the
-    compute task to the task queue after it has run.
+		\paragraph{Measure Task} The Measure task (Figure~\ref{fig:measureActivity}
+		in Appendix~\ref{appendix:activity_diagrams}), deals only with the raw data from the
+		instruments. This task is meant to act in place of the instruments that are
+		unavailable. The task only runs if the scheduler has set the global value
+		is Major Cycle to 1. On a major cycle the measure function either
+		increments the data of each measurement by 1 or 2 or decrements the data by
+		1 or 2. In the newly improved design a heart rate monitor has been added.
+		The heart rate monitor uses an interrupt handler to count the number of
+		rising edges on an input in a 2 Major cycle period. The number is then used
+		to calculate the heart rate the sensor is receiving. Additionally the
+		measure task adds the compute task to the task queue after it has run.
 
     \paragraph{Compute Task} The compute task is very simple. This task will
     only run after it has been placed into the task queue by the measure task
@@ -914,7 +918,7 @@ struct TCB {
     compute task then puts the values for the corrected data in memory at the
     location of the global data pointer. Compute uses every data value except
     the battery and keypad data. A diagram of the Compute activity is shown in
-    the appendix in Figure~\ref{fig:computeActivity}.
+		in Figure~\ref{fig:computeActivity} of Appendix~\ref{appendix:activity_diagrams}
 
     \paragraph{Warning Task} After compute, the warning task begins checking
     for warning or alarm states. The warning task only deals with the corrected
@@ -927,7 +931,7 @@ struct TCB {
     Additionally the task set up pins C 5, 6, and 7 as outputs, and pins F 0
     and G 1 as PWM outputs. Additionally the PWM outputs are set to use a 65 Hz
     clock to play a sound at this frequency whenever enabled. The activity
-    diagram is shown in Figure~\ref{fig:warningActivity} in the appendix. There
+    diagram is shown in Figure~\ref{fig:warningActivity} in Appendix~\ref{appendix:activity_diagrams}. There
     are 3 subsystems in the warning task. These subsystems each handle a
     different part of user notification. The first subsystem deals with the
     alarm. The subsystem checks to see if the systolic blood pressure data is
@@ -970,27 +974,28 @@ struct TCB {
     buttons manipulate are the global keyPad data parts which are
     global.select, global.scroll, and global.mode. Additionaly the input on pin
     E 0 manipulates the global.alarmAcknowledge signal. The activity diagram
-    for this task is shown in the appendix in Figure~\ref{fig:keyPadActivity}.
+    for this task is shown in Figure~\ref{fig:keyPadActivity} in Appendix~\ref{appendix:activity_diagrams}.
+
     \paragraph{Display Task} To show a user their current medical measurements,
     the system also has an oledDisplay task. This task uses the corrected data
     from measurements, the battery state, and the keyPad data. The display task
-    has an activity diagram shown in Figure~\ref{fig:displayActivity} in the
-    appendix. This task uses the usnprintf() function in C to convert the data
-    types that the corrected data is stored in, and properly format these data
-    values into a string which is stored in a buffer. The string contained in
-    the buffer is then printed to the OLED screen using the driver library
-    rit128x96x4 functions. The display has 2 modes. The mode that the screen
-    currently displays is determined by the global.mode data which is set in
-    the keyPad task. When mode is 0 this is the menu mode. This mode displays
-    each of the 4 measurement types, temperature, blood pressure, pulse rate,
-    and battery without the data for each. The task then takes the
-    global.scroll data from keyPad and displays a cursor next to the
-    measurement that scroll is currently at, 0 corresponding to temperature, 1
-    to blood pressure, and so on. If the global.select is set to 1 in keyPad
-    then the currently scrolled to measurement is selected and the screen will
-    change to showing only that measurement and its data. When global.mode is
-    equal to 0 the annunciation screen will instead be displayed. This screen
-    shows each measurement followed by its data.
+		has an activity diagram shown in Figure~\ref{fig:displayActivity} in
+		Appendix~\ref{appendix:activity_diagrams}. This task uses the usnprintf() function
+		in C to convert the data types that the corrected data is stored in, and
+		properly format these data values into a string which is stored in a
+		buffer. The string contained in the buffer is then printed to the OLED
+		screen using the driver library rit128x96x4 functions. The display has 2
+		modes. The mode that the screen currently displays is determined by the
+		global.mode data which is set in the keyPad task. When mode is 0 this is
+		the menu mode. This mode displays each of the 4 measurement types,
+		temperature, blood pressure, pulse rate, and battery without the data for
+		each. The task then takes the global.scroll data from keyPad and displays a
+		cursor next to the measurement that scroll is currently at, 0 corresponding
+		to temperature, 1 to blood pressure, and so on. If the global.select is set
+		to 1 in keyPad then the currently scrolled to measurement is selected and
+		the screen will change to showing only that measurement and its data. When
+		global.mode is equal to 0 the annunciation screen will instead be
+		displayed. This screen shows each measurement followed by its data.
     
     \paragraph{Serial Task} The serial task is only run when a warning occurs.
     The warning causes the TCB for the serial task to be added to the TCB
@@ -1003,13 +1008,13 @@ struct TCB {
     measurements and their data are formatted and printed into 1 buffer using
     the usnprintf function. A loop then iterates through the buffer writing
     each character in the buffer to the UART. An activity diagram showing the
-    serial task is located in the appendix as Figure~\ref{fig:serialActivity}.
+		serial task is located in Appendix~\ref{appendix:activity_diagrams} as Figure~\ref{fig:serialActivity}.
     
     \paragraph{Status Task}
     The last task is the status task. This task only deals with one piece of data
     which is the battery state data. The only thing the status task does is that on
     a major cycle, it decrements the battery state by 1. This is shown in the
-    activity diagram in Figure~\ref{fig:statusActivity} in the appendix.
+		activity diagram in Figure~\ref{fig:statusActivity} in Appendix~\ref{appendix:activity_diagrams}.
 
     \section{Presentation, Discussion, and Analysis of the Results}
 
@@ -1612,6 +1617,7 @@ A
 		\end{description}
 
     \section{Activity Diagrams}
+		\label{appendix:activity_diagrams}
 
     \begin{figure}[H]
       \centering
