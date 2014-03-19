@@ -752,11 +752,15 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     chosen was 8000 Hz (more than twice the max frequency).
 
     \paragraph{EKG Process} This task is in charge of processing raw EKG data.
-    It will run a FFT over the raw EKG data.
+		It will run a FFT over the raw EKG data. The results of the FFT operation
+		are then used to determine the maximum frequency in the signal sampled.
+		These data are stored in system memory.
 
     \paragraph{Keypad Monitor} Keypad will check the keypad for user input. It
     should provide the user with four keys: two for scrolling, one for selection,
-    and one to go back.
+		and one to go back. The monitor updates the local visual display  and
+		updates internal system states in response to mirror any selections or
+		movements by the user
 
     \paragraph{Display Task} The display task will show a user interface on the
     Stellaris OLED. The user will interact with the display using a keypad. Under
@@ -774,7 +778,10 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
     \paragraph{Serial Task} This task is in charge of sending data to
     a remote terminal. If any of the states are in a warning or alarm condition,
-    this task will transmit the (corrected) data to the remote terminal.
+		this task will transmit the (corrected) data to the remote terminal. The
+		displayed data will be continually updated until the system returns to a
+		normal condition. Once in a normal condition, the last non-normal state is
+		displayed.
 
     \paragraph{Command Task} The command task should parse commands from the 
     remote communications task and send a response.  The response is based
@@ -790,8 +797,8 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     runs entirely in the background.  It communicates with tasks using buffers.  
 
     \paragraph{Status Task} Status receives information about the battery on the
-    system and updates it's current data accordingly.
-    \\\\
+    system and updates its current data accordingly.
+
     Each of these tasks interact using the shared data shown in Figure~\ref{fig:arch}. 
 
     \begin{figure}[h]
@@ -1090,9 +1097,14 @@ struct TCB {
 
     \subsection{Analysis of Any Errors}
     
-    There were two errors found in the final project.  First, the pulse rate
-    range is not exactly as specified.  Second, it was found that the serial
-    communications task did not produce the correct values.
+		There were two errors found in the final project. Both errors involved a
+		lack of accuracu in the reported values measured by the sensors. The pulse
+		rate measurement was off in the same manner as in Lab 3. The other
+		measurement, from the EKG sensor, was off by a similarly small amount. The
+		cause of this error differed however.
+
+		A previously discussed error in the serial terminal display has been
+		successfully resolved.
 
     The specified corrected pulse rate was to be between 10 BPM and 200 BPM.
     For simplicity, the raw pulse rate was implemented as a 1-1 mapping from
@@ -1107,14 +1119,23 @@ struct TCB {
     As a result, more rising edges could fit in our measurement interval
     than we expected.  This resulted in a maximum BPM of roughly 206 BPM.
 
-    There was also an error in the Serial communication protocol in which the
-    usnprintf command used to format the data was causing a runtime error when
-    printing formatted data to a buffer.  Rather than printing the actual
-    corrected values to the buffer (to be sent to the remote terminal), it
-    seemed the command was printing addresses.  It was believed this was
-    caused by an error with the CircularBuffer implementation, though no
-    other tasks had issues with it (and extensive tests validated the 
-    CircularBuffer).  
+		In the case of the EKG measurements, the accuracy of the reported value may
+		vary by as much as $  \pm 5\%$ BPM. The actual inaccuracy is a function of the
+		actual EKG frequency. We have attributed this inaccuracy to the
+		implementation of the EKG measurement functions. Specifically the timing
+		mechanism used sample the analog sensor relies on a software defined delay
+		function to capture the signal. This choice was made because the onboard
+		hardware did not have a sufficient number of hardware based timers to use.
+		As a result, the EKG measurements are forced to rely on a system that is
+		not as accurate initially. Previous experience has indicated that a
+		software timer can made highly accurate given enough calibration and
+		adjustment of correcting variables. Time constraints limited our
+		calibration to a lower level of accuracy for the time being. In addition, a
+		more precise determination of the actual sampling rate will yield
+		correspondingly more accurate measurements of the EKG frequency. We have
+		made a decision to consider the level of precision sufficiently accurate
+		for this prototype version. A subsequent version will build upon these
+		lessons learned here.
 
     \subsection{Analysis of Implementation Issues and Workarounds}
 
