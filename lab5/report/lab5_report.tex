@@ -1161,7 +1161,7 @@ struct TCB {
 %    how to do it.
 
     \subsubsection{Scheduler}
-    The scheduler needs to be shown to correctly schedule and dispatch tasks.
+    The scheduler (FreeRTOS) needs to be shown to correctly schedule and dispatch tasks.
     This means that task should execute in the right order, and at the right
     time. Given a minor cycle of 50 ms, every task should run roughly once
     every 50 ms.   Also, the scheduler needs to successfully add and remove
@@ -1268,6 +1268,19 @@ struct TCB {
     battery, the status task simulates the battery state using the CPU. For
     now, it simply decrements the state of the battery. The test should show
     that the battery state is decremented by one every major cycle.
+
+    \subsubsection{EKG Capture} EKG Capture should be tested to grab correct
+    values from an input source (sine wave).  
+
+    \subsubsection{EKG Process} EKG Process should successfully measure sine
+    waves between 37 and 3750 Hz.  Key frequencies should be chosen between this
+    range, like 37, 40, 60, 100, 200, 500, 1000, 3000, and 3600, and 3750.  The
+    system should successfully detect each of these frequencies.
+
+    \subsubsection{Remote Communications}  The server should be tested to
+    successfully respond to HTTP requests.  This means opening a file and sending
+    it over HTTP to the requester.  Since the system also has special URLs for 
+    commands, it should also recognize these commands.
 
     \subsection{Test Cases} The students begin testing by examining if the
     alarm sounds at the proper time.  This is initially tested by disabling the
