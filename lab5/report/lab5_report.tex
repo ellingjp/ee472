@@ -844,53 +844,111 @@ struct TCB {
 		void *TCB prevTCBPtr;
 }
 \end{lstlisting}
+
     Leaving out the type information allows the scheduler to pass the task's data
     (*taskDataPtr) into the task's run function completely unaware of the kind of
     data the task uses or how the task works.
 
     For increased modularity, the data structure used by each task was not put in
     the task's header file. Instead, the structure was declared within the task
-    implementation file, and instantiated using a task initialization function. In
-    the header file, a void pointer pointing to the initialized structure is
-    exposed with global scope, as well as the task's run and initialization functions.
-These tasks are placed into the real time operating system which will schedule them and determine when they need to be run.
-The RTOS can create tasks within its system from the TCBs that have been created for each task.
+		implementation file, and instantiated using a task initialization function. In
+		the header file, a void pointer pointing to the initialized structure is
+		exposed with global scope, as well as the task's run and initialization functions.
+		These tasks are placed into the real time operating system which will schedule
+		them and determine when they need to be run.
+		The RTOS can create tasks within its system from the TCBs that have been
+		created for each task.
 
-    \subsubsection{Task Implementation}
+		\subsubsection{Task Implementation}
 
 %implementation details here. Tasks, scheduler, etc. Control diagram goes here,
 %activity diagram, etc.
 
-    The primary task of this project is to implement C code for a medical
-    device on the Stellaris EKI-LM3S8962 and its ARM Cortex A3 processor. The
-    project was started by creating a main file that initializes the variables
-    used in each task and starts the real time operating system which is implemented using the FreeRTOS software package. 
-The real time operating system(RTOS) contains code that allows us to set up tasks using the TCB struct developed with a void pointer for data and a function pointer for the run function.
-The tasks are then initialized using a task create method and each task has a priority set. The tasks
-    included in this project are Compute, Measure, Warning, keyPad,
-    OLEDDisplay, Serial, Status, Command, ekgProcess, and ekgCapture tasks. Each task has a public interface of a task control block. The TCBs for each task are used to create tasks for
-the RTOS. In our system the priority order goes warning, serial, display, keypad, command, compute, ekgProcess, measure, ekgCapture, and then status. These priorities indicate the importance in running each task from the RTOS's point of view.
-In this system the RTOS completely handles the scheduling of the tasks and the execution of the currently scheduled task. The RTOS will decide based on its own criteria and the priorities we set what order it will 
-execute tasks in. Each task can be removed from the list of available tasks that the RTOS can execute using a taskSuspend() method of the RTOS with an argument of a handle for the task to be suspended.
-Each task can likewise be placed again into the list of executable tasks in the RTOS with a taskResume() method, This is useful in our system for tasks that only need to be run at some times. 
-The serial, compute, measure, ekg, and command tasks are suspended initially. These tasks are resumed when needed for system functionality as described below. 
-The system also has a hardware timer that keeps a counter called the minor cycle counter that increments every 500ms. This counter and timer
-are used to time certain actions like the warning alarm buzzer and warning light flash.
-The system contains a startup method that is called at the beginning of our main method. 
-This method initializes the hardware timer for the minor cycle. The function also sets the system clock to run at the correct speed and enables the OLED display.
-Another important task for this function is that it sets up the entire web server system. Instead of taking a task based approach based off the FreeRTOS web server the system instead
-uses an interrupt based http server. The startup function initializes the interrupts required for the HTTP server and starts the process of obtaining an IP address from
-DHCP on the network. Because the web server, TCP/IP stack, and DHCP functionality is all interrupt based and the interrupts are all set up in the startup function, there is no web server task required in the
-medical devices operating system. The web server itself uses the Stellaris utility file system to scan JavaScript input to the web server. Whenever the web server receives an HTTP packet it calls an interrupt service routine that gives the packet to the file system.
-The file system looks at the name of the requested file and instead of opening a file stores the name of the file into a global command array. 
-This is then utilized by the command task to execute commands from the remote terminal. Data can also be sent through global data to the file system to be then sent as a HTTP packet back to the JavaScript running on the web page on the remote terminal.
+		The primary task of this project is to implement C code for a medical
+		device on the Stellaris EKI-LM3S8962 and its ARM Cortex A3 processor. The
+		project was started by creating a main file that initializes the variables
+		used in each task and starts the real time operating system which is
+		implemented using the FreeRTOS software package. 
+
+		\paragraph{Real Time Operating System Overview}
+		The real time operating system (RTOS) contains code that allows us to set up
+		tasks using the TCB struct developed with a void pointer for data and a
+		function pointer for the run function.
+
+		The tasks are then initialized using a task create method and each task has a
+		priority set. The tasks included in this project are Compute, Measure, Warning,
+		keyPad, OLEDDisplay, Serial, Status, Command, ekgProcess, and ekgCapture tasks.
+		Each task has a public interface defined by a task control block (TCB). The TCBs for each
+		task are used to create tasks for the RTOS. In our system, the priority order
+		goes (from highest to least priority): 		
+		
+		\begin{enumerate}
+			\item Warning
+			\item Serial
+			\item Display
+			\item Keypad
+			\item Command
+			\item Compute
+			\item ekgProcess
+			\item Measure
+			\item ekgCapture
+			\item Status
+		\end{enumerate}
+		These priorities indicate the importance in running each task from the RTOS's point of view.
+
+		In this system, the RTOS completely handles the scheduling of the tasks and the
+execution of the currently scheduled task. The RTOS will decide based on its
+own criteria and the priorities we set what order it will execute tasks in.
+Each task can be removed from the list of available tasks that the RTOS can
+execute using a taskSuspend() method of the RTOS with an argument of a handle
+for the task to be suspended.
+
+Conversely, Each task can be replaced into the list of scheduled tasks with a
+taskResume() method. This is useful for tasks that only need to run sporadically. 
+
+The serial, compute, measure, ekg, and command tasks are suspended initially;
+these tasks are resumed when needed for system functionality as described
+below. 
+
+The system also has a hardware timer that keeps a counter called the minor
+cycle counter that increments every 500ms. This counter and timer are used to
+time certain actions such as the warning alarm buzzer and light flash.
+
+\paragraph{Initialize (StartupTask)} The system contains a startup method that
+is called at the beginning of system power on. Within this method, The
+StartupTask initializes all of the hardware used by the entire system.
+
+This method initializes the hardware timer for the minor cycle. The function
+also sets the system clock to run at the correct speed and enables the OLED
+display.
+
+Another important task this function performs is set up the entire web
+server system. Instead of taking a task based approach based off the FreeRTOS
+web server the system instead
+uses an interrupt based http server. The startup function initializes the
+interrupts required for the HTTP server and starts the process of obtaining an
+IP address from DHCP on the network. 
+
+Because the web server, TCP/IP stack, and DHCP
+functionality is all interrupt-based and the interrupts are all set up in the
+startup function, there is no web server task required in the
+medical devices operating system. The web server itself uses the Stellaris
+utility file system to scan JavaScript input to the web server. Whenever the
+web server receives an HTTP packet, it calls an interrupt service routine that
+gives the packet to the file system.
+The file system looks at the name of the requested file and instead of opening
+a file, stores the name of the file into a global command array. 
+This is then utilized by the command task to execute commands from the remote
+terminal. Data can also be sent through global data to the file system to be
+then sent as a HTTP packet back to the JavaScript running on the web page on
+the remote terminal.
     
     Control flow is shown in Figure~\ref{fig:Control}. 
 
     \begin{figure}[h]
       \centering
 			\fbox{
-      \includegraphics[width=0.7\textwidth]{../design/Control_state_diagram.png}
+      \includegraphics[width=0.7\textwidth]{../design/high_level_data_flow.png}
 		}
       \caption{Control Flow Diagram}
       \label{fig:Control}
@@ -903,20 +961,24 @@ This is then utilized by the command task to execute commands from the remote te
 in Appendix~\ref{appendix:activity_diagrams}), deals only with the raw data from the
 instruments. This task is meant to act in place of the instruments that are
 unavailable.  When the runMeasureTask() function is called by the RTOS a few things might happen. First the task checks the global data measurement selected value. 
-This value will be 0 if all measurements are selected, 1 if temperature is selected, 2 if blood pressure is selected, and 3 if pulse rate is selected. 
-When any number besides 0 is selected, only the measurement corresponding to that number will be taken.
-When the blood pressure is taken a new raw blood pressure value is determined by the last one, and the action taken the last time measure blood pressure was called.
+This value corresponds to the user-selected measurement state according to the scheme:
+\begin{description}
+	\item[0 - All measurements selected]
+	\item[1 - Temperature Selected] The temperature is simulated using an on-chip temperature sensor. The analog value is converted to a digital value and stored in global data memory.
+	\item[2 - Blood pressure selected] When the blood pressure is taken, a new raw blood pressure value is determined by the last one and the action taken the last time measure blood pressure was called:
 If the blood pressure went up by 1 previously and is still below the maximum range of blood pressure then this cycle the raw blood pressure will go up by 2. If it previously went up by 2 it will only go up by 1 on this cycle.
 When the blood pressure reaches a maximum value it will begin to descend following the same pattern of descending 1 then 2 then 1 until it reaches a minimum and begins to increase once more.
-In the newly improved design a heart rate monitor has been added.
-The heart rate monitor uses an interrupt handler to count the number of
-rising edges on an input in a 10 second period. The number is then used
-to calculate the heart rate the sensor is receiving in the compute task. 
-The Measure task also takes an analog measurement of the Arm 3 temperature sensor when measure temperature is selected.
-To take this measurement an analog digital converter(ADC) is used. The ADC samples the output of the temperature sensor and gives the system a digital representation of the analog value after a short wait.
+	\item[3 - Pulse rate selected] The pulse rate is simulated with an external
+		square-wave generator and measured using an interrupt-based counter. The
+		pulse rate monitor uses an interrupt handler to count the number of
+rising edges on an input in a 10 second period. 
+\end{description}
+
+When any number besides 0 is selected, only the measurement corresponding to that number will be taken.
+
 All values measured in the measure function are placed into a circular buffer data structure. This data structure is an array wrapper that keeps track of the size of the array, and what index we are currently
 writing to. This way we can continue to write new measurements to the buffer while keeping the previous 8 values.
-The final functionality of the Measure task is that it adds the Compute task into the RTOS schedule by calling the resumeTask() function on the compute task's handle.
+The final functionality of the Measure task adds the Compute task into the RTOS schedule by calling the resumeTask() function on the compute task's handle.
 
     \paragraph{Compute Task} The compute task is very simple. This task will
     only run after it has been placed into the task queue by the measure task
@@ -925,11 +987,16 @@ The final functionality of the Measure task is that it adds the Compute task int
     adds a constant to each piece of raw data to get the corrected data. The
     compute task then puts the values for the corrected data in memory at the
     location of the global data pointer. Compute uses the circular buffer data structures for the raw and corrected  temperature, blood pressure, and pulse rate data.
-The temperature value is corrected to be in human range from the temperature sensor value by dividing the raw value by 10 then multiplying by .75 and finally adding 5.
-The pulse rate is corrected by multiplying the raw value by 3 then adding 8.
-The systolic blood pressure is corrected by multiplying the raw value by 2 then adding 9. Finally, the Diastolic blood pressure is corrected from the raw value by multiplying it by 1.5 and adding 6.
-A diagram of the Compute activity is shown in
-in Figure~\ref{fig:computeActivity} of Appendix~\ref{appendix:activity_diagrams}.
+		
+		\begin{itemize}
+			\item $Corrected Temperature = 5 + raw temperature \times .0.75$
+			\item $Corrected Pulse = 8 + 3 + 8 \times raw pulse$
+			\item $Corrected Systolic Pressure = 9 + 2 \times raw systolic pressure$
+			\item $Corrected Diastolic Pressure= 6 + 1.5 \times raw diastolic pressure$
+		\end{itemize}
+
+		A diagram of the Compute activity is shown in in
+		Figure~\ref{fig:computeActivity} of Appendix~\ref{appendix:activity_diagrams}.
 
     \paragraph{Warning Task} After compute, the warning task begins checking
     for warning or alarm states. The warning task only deals with the corrected
@@ -965,7 +1032,15 @@ five minor cycle counts. The next
     from the battery state data field. If there is less than 20\% battery left
     then a yellow led connected to pin C7 is illuminated, if there is more then
     20\% battery, and the device is not in a warning or alarm state then the
-    green led on pin C 6 is illuminated. 
+		green led on pin C 6 is illuminated. The control flow for the warning task is shown in Figure~\ref{fig:warning_control}
+
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.7\textwidth]{../design/warning_control_flow.png}
+			\caption{Control flow diagram of the warning task}
+			\label{fig:warning_control}
+		\end{figure}
+
     
     
     \paragraph{Keypad Task} The keyPad task uses the GPIO libraries to set up 5
@@ -1014,6 +1089,15 @@ to 1 in keyPad then the currently scrolled to measurement is selected and
 the screen will change to showing only that measurement and its data. When
 global.mode is equal to 1 the annunciation screen will instead be
 displayed. This screen shows each measurement followed by its data.
+
+The control flow for the keypad and display tasks is given in Figure~\ref{fig:local_flow}.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{../design/local_control_flow.png}
+	\caption{Control flow for keypad and display tasks}
+	\label{fig:local_flow}
+\end{figure}
     
     \paragraph{Serial Task} The serial task is only run when a warning occurs.
     The warning causes the TCB for the serial task to be added to the TCB
@@ -1031,10 +1115,27 @@ In the case of the lab the device is simulated as being run off USB power which 
 Because this is a simulation without using an actual battery, this system stops decrementing the battery state when it reaches 0 and just leaves the value untouched for the rest of the runtime.
 In the case of use with an actual battery, the system would never go past 0 as a battery state because the battery would have died and the system shut down, therefore this is not an issue.
 
-\paragraph{EKGCapture Task}
-\paragraph{EKGProcess Task}
-\paragraph{Command Task}
-4.4:analysis and implementation of workaround
+\paragraph{EKGCapture Task}  rCapturing the input waveform from the EKG sensors is the primary job of the EKGCapture.
+
+To accomplish this, the EKGCapture task performs several steps.
+\begin{enumerate}
+	\item Initialize and enable an analog to digital converter (ADC)
+	\item Capture a sequence of samples using the ADC evenly spaced in time. The interval between individual samples is determined as the reciprocal of the sampling frequency, $f_{s}$. This interval is created using a simple software timing delay.
+	\item Store the data to a global array for processing.
+	\item Enable the EKGProcess task using the vTaskResume() function on the EKGProcess handle
+\end{enumerate}
+
+\paragraph{EKGProcess Task} The EKG process task takes the raw EKG data collected by the EKGCapture task, along with an empty array and uses an optimized FFT program to determine the mazimum frequency in the signal. This result is then used to compute the final maximum frequency value.
+
+\paragraph{Command Task} The command task receives commands from the remote server, parses the data and performs the requested actions. A response is created, formatted into HTML, and sent back as a reply. The control flow for this task is given in Figure~\ref{fig:remote_control}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{../design/internet_control_flow.jpg}
+	\caption{Control flow for Command task}
+	\label{fig:remote_control}
+\end{figure}
+
     \paragraph{Status Task}
     The last task is the status task. This task only deals with one piece of data
     which is the battery state data. The only thing the status task does is that on
