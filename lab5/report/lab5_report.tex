@@ -952,10 +952,14 @@ struct TCB {
       \begin{tabular}{|l|r|} 
 	\hline
 	Task & Runtime ($\mu$s) \\ \hline
-	Measure & 23.4 \\ \hline
+	Measure & 20.3 \\ \hline
 	Compute & 55.4 \\ \hline
-	Display & 22900.0 \\ \hline
-	Warning & 27.4 \\ \hline
+	Display & 33200 \\ \hline
+	Warning & 17.7 \\ \hline
+    Serial & 12000 \\ \hline
+    keypad & 5.72 \\ \hline
+    ekgCapture & 26600 \\ \hline
+    ekgProcess & 1345 \\ \hline
 	Status & 5.6 \\ \hline
       \end{tabular}
       \caption{Empirically determined task runtimes}
@@ -981,10 +985,14 @@ struct TCB {
       \begin{tabular}{|l|r|} 
 	\hline
 	Task & Instructions \\ \hline
-	Measure & 187 \\ \hline
+	Measure & 162 \\ \hline
 	Compute & 443 \\ \hline
-	Display & 183,200 \\ \hline
-	Warning & 219 \\ \hline
+	Display & 265600 \\ \hline
+	Warning & 142 \\ \hline
+    Serial & 96,000 \\ \hline
+    keypad & 45.8 \\ \hline
+    ekgCapture & 212,800 \\ \hline
+    ekgProcess & 10,760 \\ \hline
 	Status & 45 \\ \hline
       \end{tabular}
       \caption{Estimated instructions per task, rounded to the nearest instruction}
@@ -996,7 +1004,7 @@ struct TCB {
     task, which was about three orders of magnitude more instructions than the
     other tasks. This was due to the sprintf() library call, included in the
     standard C library. While this could have been optimized, it was found that
-    with a minor cycle delay of 250 ms, the display delay of 22.9 ms was not
+    with a minor cycle delay of 250 ms, the display delay of 33.2 ms was not
     significant.
 
 
