@@ -602,7 +602,6 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
     After understanding how the user would interact with the device, the high level
     functional blocks were developed. These blocks are shown in
-    Figure~\ref{fig:func_top}. 
 
 % The main system control is located in the CPU, which
 % controls all data flow into and out of the peripheral devices. The OLED
@@ -665,6 +664,16 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     correct units of measurement. Raw temperature data to Celsius, blood pressure
     to mm Hg, and pulse rate to BPM.
 
+    \paragraph{EKG Capture} This task is in charge of getting raw EKG data.  This data
+    will be simulated.  A sample frequency is defined (based on the specified min and max
+    frequencies and the Nyquist theorem), and an ADC is triggered at the same speed as
+    the sample frequency.  The input to the ADC will be a sine wave of variable
+    frequency, from 37 Hz to 3750 Hz.  Because of this, the sample frequency
+    chosen was 8000 Hz (more than twice the max frequency).
+
+    \paragraph{EKG Process} This task is in charge of processing raw EKG data.
+    It will run a FFT over the raw EKG data.
+
     \paragraph{Keypad Monitor} Keypad will check the keypad for user input. It
     should provide the user with four keys: two for scrolling, one for selection,
     and one to go back.
@@ -716,7 +725,6 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     After developing the system architecture, the design needed to be translated into the C programming language. The design manifested in a multi-file program consisting of the following source files:
     \begin{itemize}
       \item \textbf{globals.c/globals.h} - Used to define the Shared Data used among the tasks
-      \item \textbf{schedule.c/schedule.h} - Defines the scheduler interface and it's implementation, as well as the TCB structure
       \item \textbf{timebase.h} - Defines the timebase used for the scheduler and tasks
       \item \textbf{task.h} - Defines the TCB interface for a task
     \end{itemize}
