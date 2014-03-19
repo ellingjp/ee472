@@ -453,9 +453,20 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 	ComputeTask will remove itself from the task queue
     \end{itemize}
 
-  \item DisplayTask:
-		In the Display task data collected by the system is displayed on the local
-		OLED display based upon user input received frm the keypad. In addition to simply displaying data, the display task will format the data and present a series of menus for the user. The front panel of the OLED display in the Annunciation state is shown in Figure~\ref{}<++>
+  \item DisplayTask: 
+      In the Display task data collected by the system is
+      displayed on the local OLED display based upon user input received frm
+      the keypad. In addition to simply displaying data, the display task will
+      format the data and present a series of menus for the user. The front
+      panel of the OLED display in the Annunciation state is shown in
+      Figure~\ref{fig:annun}
+
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.5\textwidth]{../design/oled_annunciation1.jpg}
+			\caption{Image of OLED front panel display}
+			\label{fig:annun}
+		\end{figure}
 
 		No new changes were made to the display task
     \begin{itemize}
@@ -470,7 +481,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
 		\begin{figure}[h]
 			\centering
-			\includegraphics{../design/OLED_frontPanel.jpg}
+            \includegraphics[width=0.5\textwidth]{../design/OLED_frontPanel.jpg}
 			\caption{Image of OLED front panel display}
 			\label{fig:oled_front_panel}
 		\end{figure}
@@ -536,7 +547,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 					\item A received command must be interpreted and acted upon if valid
 					\item A response acknowledgement or non-acknowledgement must be
 						returned to the webserver whenever a command is received
-					\item Legal commands are given in Appendix~\ref{}
+					\item Legal commands are given in Appendix~\ref{appendix:commands}
 				\end{itemize}
 			\item Messages to be sent to a remote computer must be compiled into proper HTML code before being sent to the web server
 		\end{itemize}
@@ -591,7 +602,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
     After understanding how the user would interact with the device, the high level
     functional blocks were developed. These blocks are shown in
-    Figure~\ref{fig:func}. 
+    Figure~\ref{fig:func_top}. 
 
 % The main system control is located in the CPU, which
 % controls all data flow into and out of the peripheral devices. The OLED
@@ -1394,6 +1405,7 @@ struct TCB {
     \pagebreak
 
 		\section{Supported Web Browser Commands}
+        \label{appendix:commands}
 
 		The Commands and Responses for the embedded application task are given as follows. 
 
@@ -1537,8 +1549,8 @@ struct TCB {
     \lstinputlisting{../code/schedule.c}
 
     \subsection{Tasks}
-    \subsubsection{Task Interface}
-    \lstinputlisting{../code/task.h}
+    \subsubsection{Task Control Blocks}
+    \lstinputlisting{../code/tcb.h}
 
     \subsubsection{Startup Task}
     \lstinputlisting{../code/startup.h}
@@ -1567,6 +1579,10 @@ struct TCB {
     \subsubsection{Serial Task}
     \lstinputlisting{../code/serial.h}
     \lstinputlisting{../code/serial.c}
+
+    \subsubsection{Command Task}
+    \lstinputlisting{../code/commandTask.c}
+    \lstinputlisting{../code/commandTask.h}
 
     \subsubsection{Status}
     \lstinputlisting{../code/status.h}
