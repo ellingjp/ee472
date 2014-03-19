@@ -453,9 +453,20 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 	ComputeTask will remove itself from the task queue
     \end{itemize}
 
-  \item DisplayTask:
-		In the Display task data collected by the system is displayed on the local
-		OLED display based upon user input received frm the keypad. In addition to simply displaying data, the display task will format the data and present a series of menus for the user. The front panel of the OLED display in the Annunciation state is shown in Figure~\ref{}<++>
+  \item DisplayTask: 
+      In the Display task data collected by the system is
+      displayed on the local OLED display based upon user input received frm
+      the keypad. In addition to simply displaying data, the display task will
+      format the data and present a series of menus for the user. The front
+      panel of the OLED display in the Annunciation state is shown in
+      Figure~\ref{fig:annun}
+
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.5\textwidth]{../design/oled_annunciation1.jpg}
+			\caption{Image of OLED front panel display}
+			\label{fig:annun}
+		\end{figure}
 
 		No new changes were made to the display task
     \begin{itemize}
@@ -470,7 +481,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
 		\begin{figure}[h]
 			\centering
-			\includegraphics{../design/OLED_frontPanel.jpg}
+            \includegraphics[width=0.5\textwidth]{../design/OLED_frontPanel.jpg}
 			\caption{Image of OLED front panel display}
 			\label{fig:oled_front_panel}
 		\end{figure}
@@ -536,7 +547,7 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 					\item A received command must be interpreted and acted upon if valid
 					\item A response acknowledgement or non-acknowledgement must be
 						returned to the webserver whenever a command is received
-					\item Legal commands are given in Appendix~\ref{}
+					\item Legal commands are given in Appendix~\ref{appendix:commands}
 				\end{itemize}
 			\item Messages to be sent to a remote computer must be compiled into proper HTML code before being sent to the web server
 		\end{itemize}
@@ -591,7 +602,6 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
 
     After understanding how the user would interact with the device, the high level
     functional blocks were developed. These blocks are shown in
-    Figure~\ref{fig:func}. 
 
 % The main system control is located in the CPU, which
 % controls all data flow into and out of the peripheral devices. The OLED
@@ -612,6 +622,10 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
       \label{fig:func_top}
     \end{figure}
 
+    The functional blocks were then refined further, showing the main functions
+    the system needed to perform.  This refined functional decomposition is shown
+    in Figure~\ref{fig:func_low}.
+
     \begin{figure}[h]
       \centering
       \includegraphics[width=\textwidth]{../design/Functional_decomposition}
@@ -619,19 +633,22 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
       \label{fig:func_low}
     \end{figure}
 
-    \subsubsection{System Architecture}
-    Next, the system architecture was developed (Figure~\ref{fig:arch}). At a high
-    level the system works on two main concepts, the scheduler and tasks. Tasks
-    embody some sort of work being done, and the scheduler is in charge of
-    determining the speed and order in which the tasks execute. The system has
-    several tasks, each with their own specific job. For modularity reasons, each
-    task should have the same public interface and the scheduler should be able to
-    run each task regardless of that specific tasks job or implementation. Thus
-    the task concept is abstracted into a Task Control Block (TCB), and the
-    scheduler maintains a queue of TCBs to run. The TCB abstraction is shown in
-    Figure~\ref{fig:arch} using inheritance, and the fact that the scheduler has a
-    queue of TCBs is shown with composition. The core functionality of the system
-    was divided into the following eight main tasks:
+    \subsubsection{System Architecture} Next, the system architecture was
+    developed (Figure~\ref{fig:arch}). At a high level the system works on two
+    main concepts, the scheduler and tasks. In this project, FreeRTOS was used
+    as the scheduler.  Tasks embody some sort of work being done, and the
+    scheduler is in charge of determining the speed and order in which the
+    tasks execute.  Under FreeRTOS, each task is given a priority, and tasks
+    that are waiting to execute are started based on their priority.  The
+    system has several tasks, each with their own specific job. For modularity
+    reasons, each task should have the same public interface and the scheduler
+    should be able to run each task regardless of that specific tasks job or
+    implementation. Thus the task concept is abstracted into a Task Control
+    Block (TCB), and the scheduler maintains a queue of TCBs to run. The TCB
+    abstraction is shown in Figure~\ref{fig:arch} using inheritance, and the
+    fact that the scheduler has a queue of TCBs is shown with composition. The
+    core functionality of the system was divided into the following eight main
+    tasks:
 
     \paragraph{Initialization Task} This task Initializes data structures and does
     system startup-related jobs. This task is not actually scheduled to run, it
@@ -646,6 +663,16 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     \paragraph{Compute Task} Compute takes the simulated raw data and converts it to the
     correct units of measurement. Raw temperature data to Celsius, blood pressure
     to mm Hg, and pulse rate to BPM.
+
+    \paragraph{EKG Capture} This task is in charge of getting raw EKG data.  This data
+    will be simulated.  A sample frequency is defined (based on the specified min and max
+    frequencies and the Nyquist theorem), and an ADC is triggered at the same speed as
+    the sample frequency.  The input to the ADC will be a sine wave of variable
+    frequency, from 37 Hz to 3750 Hz.  Because of this, the sample frequency
+    chosen was 8000 Hz (more than twice the max frequency).
+
+    \paragraph{EKG Process} This task is in charge of processing raw EKG data.
+    It will run a FFT over the raw EKG data.
 
     \paragraph{Keypad Monitor} Keypad will check the keypad for user input. It
     should provide the user with four keys: two for scrolling, one for selection,
@@ -665,9 +692,22 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     by driving the speaker. At any time if the battery goes too low, the yellow
     LED will illuminate.
 
-    \paragraph{Remote Communication Task} This task is in charge of sending data to
+    \paragraph{Serial Task} This task is in charge of sending data to
     a remote terminal. If any of the states are in a warning or alarm condition,
     this task will transmit the (corrected) data to the remote terminal.
+
+    \paragraph{Command Task} The command task should parse commands from the 
+    remote communications task and send a response.  The response is based
+    on the particular command sent.  For example, if the user requests to view
+    all measurements, the response should be an HTML formatted response
+    containing all of the data for each measurement.  Each response should also
+    contain an ACK or NACK, depending on whether or not the command was valid or
+    not.
+
+    \paragraph{Remote Communications}  Remote Communications is not actually a
+    task.  Instead, the http server, httpd, that is shipped along with the TI
+    embedded development kit was used.  This server is interrupt driven and
+    runs entirely in the background.  It communicates with tasks using buffers.  
 
     \paragraph{Status Task} Status receives information about the battery on the
     system and updates it's current data accordingly.
@@ -685,7 +725,6 @@ must be written in C using the IAR Systems Embedded Workbench/Assembler IDE.
     After developing the system architecture, the design needed to be translated into the C programming language. The design manifested in a multi-file program consisting of the following source files:
     \begin{itemize}
       \item \textbf{globals.c/globals.h} - Used to define the Shared Data used among the tasks
-      \item \textbf{schedule.c/schedule.h} - Defines the scheduler interface and it's implementation, as well as the TCB structure
       \item \textbf{timebase.h} - Defines the timebase used for the scheduler and tasks
       \item \textbf{task.h} - Defines the TCB interface for a task
     \end{itemize}
@@ -1394,6 +1433,7 @@ struct TCB {
     \pagebreak
 
 		\section{Supported Web Browser Commands}
+        \label{appendix:commands}
 
 		The Commands and Responses for the embedded application task are given as follows. 
 
@@ -1454,7 +1494,7 @@ struct TCB {
 
     \begin{figure}[H]
       \centering
-      \includegraphics[width=\textwidth]{../design/KeyPad_activity.png}
+      \includegraphics[width=0.5\textwidth]{../design/KeyPad_activity.png}
       \caption{Keypad Activity Diagram}
       \label{fig:keyPadActivity}
     \end{figure}
@@ -1532,13 +1572,19 @@ struct TCB {
     \subsection{Timebase}
     \lstinputlisting{../code/timebase.h}
 
-    \subsection{Scheduler}
-    \lstinputlisting{../code/schedule.h}
-    \lstinputlisting{../code/schedule.c}
+    \subsection{Modified lmi\_fs.c}
+    \lstinputlisting{../code/lmi_fs.c}
+
+    \subsection{Circular Buffer}
+    \lstinputlisting{../code/CircularBuffer.h}
+    \lstinputlisting{../code/CircularBuffer.c}
+
+    \subsection{Warm up File (For Interrupt Initialization)}
+    \lstinputlisting{../code/startup_ewarm.c}
 
     \subsection{Tasks}
-    \subsubsection{Task Interface}
-    \lstinputlisting{../code/task.h}
+    \subsubsection{Task Control Blocks}
+    \lstinputlisting{../code/tcb.h}
 
     \subsubsection{Startup Task}
     \lstinputlisting{../code/startup.h}
@@ -1568,15 +1614,23 @@ struct TCB {
     \lstinputlisting{../code/serial.h}
     \lstinputlisting{../code/serial.c}
 
+    \subsubsection{EKG Capture}
+    \lstinputlisting{../code/ekgCapture.c}
+    \lstinputlisting{../code/ekgCapture.h}
+
+    \subsubsection{EKG Process}
+    \lstinputlisting{../code/ekgProcess.c}
+    \lstinputlisting{../code/ekgProcess.h}
+
+    \subsubsection{Command Task}
+    \lstinputlisting{../code/commandTask.c}
+    \lstinputlisting{../code/commandTask.h}
+
     \subsubsection{Status}
     \lstinputlisting{../code/status.h}
     \lstinputlisting{../code/status.c}
 
-    \subsection{Circular Buffer}
-    \lstinputlisting{../code/CircularBuffer.h}
-    \lstinputlisting{../code/CircularBuffer.c}
-
-    \subsection{Warm up File (For Interrupt Initialization)}
-    \lstinputlisting{../code/startup_ewarm.c}
+    \subsection{Website Source}
+    \lstinputlisting{../code/fs/index.html}
 
     \end{document}
