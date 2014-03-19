@@ -807,7 +807,7 @@ struct TCB {
     Each task has its own unique purpose in the system, and each uses a different
     part of the global data.
 
-    \paragraph{Measure Task} The Measure task (Figure~\ref{fig:measureActivity}
+\paragraph{Measure Task} The Measure task (Figure~\ref{fig:measureActivity}
     in the appendix), deals only with the raw data from the instruments. This
     task is meant to act in place of the instruments that are unavailable. The
     task only runs if the scheduler has set the global value is Major Cycle to
@@ -1277,10 +1277,23 @@ struct TCB {
     range, like 37, 40, 60, 100, 200, 500, 1000, 3000, and 3600, and 3750.  The
     system should successfully detect each of these frequencies.
 
+    \subsubsection{Command Task} The command task should successfully parse
+    each of the commands shown in Appendix~\ref{appendix:commands}.  Upon
+    receiving a command, it should also generate a correct response.  For
+    example, a ``M T'' command should give the response shown in Listing~\ref{lst:comm}.
+    The ``A'' refers to an ACK.  If the command was invalid, the response should simply
+    be an ``E''.
+
+\begin{lstlisting}[caption=Command Response, captionpos=b, label=lst:comm]
+A
+<p>Temperature 0 C</p>
+\end{lstlisting}
+
     \subsubsection{Remote Communications}  The server should be tested to
     successfully respond to HTTP requests.  This means opening a file and sending
     it over HTTP to the requester.  Since the system also has special URLs for 
     commands, it should also recognize these commands.
+
 
     \subsection{Test Cases} The students begin testing by examining if the
     alarm sounds at the proper time.  This is initially tested by disabling the
